@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d6654f" version="168">
+	<Properties>
+	    <Name>LOC_BBS_TITLE</Name>
+		<Description>LOC_BBS_DESCRIPTION</Description>
+		<Created>1</Created>
+		<Teaser>LOC_BBS_TEASER</Teaser>
+		<Authors>D. / Jack The Narrator</Authors>
+		<SpecialThanks>Civfanatics.com, CPL, CivFR, 57 Fan, Wazabaza , iElden, Deliverator, VonHolio, Braizh, Kilua, Gedemon, Je, EvilVictor, StormingRomans, Ben</SpecialThanks>
+		<CompatibleVersions>1.2,2.0</CompatibleVersions>
+		<Version>168</Version>
+	</Properties>
+	
+		<LocalizedText>
+		<Text id="LOC_BBS_TITLE">
+			<en_US>Better Balanced Starts 1.6.8</en_US>
+			<fr_FR>Better Balanced Starts 1.6.8</fr_FR>
+		</Text>
+		<Text id="LOC_BBS_TEASER">
+			<en_US>Balanced spawn placement for tournaments.</en_US>
+            <fr_FR>Mod d'equilibrage de placement de joueurs pour tournois.</fr_FR>
+		</Text>
+		<Text id="LOC_BBS_DESCRIPTION">
+			<en_US>Balance spawn locations for Multiplayer.[NEWLINE][NEWLINE]Players would be placed according to their civilizations biases while considering minimum distances.[NEWLINE][NEWLINE]Yields accross spawn locations are balanced so players can have a leveled playing fields.</en_US>
+            <fr_FR>Mod d'equilibrage de placement de joueurs pour tournois.[NEWLINE][NEWLINE]Les joueurs seront places en fonction des biais de leur civilization et en maintenant des distances minimales entre les joueurs.[NEWLINE][NEWLINE]Les ressources situees sur les spawns seront equilibrees pour permettre aux joueurs d'avoir les meme chances.</fr_FR>
+		</Text>
+	</LocalizedText>
+	
+  <Dependencies>
+    	<Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="Expansion: Gathering Storm" />
+  </Dependencies>
+  <ActionCriteria>
+    <Criteria id="DLC: Vikings Content">
+      <ModInUse>2F6E858A-28EF-46B3-BEAC-B985E52E9BC1</ModInUse>
+    </Criteria>
+	<Criteria id="xp1">
+			<ModInUse>1B28771A-C749-434B-9053-D1380C553DE9</ModInUse>
+		</Criteria>
+		<Criteria id="xp2">
+			<ModInUse>4873eb62-8ccc-4574-b784-dda455e74e68</ModInUse>
+		</Criteria>
+		<Criteria id="dlc_australia">
+			<ModInUse>E3F53C61-371C-440B-96CE-077D318B36C0</ModInUse>
+		</Criteria>
+		<Criteria id="xp2_australia">
+			<LeaderPlayable>Players:Expansion2_Players::LEADER_JOHN_CURTIN</LeaderPlayable>
+		</Criteria>
+		<Criteria id="dlc_aztec">
+			<ModInUse>02A8BDDE-67EA-4D38-9540-26E685E3156E</ModInUse>
+		</Criteria>
+		<Criteria id="xp2_aztec">
+			<LeaderPlayable>Players:Expansion2_Players::LEADER_MONTEZUMA</LeaderPlayable>
+		</Criteria>
+		<Criteria id="dlc_indo_khmer">
+			<ModInUse>1F367231-A040-4793-BDBB-088816853683</ModInUse>
+		</Criteria>
+		<Criteria id="xp2_indo_khmer">
+			<LeaderPlayable>Players:Expansion2_Players::LEADER_GITARJA,Players:Expansion2_Players::LEADER_JAYAVARMAN</LeaderPlayable>
+		</Criteria>
+		<Criteria id="dlc_macedon_persia">
+			<ModInUse>E2749E9A-8056-45CD-901B-C368C8E83DEB</ModInUse>
+		</Criteria>
+		<Criteria id="xp2_macedon_persia">
+			<LeaderPlayable>Players:Expansion2_Players::LEADER_ALEXANDER,Players:Expansion2_Players::LEADER_CYRUS</LeaderPlayable>
+		</Criteria>
+		<Criteria id="dlc_nubia">
+			<ModInUse>643EA320-8E1A-4CF1-A01C-00D88DDD131A</ModInUse>
+		</Criteria>
+		<Criteria id="xp2_nubia">
+			<ModInUse>643EA320-8E1A-4CF1-A01C-00D88DDD131A</ModInUse>
+			<ModInUse>4873eb62-8ccc-4574-b784-dda455e74e68</ModInUse>
+		</Criteria>
+		<Criteria id="dlc_poland">
+			<ModInUse>3809975F-263F-40A2-A747-8BFB171D821A</ModInUse>
+		</Criteria>
+		<Criteria id="xp2_poland">
+			<LeaderPlayable>Players:Expansion2_Players::LEADER_JADWIGA</LeaderPlayable>
+		</Criteria>
+		<Criteria id="dlc_maya_colombia">
+			<ModInUse>9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_macedon_persia_maya_colombia">
+			<!-- for some reason, requires xp1 as well -->
+			<ModInUse>1B28771A-C749-434B-9053-D1380C553DE9</ModInUse>
+			<ModInUse>E2749E9A-8056-45CD-901B-C368C8E83DEB</ModInUse>
+			<ModInUse>9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_xp1_maya_colombia">
+			<ModInUse>1B28771A-C749-434B-9053-D1380C553DE9</ModInUse>
+			<ModInUse>9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_ethiopia">
+			<ModInUse>1B394FE9-23DC-4868-8F0A-5220CB8FB427</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_xp2_ethiopia">
+			<ModInUse>1B394FE9-23DC-4868-8F0A-5220CB8FB427</ModInUse>
+			<ModInUse>4873eb62-8ccc-4574-b784-dda455e74e68</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_teddy_persona">
+			<ModInUse>113D9459-0A3B-4FCB-A49C-483F40303575</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_catherine_persona">
+			<ModInUse>CE5876CD-6900-46D1-9C9C-8DBA1F28872E</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_byzantium_gaul">
+			<ModInUse>A1100FC4-70F2-4129-AC27-2A65A685ED08</ModInUse>
+		</Criteria>
+		<Criteria id="nfp_babylon">
+			<ModInUse>8424840C-92EF-4426-A9B4-B4E0CB818049</ModInUse>
+		</Criteria>
+		
+	<Criteria id="NATURALSetting_2">
+            <ConfigurationValueMatches>
+                <ConfigurationId>BBSNatural</ConfigurationId>
+                <Group>Map</Group>
+                <Value>2</Value>
+            </ConfigurationValueMatches>
+        </Criteria>
+		<Criteria id="NATURALSetting_1">
+            <ConfigurationValueMatches>
+                <ConfigurationId>BBSNatural</ConfigurationId>
+                <Group>Map</Group>
+                <Value>0</Value>
+            </ConfigurationValueMatches>
+        </Criteria>
+	
+	
+	
+	
+</ActionCriteria>
+  <FrontEndActions>
+        <UpdateDatabase id="BBS_SETTINGS">
+            	<File>Configuration/Config.xml</File>
+        </UpdateDatabase>
+        <UpdateText id="BBS_SETTINGS_TEXTS">
+            <File>Lang/Text_EN.xml</File>
+			<File>Lang/Text_RU.xml</File>
+        </UpdateText>
+		<UpdateIcons id="BBS_ICONS">
+      <File>sql/bbs_icons_wonders.sql</File>
+    </UpdateIcons>
+  </FrontEndActions>
+
+    <InGameActions>
+	<UpdateIcons id="BBS_ICONS">
+      <File>sql/bbs_icons_wonders.sql</File>
+    </UpdateIcons>
+	
+	    <UpdateArt id="ArtDep">
+      <Properties>
+        <LoadOrder>10</LoadOrder>
+      </Properties>
+      <File>NaturalWondersMod.dep</File>
+    </UpdateArt>
+	
+	
+    <ImportFiles id="Map_BBS">
+		<Properties>
+        	<LoadOrder>1000</LoadOrder>
+		</Properties>
+      <File>Data/BBS Maps/continents.lua</File>
+	<File>Data/BBS Maps/continents_islands.lua</File>
+	<File>Data/BBS Maps/fractal.lua</File>
+	<File>Data/BBS Maps/inlandsea.lua</File>
+	<File>Data/BBS Maps/island_plates.lua</File>
+	<File>Data/BBS Maps/lakes.lua</File>
+	<File>Data/BBS Maps/pangaea.lua</File>
+	<File>Data/BBS Maps/primordial.lua</File>
+	<File>Data/BBS Maps/seven_seas.lua</File>
+	<File>Data/BBS Maps/shuffle.lua</File>
+	<File>Data/BBS Maps/splintered_fractal.lua</File>
+	<File>Data/BBS Maps/small_continents.lua</File>
+	<File>Data/BBS Maps/terra.lua</File>
+	<File>Data/BBS Maps/tilted_axis.lua</File>
+	<File>Data/BBS Maps/archipelago_xp2.lua</File>
+	<File>Data/BBS Maps/highlands_xp2.lua</File>
+	<File>Data/BBS Maps/wetlands_xp2.lua</File>
+	<File>Data/BBS Maps/perfectworld6.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_NaturalWonderGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_MountainsCliffs.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_AssignStartingPlots.lua</File>
+	<File>Data/BBS Maps/Utility/DW_CoastalLowlands.lua</File>
+	<File>Data/BBS Maps/Utility/DW_FeatureGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/DW_MapUtilities.lua</File>
+	<File>Data/BBS Maps/Utility/DW_MountainsCliffs.lua</File>
+	<File>Data/BBS Maps/Utility/DW_RiversLakes.lua</File>
+	<File>Data/BBS Maps/Utility/DW_TerrainGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_TerrainGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_ResourceGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_Balance.lua</File>
+    </ImportFiles>
+
+    	<UpdateDatabase id="BBS_Global_Parameters">
+      		<Properties>
+        		<LoadOrder>1001</LoadOrder>
+      		</Properties>
+      		<File>Configuration/Config.sql</File>
+		<File>Gameplay/GamePlay.xml</File>
+		<File>Gameplay/GamePlayXP2.xml</File>
+    	</UpdateDatabase>
+
+        <UpdateText id="BBS_Gameplay_test">
+            <File>Lang/Text_EN.xml</File>
+			<File>Lang/Text_RU.xml</File>
+        </UpdateText>
+
+    	<UpdateDatabase id="BBS_Minor_Bias_Parameters">
+      		<Properties>
+        		<LoadOrder>1001</LoadOrder>
+      		</Properties>
+      		<File>Configuration/Config_minor_bias.sql</File>
+    	</UpdateDatabase>
+
+    	<UpdateDatabase id="BBS_Minor_Bias_Parameters" criteria="DLC: Vikings Content">
+      		<Properties>
+        		<LoadOrder>1001</LoadOrder>
+      		</Properties>
+      		<File>Configuration/Config_minor_bias_DLC_viking.sql</File>
+    	</UpdateDatabase>
+
+		<UpdateDatabase id="BBS_Negative_StartBias">
+            <Properties>
+                <LoadOrder>2000</LoadOrder>
+            </Properties>
+            <File>sql/bbs_bias_master.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_New_Natural_Wonders">
+            <Properties>
+                <LoadOrder>20000</LoadOrder>
+            </Properties>
+            <File>sql/bbs_new_wonders.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_New_Natural_Wonders_Xp1">
+            <Properties>
+                <LoadOrder>20000</LoadOrder>
+            </Properties>
+			<Criteria>xp1</Criteria>
+            <File>sql/bbs_new_wonders_xp1.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_New_Natural_Wonders_Xp2">
+            <Properties>
+                <LoadOrder>20000</LoadOrder>
+            </Properties>
+			<Criteria>xp2</Criteria>
+            <File>sql/bbs_new_wonders_xp2.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_New_Natural_Wonders_Xp1_Xp2">
+            <Properties>
+                <LoadOrder>20000</LoadOrder>
+            </Properties>
+			<Criteria>xp1</Criteria>
+			<Criteria>xp2</Criteria>
+            <File>sql/bbs_new_wonders_xp1_xp2.sql</File>
+        </UpdateDatabase>
+
+		<UpdateDatabase id="BBS_Less_Natural_Wonders">
+            <Properties>
+                <LoadOrder>20000</LoadOrder>
+            </Properties>
+			<Criteria>NATURALSetting_1</Criteria>
+            <File>sql/bbs_less_wonders.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_More_Natural_Wonders">
+            <Properties>
+                <LoadOrder>20000</LoadOrder>
+            </Properties>
+			<Criteria>NATURALSetting_2</Criteria>
+            <File>sql/bbs_more_wonders.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_Negative_StartBias_Australia">
+            <Properties>
+                <LoadOrder>20005</LoadOrder>
+            </Properties>
+			<Criteria>xp2_australia</Criteria>
+            <File>sql/bbs_bias_australia.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_Negative_StartBias_Maya">
+            <Properties>
+                <LoadOrder>20005</LoadOrder>
+            </Properties>
+			<Criteria>dlc_maya_colombia</Criteria>
+            <File>sql/bbs_bias_maya.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_Negative_StartBias_xp2">
+            <Properties>
+                <LoadOrder>20005</LoadOrder>
+            </Properties>
+			<Criteria>xp2</Criteria>
+            <File>sql/bbs_bias_xp2.sql</File>
+        </UpdateDatabase>
+		<UpdateDatabase id="BBS_Negative_StartBias_xp1">
+            <Properties>
+                <LoadOrder>20005</LoadOrder>
+            </Properties>
+			<Criteria>xp1</Criteria>
+            <File>sql/bbs_bias_xp1.sql</File>
+        </UpdateDatabase>		
+
+    <ImportFiles id="BBS_ExtraMapScriptImport">
+      <Properties>
+        <LoadOrder>1001</LoadOrder>
+      </Properties>
+      	<File>Data/BBS Maps/PerfectWorld6.lua</File>
+	<File>Data/BBS Maps/DWArchipelago.lua</File>
+	<File>Data/BBS Maps/DWContinents.lua</File>
+	<File>Data/BBS Maps/DWFractal.lua</File>
+	<File>Data/BBS Maps/DWPangaea.lua</File>
+	<File>Data/BBS Maps/DWSmallContinents.lua</File>
+	<File>Data/BBS Maps/DWMixedLand.lua</File>
+	<File>Data/BBS Maps/DWMixedIslands.lua</File>
+    </ImportFiles>
+
+        <AddUserInterfaces id="BBS_UI">
+		<Properties>
+			<Context>InGame</Context>
+		</Properties>
+		<File>UI/BBS_UI.xml</File>
+	</AddUserInterfaces>
+
+
+        <AddGameplayScripts id="D">
+            <File>Data/BBS_D.lua</File>
+        </AddGameplayScripts>
+    </InGameActions>
+
+
+        
+    <Files>
+	<File>UI/BBS_UI.lua</File>
+	<File>UI/BBS_UI.xml</File>
+    <File>Data/BBS_D.lua</File>
+    <File>Data/BBS Maps/continents.lua</File>
+	<File>Data/BBS Maps/continents_islands.lua</File>
+	<File>Data/BBS Maps/fractal.lua</File>
+	<File>Data/BBS Maps/inlandsea.lua</File>
+	<File>Data/BBS Maps/island_plates.lua</File>
+	<File>Data/BBS Maps/lakes.lua</File>
+	<File>Data/BBS Maps/pangaea.lua</File>
+	<File>Data/BBS Maps/primordial.lua</File>
+	<File>Data/BBS Maps/seven_seas.lua</File>
+	<File>Data/BBS Maps/shuffle.lua</File>
+	<File>Data/BBS Maps/splintered_fractal.lua</File>
+	<File>Data/BBS Maps/small_continents.lua</File>
+	<File>Data/BBS Maps/terra.lua</File>
+	<File>Data/BBS Maps/tilted_axis.lua</File>
+	<File>Data/BBS Maps/archipelago_xp2.lua</File>
+	<File>Data/BBS Maps/highlands_xp2.lua</File>
+	<File>Data/BBS Maps/wetlands_xp2.lua</File>
+	<File>Data/BBS Maps/perfectworld6.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_NaturalWonderGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_AssignStartingPlots.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_MountainsCliffs.lua</File>
+	<File>Data/BBS Maps/Utility/DW_CoastalLowlands.lua</File>
+	<File>Data/BBS Maps/Utility/DW_FeatureGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/DW_MapUtilities.lua</File>
+	<File>Data/BBS Maps/Utility/DW_MountainsCliffs.lua</File>
+	<File>Data/BBS Maps/Utility/DW_RiversLakes.lua</File>
+	<File>Data/BBS Maps/Utility/DW_TerrainGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_TerrainGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_ResourceGenerator.lua</File>
+	<File>Data/BBS Maps/Utility/BBS_Balance.lua</File>
+    <File>Data/BBS Maps/PerfectWorld6.lua</File>
+	<File>Data/BBS Maps/DWArchipelago.lua</File>
+	<File>Data/BBS Maps/DWContinents.lua</File>
+	<File>Data/BBS Maps/DWFractal.lua</File>
+	<File>Data/BBS Maps/DWPangaea.lua</File>
+	<File>Data/BBS Maps/DWSmallContinents.lua</File>
+	<File>Data/BBS Maps/DWMixedLand.lua</File>
+	<File>Data/BBS Maps/DWMixedIslands.lua</File>
+    <File>Configuration/Config.xml</File>
+	<File>Configuration/Config.sql</File>
+	<File>Configuration/Config_minor_bias.sql</File>
+	<File>Configuration/Config_minor_bias_DLC_viking.sql</File>
+	<File>Lang/Text_EN.xml</File>
+	<File>Lang/Text_RU.xml</File>
+	<File>Gameplay/GamePlay.xml</File>
+	<File>Gameplay/GamePlayXP2.xml</File>
+	
+	<File>sql/bbs_less_wonders.sql</File>
+	<File>sql/bbs_more_wonders.sql</File>
+	<File>sql/bbs_new_wonders.sql</File>
+	<File>sql/bbs_icons_wonders.sql</File>
+	<File>sql/bbs_new_wonders_xp1.sql</File>
+	<File>sql/bbs_new_wonders_xp2.sql</File>	
+	<File>sql/bbs_new_wonders_xp1_xp2.sql</File>
+	<File>sql/bbs_bias_master.sql</File>
+	<File>sql/bbs_bias_australia.sql</File>
+	<File>sql/bbs_bias_xp1.sql</File>
+	<File>sql/bbs_bias_xp2.sql</File>
+    <File>sql/bbs_bias_maya.sql</File>
+			
+	<File>ArtDefs/Clutter.artdef</File>
+    <File>ArtDefs/Features.artdef</File>
+    <File>ArtDefs/StrategicView.artdef</File>
+    <File>ArtDefs/Terrains.artdef</File>
+    <File>ArtDefs/TerrainStyle.artdef</File>
+	 
+	<File>NaturalWondersMod.dep</File>
+    <File>Platforms/MacOS/BLPs/environment/clutter.blp</File>
+    <File>Platforms/MacOS/BLPs/landmarks/tilebases.blp</File>
+    <File>Platforms/MacOS/BLPs/NW_VFX.blp</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_2TileDecalGuide3</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_3TileDecalGuide5</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_BioBayBlue_EM</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_BioBayBlue_OPAC5</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Burn_BaseColor</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Burn_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Dallol_01_b</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Dallol_01_fow</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Dallol_01_g</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Dallol_01_h_2</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_2TileDecalGuide3_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_3TileDecalGuide5_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_BioBayBlue_B6_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Dallol_01_b_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Foliage_Bld_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Foliage_Bld_Flowered_White_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_BarrierReef_Decal_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Crater_Decal4_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Kailash_Decal3_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Mosi_Decal_B5_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Reef_Fish_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_SriPadaS7_Decal_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Okavango_Decal_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Pillaged_Foliage_2_B4_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Pillaged_Foliage_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_RES_Fish_x2_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_RES_Silver_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_RES_Silver_Decal_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Tree_PIL_Decal_B_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Vredefort_Decal_B2_null</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_Flowered_N0</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_Flowered_N1</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_N0</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_N1</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_FOW_Tree_PIL_Decal</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_FX_AQD_Water_a_still</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_FX_Rock1_a_01</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_FX_Rock1_a_02</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_FOW</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_FOWSprite</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_H</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Crater_Decal4_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Crater_Decal4_FOW</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Crater_Decal_H</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal2_H</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal3_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal3_FOW</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal3_S</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Mosi_Decal_B5</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Mosi_Decal_G4</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Mosi_Decal_H4</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Reef_Fish_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Reef_Fish_N0</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Reef_Fish_N1</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_SriPadaS7_Decal_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_SriPadaS7_Decal_FOW</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_SriPadaS7_Decal_H</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_NWON_Tsingy_Decal_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Okavango_Decal_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Okavango_Decal_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Okavango_Decal_H</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Pillaged_Foliage_2_O4</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Pillaged_Foliage_O</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_ProceduralNoiseTexture2D_0x304656c5</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Aluminum_Decal_FOW</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Fish_x2_EM</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_Decal_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_Decal_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_Decal_H</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_G</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_M</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_N0</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_RES_Silver_N1</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_TER_WaterLake_Density_DarkMap_0x6b28231d</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_TER_WaterLake_Density_ScatterMap_0x6b28231d</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_TER_WaterRiverSource_Density_DarkMap_0x47b164c5</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_TER_WaterRiverSource_Density_ScatterMap_0x47b164c5</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_TER_Water_Bumps_Small_Lean0_0x9be17165</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_TER_Water_Bumps_Small_Lean1_0x9be17165</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Tree_PIL_Decal_B</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Vredefort_Decal_B2</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Vredefort_Decal_G2</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_Vredefort_Decal_H4</File>
+    <File>Platforms/MacOS/BLPs/SHARED_DATA/TEXTURE_White32</File>
+    <File>Platforms/MacOS/BLPs/strategicview/strategicview_features.blp</File>
+    <File>Platforms/MacOS/BLPs/terrain/TerrainAssetSet_Base.blp</File>
+    <File>Platforms/MacOS/BLPs/terrain/TerrainElementSet_Base.blp</File>
+    <File>Platforms/MacOS/BLPs/terrain/TerrainMaterialSet_Base.blp</File>
+    <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
+    <File>Platforms/MacOS/BLPs/Water.blp</File>
+    <File>Platforms/Windows/BLPs/environment/clutter.blp</File>
+    <File>Platforms/Windows/BLPs/landmarks/tilebases.blp</File>
+    <File>Platforms/Windows/BLPs/NW_VFX.blp</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_2TileDecalGuide3</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_3TileDecalGuide5</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_BioBayBlue_EM</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_BioBayBlue_OPAC5</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Burn_BaseColor</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Burn_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Dallol_01_b</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Dallol_01_fow</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Dallol_01_g</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Dallol_01_h_2</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_2TileDecalGuide3_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_3TileDecalGuide5_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_BioBayBlue_B6_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Dallol_01_b_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Foliage_Bld_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Foliage_Bld_Flowered_White_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_BarrierReef_Decal_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Crater_Decal4_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Kailash_Decal3_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Mosi_Decal_B5_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_Reef_Fish_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_NWON_SriPadaS7_Decal_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Okavango_Decal_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Pillaged_Foliage_2_B4_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Pillaged_Foliage_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_RES_Fish_x2_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_RES_Silver_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_RES_Silver_Decal_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Tree_PIL_Decal_B_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_DiffuseTint_Vredefort_Decal_B2_null</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_Flowered_N0</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_Flowered_N1</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_N0</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Foliage_Bld_N1</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_FOW_Tree_PIL_Decal</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_FX_AQD_Water_a_still</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_FX_Rock1_a_01</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_FX_Rock1_a_02</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_FOW</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_FOWSprite</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_BarrierReef_Decal_H</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Crater_Decal4_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Crater_Decal4_FOW</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Crater_Decal_H</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal2_H</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal3_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal3_FOW</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Kailash_Decal3_S</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Mosi_Decal_B5</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Mosi_Decal_G4</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Mosi_Decal_H4</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Reef_Fish_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Reef_Fish_N0</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Reef_Fish_N1</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_SriPadaS7_Decal_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_SriPadaS7_Decal_FOW</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_SriPadaS7_Decal_H</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_NWON_Tsingy_Decal_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Okavango_Decal_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Okavango_Decal_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Okavango_Decal_H</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Pillaged_Foliage_2_O4</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Pillaged_Foliage_O</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_ProceduralNoiseTexture2D_0x304656c5</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Aluminum_Decal_FOW</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Fish_x2_EM</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_Decal_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_Decal_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_Decal_H</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_G</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_M</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_N0</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_RES_Silver_N1</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_TER_WaterLake_Density_DarkMap_0x6b28231d</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_TER_WaterLake_Density_ScatterMap_0x6b28231d</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_TER_WaterRiverSource_Density_DarkMap_0x47b164c5</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_TER_WaterRiverSource_Density_ScatterMap_0x47b164c5</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_TER_Water_Bumps_Small_Lean0_0x9be17165</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_TER_Water_Bumps_Small_Lean1_0x9be17165</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Tree_PIL_Decal_B</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Vredefort_Decal_B2</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Vredefort_Decal_G2</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_Vredefort_Decal_H4</File>
+    <File>Platforms/Windows/BLPs/SHARED_DATA/TEXTURE_White32</File>
+    <File>Platforms/Windows/BLPs/strategicview/strategicview_features.blp</File>
+    <File>Platforms/Windows/BLPs/terrain/TerrainAssetSet_Base.blp</File>
+    <File>Platforms/Windows/BLPs/terrain/TerrainElementSet_Base.blp</File>
+    <File>Platforms/Windows/BLPs/terrain/TerrainMaterialSet_Base.blp</File>
+    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
+    <File>Platforms/Windows/BLPs/Water.blp</File>
+    </Files>
+</Mod>

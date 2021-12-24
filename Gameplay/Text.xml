@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+
+	<LocalizedText>		<!-- Map Sizes -->
+
+		<Replace Tag="LOC_MAPSIZE_ENORMOUS_NAME" Language="en_US">
+		  <Text>Enormous</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_ENORMOUS_DESCRIPTION" Language="en_US">
+		  <Text>Huge map for 16 players</Text>
+		</Replace>
+	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" language="en">
+		<Text>Spawn Recalculation</Text>
+	</Replace>
+	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" language="en">
+		<Text>Attempt to place the civ in better starting location</Text>
+	</Replace>
+	<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" language="en">
+		<Text>Ridges Definition</Text>
+	</Replace>
+	<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" language="en">
+		<Text>Control how formidable the mountain ranges are in the game</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_NORMAL_NAME" language="en">
+		<Text>Standard</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_NORMAL_DESC" language="en">
+		<Text>Original Game Setting</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_LESS_NAME" language="en">
+		<Text>Small Chokes</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_LESS_DESC" language="en">
+		<Text>Add small extra small choke in the mountain range</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_VLESS_NAME" language="en">
+		<Text>Large Opening</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_VLESS_DESC" language="en">
+		<Text>Add wider chokes in the mountain range allowing multiple path for attacking units</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_NONE_NAME" language="en">
+		<Text>Flat Earther</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_NONE_DESC" language="en">
+		<Text>Mountain ranges are agressively eroded to create a much flatter map with a lot of Hills</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_MORE_NAME" language="en">
+		<Text>Impenetrable</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_MORE_DESC" language="en">
+		<Text>Make the mountain ridges broader with less passages</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_RF_NAME" language="en">
+		<Text>Classic</Text>
+	</Replace>
+	<Replace Tag="BBS_RIDGE_RF_DESC" language="en">
+		<Text>Pre Gathering Storm, non-continent based placement.</Text>
+	</Replace>
+	<Replace Tag="LOC_GAME_BBS_SRESOURCES_NAME" Language="en_US">
+		  <Text>Strategic Resources</Text>
+	</Replace>
+	<Replace Tag="LOC_GAME_BBS_SRESOURCES_DESC" Language="en_US">
+		  <Text>Modulates the amount of strategic resources in Balanced Start settings</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_NORMAL_NAME" Language="en_US">
+		  <Text>Standard</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_NORMAL_DESC" Language="en_US">
+		  <Text>Standard setting of the Firaxis resource generator</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_MORE_NAME" Language="en_US">
+		  <Text>Abundant</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_MORE_DESC" Language="en_US">
+		  <Text>20% more strategics</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_MUCHMORE_NAME" Language="en_US">
+		  <Text>Epic</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_MUCHMORE_DESC" Language="en_US">
+		  <Text>50% more strategics</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_GARANTEED_NAME" Language="en_US">
+		  <Text>Spawn Garanteed</Text>
+	</Replace>
+	<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="en_US">
+		  <Text>95% chances to have all resources within 5 tiles of your spawning location</Text>
+	</Replace>
+	
+	</LocalizedText>
+
+</GameData>
