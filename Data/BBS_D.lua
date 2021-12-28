@@ -321,7 +321,7 @@ include "MapEnums"
 --	Run spawn correction Coastal (failsafe to prevent harbor blocked by reefs) 
 --	Run Choke point analysis (prevent crashes)
 
-g_version = "1.6.8"
+g_version = "1.7.0"
 
 -----------------------------------------------------------------------------
 function __Debug(...)

@@ -31,13 +31,18 @@ local Base_Major_Distance_Target = 16
 local Minor_Distance_Target = 0
 local bMinDistance = false
 local civs = {};
+
+
+
+
+
 ------------------------------------------------------------------------------
 BBS_AssignStartingPlots = {};
 
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-    --print (...);
+    print (...);
 end
 
 ------------------------------------------------------------------------------
@@ -130,21 +135,25 @@ function BBS_AssignStartingPlots.Create(args)
       or mapScript == "DWSmallContinents.lua" or mapScript == "DWMixedIslands.lua" then
 		Major_Distance_Target = 10
 	end
-
-   
 	
 	if mapScript == "Terra.lua" then
 		Major_Distance_Target = 8
+	end
+   
+   -- Checking if map is earth is flat or not.
+   
+   if mapScript == "Tilted_Axis.lua" or mapScript == "InlandSea.lua" then
+		mapIsRoundWestEast = false
 	end
    
    
    --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
    
    -- Enormous ?
-   if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() > 17 then
+   if Map.GetMapSize() == 6 and  PlayerManager.GetAliveMajorsCount() > 17 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() < 15 then
+	if Map.GetMapSize() == 6 and  PlayerManager.GetAliveMajorsCount() < 15 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
    
@@ -365,9 +374,629 @@ function BBS_AssignStartingPlots.Create(args)
 	
 end
 
+--- New vars ---
+
+local mapIsRoundWestEast = true;
+local mapXSize = 0;
+local mapYSize = 0;
+
+-- True = a player is too close to that location to be settle-able ---
+local isPlayerProximityBlocked = {};
+local mapResourceCode = {};
+local mapTerrainCode = {};
+local mapFeatureCode = {};
+local mapLake = {}; -- true = lake, false = not
+local mapCoastal = {}; -- true = Coastal, false = not
+local mapFreshWater = {};
+local mapRiver = {};
+
+
+local mapFoodYield = {};
+local mapProdYield = {};
+local mapGoldYield = {};
+local mapScienceYield = {};
+local mapCultureYield = {};
+local mapFaithYield = {};
+
+
+--[[
+
+values:
+0 - Water
+1 - Land (no 2-2)
+2 - 2-2
+3 - better than 2-2
+
+--]]
+local mapTwoTwo = {};
+
+
+-- counters (purely statistics)
+
+local terrainCount = {};
+local featureCount = {};
+local resourceCount = {};
+local coastalCount = 0;
+
+local landCount = 0;
+local lakeCount = 0;
+local mountainCount = 0;
+local hillsnCount = 0;
+local waterCount = 0;
+local mountainCount = 0;
+local floodPlainsCount = 0;
+
+
+--- End new vars ---
+
+-- Takes a terrain ID as argument, return whether or not the tile is a water tile.
+
+function isWater(terrain)
+
+   if (terrain == 15 or terrain == 16) then
+      return true;
+   end
+   
+   return false;
+end
+
+
+--[[ Draws the two-two map.
+
+Map: the two-two map (see "mapTwoTwo" declaration for details)
+xSize: xSize of the map
+ySize: ySize of the map
+
+--]]
+function drawMap(map, xSize, ySize)
+
+   local rowOne = "---|";
+   local rowTwo = "---|";
+   local rowThree = "---|";
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+   for i = 0, xSize - 1 do
+      if (i < 100) then
+         rowOne = rowOne .. "0" .. "|";
+      else
+         rowOne = rowOne .. math.floor(i / 100) .. "|";
+      end
+      
+      if (i < 10) then
+         rowTwo = rowTwo .. "0" .. "|";
+      else
+         rowTwo = rowTwo .. math.floor((i % 100) / 10) .. "|";
+      end
+      
+      rowThree = rowThree .. i % 10 .. "|";
+
+   end
+   ___Debug(rowOne);
+   ___Debug(rowTwo);
+   ___Debug(rowThree);
+   
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+
+   for j = ySize - 1, 0 , -1 do
+      jIndex = j + 1;
+      
+      local line = "";
+      if (j < 10) then
+         line = line .. "00" .. j .. "|";
+      elseif (j < 100) then
+         line = line .. "0" .. j .. "|";
+      else
+         line = line .. j .. "|";
+      end
+      
+      for i = 0, xSize - 1 do
+         iIndex = i + 1;
+         
+         line = line .. map[iIndex][jIndex] .. "|";
+         
+         
+      end
+      
+      ___Debug(line);
+   
+   end
+   
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+   ___Debug(rowOne);
+   ___Debug(rowTwo);
+   ___Debug(rowThree);
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+end
+
+--[[
+
+Returns a table containing the (real) index of all tiles of ring X for a given coordinate.
+
+--]]
+
+function getRing(startX, startY, ring, xSize, ySize, mapIsRoundWestEast)
+
+   local list = {};
+
+   if (ring < 0) then
+      return nil; 
+   end
+
+   if (ring == 0) then-- makes no sense
+      list = {startX, startY};
+      return list;
+   end
+   
+   local workX = -1;
+   local workY = -1;
+   
+   local evenIndex = ring ;
+   local posIndex = 0;
+   local negIndex = 0;
+
+   
+   -- EVEN Rows (0, 2 ,4 ...)
+   if (startY % 2 == 0) then
+  
+      posIndex = ring - 1;
+      negIndex = ring;
+      
+   else -- ODD rows
+
+      posIndex = ring;
+      negIndex = ring - 1;
+      
+   end
+   
+   print ("start pos", posIndex);
+   print ("start neg", negIndex);
+   
+   for i = 0, ring - 1 do
+   
+      local tmpPosIndex = 0;
+      local tmpNegIndex = 0;
+   
+      if (i % 2 == 1) then -- rows 1, 3, 5
+         tmpPosIndex = posIndex;
+         tmpNegIndex = negIndex;
+         
+         posIndex = posIndex - 1;
+         negIndex = negIndex - 1;
+      
+      else -- rows 0,2,4
+      
+         tmpPosIndex = evenIndex;
+         tmpNegIndex = evenIndex;
+         
+         evenIndex = evenIndex - 1;
+      end
+      
+      print ("posinde", tmpPosIndex);
+      print ("neginde", tmpNegIndex);
+      
+      -- row above
+      workY = startY + i;
+      if (workY < ySize) then
+      
+         -- neg X (tile on the left)
+         workX = startX - tmpNegIndex;
+         if (workX < 0) then
+            if (mapIsRoundWestEast) then
+               workX = workX + xSize;
+               table.insert(list, {workX, workY})
+            end
+         else
+            table.insert(list, {workX, workY})
+         end
+         
+         -- post X (tile on the right)
+               
+         workX = startX + tmpPosIndex;
+         if (workX >= mapXSize) then
+            if (mapIsRoundWestEast) then
+                  workX = workX - xSize;
+                  table.insert(list, {workX, workY})
+            end -- no else as we not adding if map not round
+
+         else
+            table.insert(list, {workX, workY});
+         end
+      end
+      
+      if (i ~= 0) then
+      
+         -- row BELOW
+         workY = startY - i;
+         if (workY >= 0) then
+                  
+            -- neg X (tile on the left)
+            workX = startX - tmpNegIndex;
+            if (workX < 0) then
+               if (mapIsRoundWestEast) then
+                  workX = workX + xSize;
+                  table.insert(list, {workX, workY})
+               end
+            else
+               table.insert(list, {workX, workY})
+            end
+            
+            -- post X (tile on the right)
+            
+            workX = startX + tmpPosIndex;
+            if (workX >= mapXSize) then
+               if (mapIsRoundWestEast) then
+                     workX = workX - xSize;
+                     table.insert(list, {workX, workY})
+               end -- no else as we not adding if map not round
+
+            else
+               table.insert(list, {workX, workY});
+            end
+         end
+      end
+   end
+   
+   
+   -- last iteration is always special (more tiles)
+   
+   local startLastLine = 0;
+   local endLastLine = 0;
+   
+   if (ring % 2 == 0) then
+      startLastLine = startX - evenIndex;
+      endLastLine = startX + evenIndex;
+   else
+      startLastLine = startX - negIndex;
+      endLastLine = startX + posIndex;
+   
+   end
+   
+   -- row above
+   workY = startY + ring;
+   if (workY < ySize) then
+   
+      for workX = startLastLine, endLastLine do
+      
+         if (workX >= 0 and workX < mapXSize) then
+            table.insert(list, {workX, workY});
+         elseif mapIsRoundWestEast then
+            if (workX < 0) then
+               table.insert(list, {workX + mapXSize, workY});
+            else -- must be over the limit
+               table.insert(list, {workX - mapXSize, workY});
+            end
+         end
+      end
+      
+   
+   end
+   
+    workY = startY - ring;
+   if (workY >= 0) then
+   
+      for workX = startLastLine, endLastLine do
+      
+         if (workX >= 0 and workX < mapXSize) then
+            table.insert(list, {workX, workY});
+         elseif mapIsRoundWestEast then
+            if (workX < 0) then
+               table.insert(list, {workX + mapXSize, workY});
+            else -- must be over the limit
+               table.insert(list, {workX - mapXSize, workY});
+            end
+         end
+      end
+      
+   
+   end
+      
+   return list;
+      
+     
+end
+
+
+
+--function BBS_AssignStartingPlots:__InitStartingData()
+function NewBBS()
+
+   print("----------- BBS BETA -------------");
+   print("----------- Starting map parsing -------------");
+   print(os.date("%c"));
+   
+   -- These map are ... flat earth :-)
+   local mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
+   if (mapScript == "Tilted_Axis.lua" or mapScript == "InlandSea.lua") then
+      mapIsRoundWestEast = false;
+   end
+   
+   -- Size = max index
+   
+   -- duel (1v1)
+   if Map.GetMapSize() == 0 then
+      mapXSize = 44;
+      mapYSize = 26;
+   end
+   
+   -- Tiny (2v2)
+   if Map.GetMapSize() == 1 then
+      mapXSize = 60;
+      mapYSize = 38;
+   end
+   
+   -- Small (3v3)
+   if Map.GetMapSize() == 2 then
+      mapXSize = 74;
+      mapYSize = 46;
+   end
+   
+   -- Standard (4v4)
+   if Map.GetMapSize() == 3 then
+      mapXSize = 84;
+      mapYSize = 54;
+   end
+   
+   -- Large (5v5)
+   if Map.GetMapSize() == 4 then
+      mapXSize = 96;
+      mapYSize = 60;
+   end
+   
+   -- Huge (6v6)
+   if Map.GetMapSize() == 5 then
+      mapXSize = 106;
+      mapYSize = 66;
+   end
+   
+   
+   -- Enormous (8v8)
+   if Map.GetMapSize() == 6 then
+      mapXSize = 128;
+      mapYSize = 78;
+   end
+   
+   print("size:", Map.GetMapSize());
+   print("X:", mapXSize, "Y:", mapYSize);
+   
+   
+   -- Array init --
+   for i = 1, mapXSize do
+   
+      isPlayerProximityBlocked[i] = {};
+      mapResourceCode[i] = {};
+      mapTerrainCode[i] = {};
+      mapFeatureCode[i] = {};
+      mapCoastal[i] = {};
+      mapLake[i] = {};
+      mapRiver[i] = {};
+      mapFreshWater[i] = {};
+      
+      mapTwoTwo[i] = {};
+      mapFoodYield[i] = {};
+      mapProdYield[i] = {};
+      mapGoldYield[i] = {};
+      mapScienceYield[i] = {};
+      mapCultureYield[i] = {};
+      mapFaithYield[i] = {};
+      
+      for j = 1, mapYSize do
+         mapResourceCode[i][j] = -1;
+         mapTerrainCode[i][j] = -1;
+         mapFeatureCode[i][j] = -1;
+         mapTwoTwo[i][j] = -1;
+         mapCoastal[i][j] = false;
+         mapLake[i][j] = false;
+         mapRiver[i][j] = false;
+         mapFreshWater[i][j] = false;
+         
+         mapFoodYield[i][j] = 0;
+         mapProdYield[i][j] = 0;
+         mapGoldYield[i][j] = 0;
+         mapScienceYield[i][j] = 0;
+         mapCultureYield[i][j] = 0;
+         mapFaithYield[i][j] = 0;
+         
+         isPlayerProximityBlocked[i][j] = false;
+      end
+   end
+   
+   for i = 1, 17 do
+      terrainCount[i] = 0;
+   end
+   
+   for i = 1, 100 do
+      resourceCount[i] = 0;
+      featureCount[i] = 0;
+   end
+   
+   -- Analysing the Map --
+   
+   for i = 0, mapXSize - 1 do
+   
+      local iIndex = i + 1;
+      
+      for j = 0, mapYSize - 1 do
+      
+         local jIndex = j + 1 ;
+         local plot = Map.GetPlot(i , j);
+         
+         if (plot ~=nil) then
+         
+            local feature = plot:GetFeatureType();
+            local terrain = plot:GetTerrainType();
+            local resource = plot:GetResourceType();
+            local isCoastal = plot:IsCoastalLand();
+            local food = plot:GetYield(g_YIELD_FOOD);
+            local prod = plot:GetYield(g_YIELD_PRODUCTION);
+            local gold = plot:GetYield(g_YIELD_GOLD);
+            local science = plot:GetYield(g_YIELD_SCIENCE);
+            local culture = plot:GetYield(g_YIELD_CULTURE);
+            local faith = plot:GetYield(g_YIELD_FAITH);
+            
+            
+            mapTerrainCode[iIndex][jIndex] = terrain;
+            mapResourceCode[iIndex][jIndex] = resource;
+            mapFeatureCode[iIndex][jIndex] = feature;
+            
+            mapFoodYield[iIndex][jIndex] = food;
+            mapProdYield[iIndex][jIndex] = prod;
+            mapGoldYield[iIndex][jIndex] = gold;
+            mapScienceYield[iIndex][jIndex] = science;
+            mapCultureYield[iIndex][jIndex] = culture;
+            mapFaithYield[iIndex][jIndex] = faith;
+            
+            -- Mapping 2-2
+            if (terrain >= 15) then -- water
+               mapTwoTwo[iIndex][jIndex] = 0;
+            
+            elseif (food < 2 or prod < 2) then -- not 2-2
+               mapTwoTwo[iIndex][jIndex] = 1;
+               
+            elseif (food == 2 and prod == 2) then -- 2-2
+               mapTwoTwo[iIndex][jIndex] = 2;
+            
+            else -- better than 2-2
+               mapTwoTwo[iIndex][jIndex] = 3;
+            end
+            --- end mapping 2-2 --
+            
+            if(plot:IsRiver()) then
+               mapRiver[iIndex][jIndex] = true;
+            end
+            
+            if(plot:IsFreshWater()) then
+               mapFreshWater[iIndex][jIndex] = true;
+            end
+            
+            if (terrain >= 0) then
+               terrainCount[terrain + 1] = terrainCount[terrain + 1] + 1;
+            end
+            
+            if (terrain == 15 and plot:IsLake()) then
+               mapLake[iIndex][jIndex] = true;
+               lakeCount = lakeCount + 1;
+            end
+            
+            if (resource >= 0) then
+               resourceCount[resource + 1] = resourceCount[resource + 1] + 1;
+            end
+            if (feature >= 0) then
+               featureCount[feature + 1] = featureCount[feature + 1] + 1;
+            end
+            
+            if (feature == 0 or feature == 31 or feature == 32) then
+               floodPlainsCount = floodPlainsCount + 1;
+            end
+            
+            if (isCoastal) then
+               coastalCount = coastalCount + 1;
+               mapCoastal[iIndex][jIndex] = true;
+            end
+            
+            ___Debug("Tile X:", i, "Y:", j);
+            ___Debug("-- Terrain:", terrain);
+            ___Debug("-- Resource:", resource);
+            ___Debug("-- Feature:", feature);
+            ___Debug("-----");
+            
+         end
+      end
+   end
+   
+   -- Display stats --
+   
+   local tilesCount = mapXSize * mapYSize
+   
+   waterCount = terrainCount[16 + 1] + terrainCount[15 + 1];
+   landCount = tilesCount - waterCount;
+   mountainCount = terrainCount[2 + 1] + terrainCount[5 + 1] + terrainCount[8 + 1] + terrainCount[11 + 1] + terrainCount[14 + 1];
+   hillsCount = terrainCount[1 + 1] + terrainCount[4 + 1] + terrainCount[7 + 1] + terrainCount[10 + 1] + terrainCount[13 + 1];
+   local usableLand = landCount - mountainCount;
+   
+   
+   
+   print("Amount of tiles:", tilesCount);
+   print("---------------");
+   print("--- Water ---");
+   print("---------------");
+   print("------Percentage of Water:", ((waterCount / tilesCount) * 100));
+   print("------Water Count:", terrainCount[16 + 1] + terrainCount[15 + 1]);
+   print("----------Coast Count:", terrainCount[15 + 1] - lakeCount);
+   print("----------Lake Count: ", lakeCount);
+   print("----------Ocean Count:", terrainCount[16 + 1]);
+   print("--------------Of which are ice:", featureCount[1 + 1]);
+   print("---------------");
+   
+   print("---------------");
+   print("--- Land ---");
+   print("---------------");
+   print("------Percentage of Land:", ((landCount / tilesCount) * 100));
+   print("------Land count", landCount);
+   print("----------Coastal tiles:", coastalCount);
+   print("----------Mountains count", mountainCount);
+   print("----------Hills count", hillsCount);
+   print("------Usable land count (no mountains)", usableLand);
+   print("----------Of which: grasland", terrainCount[0 + 1] + terrainCount[1 + 1]);
+   print("----------Of which: plain", terrainCount[3 + 1] + terrainCount[4 + 1]);
+   print("----------Of which: desert", terrainCount[6 + 1] + terrainCount[7 + 1]);
+   print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
+   print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
+   print("----------Floodplains:", floodPlainsCount);
+   
+   
+   ___Debug("---------------");
+   ___Debug("--- Two-Two Map ---");
+   drawMap(mapTwoTwo, mapXSize, mapYSize);
+   
+   
+   -- test rings
+   
+   local ringTest = {};
+   for i = 1, mapXSize do
+      ringTest[i] = {};
+      for j = 1, mapYSize do
+         ringTest[i][j] = 9;
+      end
+   end
+   
+   for i = 1, 5 do
+   
+      print("--------");
+      print("---- Ring:", i, "-------");
+      print("--------");
+      local list = getRing(65, 37, i, mapXSize, mapXSize, mapIsRoundWestEast)
+      
+      for _, element in ipairs(list) do
+         local x = element[1];
+         local y = element[2];
+         print("X:", x, "Y:", y);
+         ringTest[x + 1][y + 1] = i;
+         
+      end
+      
+      print("--------");
+      print("--------");
+      --for k, v in pairs(list) do
+        -- print("X:", v[k], "Y:", y);
+         --ringTest[x + 1][y + 1] = i;
+      --end
+   end
+   
+   drawMap(ringTest, mapXSize, mapYSize);
+
+end
+
 ------------------------------------------------------------------------------
 function BBS_AssignStartingPlots:__InitStartingData()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
+      
+      
+   ---- TEMPORARY !!! -----
+   NewBBS();
+   
+   ---- END ----
+   
     if(self.uiMinMajorCivFertility <= 0) then
         self.uiMinMajorCivFertility = 110;
     end

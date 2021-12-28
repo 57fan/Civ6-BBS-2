@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d6654f" version="168">
+<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="170">
 	<Properties>
 	    <Name>LOC_BBS_TITLE</Name>
 		<Description>LOC_BBS_DESCRIPTION</Description>
@@ -13,8 +13,8 @@
 	
 		<LocalizedText>
 		<Text id="LOC_BBS_TITLE">
-			<en_US>Better Balanced Starts 1.6.8</en_US>
-			<fr_FR>Better Balanced Starts 1.6.8</fr_FR>
+			<en_US>Better Balanced Starts 1.7.0</en_US>
+			<fr_FR>Better Balanced Starts 1.7.0</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_TEASER">
 			<en_US>Balanced spawn placement for tournaments.</en_US>
