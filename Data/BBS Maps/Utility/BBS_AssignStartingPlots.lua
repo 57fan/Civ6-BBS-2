@@ -374,6 +374,20 @@ function BBS_AssignStartingPlots.Create(args)
 	
 end
 
+function isLuxury(resource)
+
+   if(resource >= 10 and resource < 40) then
+      return true;
+   end
+   
+   if (resource == 49 or resource == 50 or resource == 51 or resource == 53) then
+      return true;
+   end
+   
+   return false;
+
+end
+
 --- New vars ---
 
 local mapIsRoundWestEast = true;
@@ -382,6 +396,7 @@ local mapYSize = 0;
 
 -- True = a player is too close to that location to be settle-able ---
 local isPlayerProximityBlocked = {};
+local mapSpawnable = {}; -- whether the tile can be settled or not
 local mapResourceCode = {};
 local mapTerrainCode = {};
 local mapFeatureCode = {};
@@ -389,6 +404,8 @@ local mapLake = {}; -- true = lake, false = not
 local mapCoastal = {}; -- true = Coastal, false = not
 local mapFreshWater = {};
 local mapRiver = {};
+local mapContinent = {};
+local mapWonder = {};
 
 
 local mapFoodYield = {};
@@ -397,6 +414,22 @@ local mapGoldYield = {};
 local mapScienceYield = {};
 local mapCultureYield = {};
 local mapFaithYield = {};
+
+--- civ related ---
+
+local majorList = {};
+local majorBiases = {};
+
+
+local majorBiasOKlandOKWaterOK = {};
+local majorBiasOKlandOKWaterNOK = {};
+local majorBiasOKlandNOKWaterOK = {};
+local majorBiasOKlandOKWaterNOK = {};
+local majorBiasNOKlandOK = {};
+local majorBiasNOKlandNOK = {};
+
+local minorList = {};
+local minorBiases = {};
 
 
 --[[
@@ -509,6 +542,71 @@ function drawMap(map, xSize, ySize)
 
 end
 
+
+function drawMapBoolean(map, xSize, ySize)
+
+   local rowOne = "---|";
+   local rowTwo = "---|";
+   local rowThree = "---|";
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+   for i = 0, xSize - 1 do
+      if (i < 100) then
+         rowOne = rowOne .. "0" .. "|";
+      else
+         rowOne = rowOne .. math.floor(i / 100) .. "|";
+      end
+      
+      if (i < 10) then
+         rowTwo = rowTwo .. "0" .. "|";
+      else
+         rowTwo = rowTwo .. math.floor((i % 100) / 10) .. "|";
+      end
+      
+      rowThree = rowThree .. i % 10 .. "|";
+
+   end
+   ___Debug(rowOne);
+   ___Debug(rowTwo);
+   ___Debug(rowThree);
+   
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+
+   for j = ySize - 1, 0 , -1 do
+      jIndex = j + 1;
+      
+      local line = "";
+      if (j < 10) then
+         line = line .. "00" .. j .. "|";
+      elseif (j < 100) then
+         line = line .. "0" .. j .. "|";
+      else
+         line = line .. j .. "|";
+      end
+      
+      for i = 0, xSize - 1 do
+         iIndex = i + 1;
+         
+         if (map[iIndex][jIndex]) then
+            line = line .. "1" .. "|";
+         else
+            line = line .. "0" .. "|";
+         end
+         
+      end
+      
+      ___Debug(line);
+   
+   end
+   
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+   ___Debug(rowOne);
+   ___Debug(rowTwo);
+   ___Debug(rowThree);
+   ___Debug("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+end
+
 --[[
 
 Returns a table containing the (real) index of all tiles of ring X for a given coordinate.
@@ -549,8 +647,8 @@ function getRing(startX, startY, ring, xSize, ySize, mapIsRoundWestEast)
       
    end
    
-   print ("start pos", posIndex);
-   print ("start neg", negIndex);
+   --print ("start pos", posIndex);
+   --print ("start neg", negIndex);
    
    for i = 0, ring - 1 do
    
@@ -572,8 +670,8 @@ function getRing(startX, startY, ring, xSize, ySize, mapIsRoundWestEast)
          evenIndex = evenIndex - 1;
       end
       
-      print ("posinde", tmpPosIndex);
-      print ("neginde", tmpNegIndex);
+      --print ("posinde", tmpPosIndex);
+      --print ("neginde", tmpNegIndex);
       
       -- row above
       workY = startY + i;
@@ -604,7 +702,7 @@ function getRing(startX, startY, ring, xSize, ySize, mapIsRoundWestEast)
          end
       end
       
-      if (i ~= 0) then
+      if (i ~= 0) then -- because otherwise, we have the tile two times
       
          -- row BELOW
          workY = startY - i;
@@ -701,9 +799,16 @@ end
 --function BBS_AssignStartingPlots:__InitStartingData()
 function NewBBS()
 
+
+   
    print("----------- BBS BETA -------------");
    print("----------- Starting map parsing -------------");
    print(os.date("%c"));
+   
+   
+   -------------------------
+   ----- PHASE 1 -----------
+   ----- Now collecting all kind of stats about the map and the tiles
    
    -- These map are ... flat earth :-)
    local mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
@@ -764,6 +869,7 @@ function NewBBS()
    for i = 1, mapXSize do
    
       isPlayerProximityBlocked[i] = {};
+      
       mapResourceCode[i] = {};
       mapTerrainCode[i] = {};
       mapFeatureCode[i] = {};
@@ -771,6 +877,9 @@ function NewBBS()
       mapLake[i] = {};
       mapRiver[i] = {};
       mapFreshWater[i] = {};
+      mapContinent[i] = {};
+      mapSpawnable[i] = {};
+      mapWonder[i] = {};
       
       mapTwoTwo[i] = {};
       mapFoodYield[i] = {};
@@ -789,6 +898,7 @@ function NewBBS()
          mapLake[i][j] = false;
          mapRiver[i][j] = false;
          mapFreshWater[i][j] = false;
+         mapContinent[i][j] = 9;
          
          mapFoodYield[i][j] = 0;
          mapProdYield[i][j] = 0;
@@ -796,8 +906,10 @@ function NewBBS()
          mapScienceYield[i][j] = 0;
          mapCultureYield[i][j] = 0;
          mapFaithYield[i][j] = 0;
+         mapWonder[i][j] = false;
          
          isPlayerProximityBlocked[i][j] = false;
+         mapSpawnable[i][j] = true;
       end
    end
    
@@ -808,6 +920,7 @@ function NewBBS()
    for i = 1, 100 do
       resourceCount[i] = 0;
       featureCount[i] = 0;
+      majorBiases[i] = {};
    end
    
    -- Analysing the Map --
@@ -846,6 +959,22 @@ function NewBBS()
             mapCultureYield[iIndex][jIndex] = culture;
             mapFaithYield[iIndex][jIndex] = faith;
             
+            
+            --- strategics are not visible at start, but the game would count their stat anyway
+            if (resource == 40 or resource == 43) then
+               science = science - 1;
+            elseif resource == 41 then
+               prod = prod - 1;
+            elseif (resource == 42 or resource == 44) then
+               prod = prod - 1;
+               food = food - 1;
+            elseif resource == 45 then
+               prod = prod - 3;
+            elseif resource == 46 then
+               prod = prod - 2; 
+            end
+               
+            
             -- Mapping 2-2
             if (terrain >= 15) then -- water
                mapTwoTwo[iIndex][jIndex] = 0;
@@ -869,6 +998,10 @@ function NewBBS()
                mapFreshWater[iIndex][jIndex] = true;
             end
             
+            if(plot:IsNaturalWonder()) then
+               mapWonder[iIndex][jIndex] = true;
+            end
+            
             if (terrain >= 0) then
                terrainCount[terrain + 1] = terrainCount[terrain + 1] + 1;
             end
@@ -876,6 +1009,10 @@ function NewBBS()
             if (terrain == 15 and plot:IsLake()) then
                mapLake[iIndex][jIndex] = true;
                lakeCount = lakeCount + 1;
+            end
+            
+            if (terrain < 15) then
+               mapContinent[iIndex][jIndex] = plot:GetContinentType();
             end
             
             if (resource >= 0) then
@@ -915,6 +1052,213 @@ function NewBBS()
    local usableLand = landCount - mountainCount;
    
    
+   -- test rings
+   --[[
+   local ringTest = {};
+   for i = 1, mapXSize do
+      ringTest[i] = {};
+      for j = 1, mapYSize do
+         ringTest[i][j] = 9;
+      end
+   end
+   
+   for i = 1, 5 do
+   
+      print("--------");
+      print("---- Ring:", i, "-------");
+      print("--------");
+      local list = getRing(0, 0, i, mapXSize, mapXSize, mapIsRoundWestEast)
+      
+      for _, element in ipairs(list) do
+         local x = element[1];
+         local y = element[2];
+         print("X:", x, "Y:", y);
+         ringTest[x + 1][y + 1] = i;
+         
+      end
+      
+      print("--------");
+      print("--------");
+      --for k, v in pairs(list) do
+        -- print("X:", v[k], "Y:", y);
+         --ringTest[x + 1][y + 1] = i;
+      --end
+   end
+   --]]
+   --drawMap(ringTest, mapXSize, mapYSize);
+   
+   
+   -- continent map
+   
+   --drawMap(mapContinent, mapXSize, mapYSize);
+   
+   ----------------------
+   -----PHASE 2----------
+   ---- Now, with all the data, we start analysing the map-----
+   ----------------------
+   
+   ----
+   --Now Deciding which tiles are going to be "settle forbidden"
+   --
+   -- Forbidden:
+   --    - Spawn on a luxury (any luxury)
+   --    - Spawn Ring 1 of 1-3 gypsum/Ivory/deer with fresh water (would make capital 2-3)
+   --    - Spawn Ring 1 of diamond/cocoa/amber/coffee in 2-2 ---> NOT NOW, not too game breaker ?
+   --    - Spawn Ring 2 of a Spice (any spice, any land)
+   --    - Spawn Ring 2 of 4-0 sugar/honey/citrus, with fresh water or coastal (would make cap 4-1) and flat grassland
+   --    - Spawn on Oasis (unsettleable) or mountain or water (except Maori of course)
+   --    - Spawn Ring 3 of a natural wonder (any wonder)
+   
+   
+   
+   for i = 0, mapXSize - 1 do
+      local iIndex = i + 1;
+      
+      for j = 0, mapYSize - 1 do 
+         local jIndex = j + 1 ;
+         
+         ------ Too close to map border ! ----------
+         ------ It is forbidden to settle less than 3 tiles away from the map border ----
+         
+         if (j <= 1 or ((mapYSize - j) <= 1)) then
+            mapSpawnable[iIndex][jIndex] = false;
+            
+            ___Debug("---- Banning border of the map X:", i, "Y:", j);
+         end
+         
+         if (mapIsRoundWestEast == false) then
+            if (i <= 1 or ((mapXSize - i) <= 1)) then
+            mapSpawnable[iIndex][jIndex] = false;
+            
+            ___Debug("---- Banning border of the map X:", i, "Y:", j);
+            end
+         end
+         
+         ------ removing ... resources -----------
+         --if isLuxury(mapResourceCode[iIndex][jIndex]) then
+         if (mapResourceCode[iIndex][jIndex] >= 0) then
+            mapSpawnable[iIndex][jIndex] = false;
+            
+            ___Debug("---- Banning resource X:", i, "Y:", j);
+         end
+         
+         ------ removing water ----------
+         --if isWater(mapTerrainCode[iIndex][jIndex]) then
+         --   mapSpawnable[iIndex][jIndex] = false;
+         --end
+         
+         ----- removing mountains ----------
+         if isMountainCode(mapTerrainCode[iIndex][jIndex]) then
+            mapSpawnable[iIndex][jIndex] = false;
+         end
+         
+         ----- removing oasis ------------
+         if (mapFeatureCode[iIndex][jIndex] == 4) then
+            mapSpawnable[iIndex][jIndex] = false;
+         end
+        
+         ---- now starting more complex tasks ----
+         ----- banning spawns too close from a certain type of tile ------
+        
+         ------ gypsum/ivory/deer  needs :----
+         ----- Fresh water
+         ----- plain hills
+         if ((mapResourceCode[iIndex][jIndex] == 17 or mapResourceCode[iIndex][jIndex] == 4 or mapResourceCode[iIndex][jIndex] == 19) and mapFreshWater[iIndex][jIndex] == true and mapTerrainCode[iIndex][jIndex] == 4) then
+            ___Debug("Found forbidden Gypsum/Ivory/ on X:", i, "Y:", j);
+            local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+         end
+         
+         ----- Spice: no settle ring 2 near a spice -----
+         if (mapResourceCode[iIndex][jIndex] == 27) then
+            ___Debug("Found Spice on X:", i, "Y:", j);
+            local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+            
+            list = getRing(i, j, 2, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+         end
+         
+         -- sugar/honey/citrus on fres water/coastal on flat grassland
+         if ((mapResourceCode[iIndex][jIndex] == 53 or mapResourceCode[iIndex][jIndex] == 10 or mapResourceCode[iIndex][jIndex] == 28) and
+               (mapFreshWater[iIndex][jIndex] or mapCoastal[iIndex][jIndex]) and
+               (mapTerrainCode[iIndex][jIndex] == 0)) then
+            ___Debug("Found a forbidden sugar/honey/citrus on X:", i, "Y:", j);
+            local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+            
+            list = getRing(i, j, 2, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+         end
+         
+         -- wonder neighbourhood ---
+         if mapWonder[iIndex][jIndex] then
+            ___Debug("Found a wonder on X:", i, "Y:", j);
+            mapSpawnable[iIndex][jIndex] = false; -- banning ring 0
+            
+            
+            local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+            
+            list = getRing(i, j, 2, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+            
+            list = getRing(i, j, 3, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+         end
+      end
+   end
+   
+   local totalSpawnable = 0;
+   
+   for i = 1, mapXSize do      
+      for j = 1, mapYSize do 
+         if (mapSpawnable[i][j]) then
+            totalSpawnable = totalSpawnable + 1;
+         end
+      end
+   end
+   
    
    print("Amount of tiles:", tilesCount);
    print("---------------");
@@ -943,47 +1287,334 @@ function NewBBS()
    print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
    print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
    print("----------Floodplains:", floodPlainsCount);
+   print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
    
    
    ___Debug("---------------");
    ___Debug("--- Two-Two Map ---");
    drawMap(mapTwoTwo, mapXSize, mapYSize);
    
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("--- Spawnablemap ---");
    
-   -- test rings
    
-   local ringTest = {};
-   for i = 1, mapXSize do
-      ringTest[i] = {};
-      for j = 1, mapYSize do
-         ringTest[i][j] = 9;
-      end
+   drawMapBoolean(mapSpawnable, mapXSize, mapYSize);
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   
+
+   ----------------------
+   -----PHASE 3----------
+   ---- Now, we will rate every settleable tile-----
+   ----------------------
+   
+   print("----------- BBS BETA -------------");
+   print("----------- Starting tiles scoring -------------");
+   print(os.date("%c"));
+   
+   -- See if there are any civs starting out in the water
+   local tempMajorList = {};
+   local specMajorList = {};
+   local tempMinorList = {};
+   
+   local majorAll = {} -- will contain all infos, including biases !
+   
+   local majorBiases = {};
+   local minorBiases = {};
+   
+   local majorBestBias = {};
+   local minorBestBias = {};
+   
+   for i = 1, 20 do
+      majorBestBias[i] = 10;
+      minorBestBias[i] = 10;
    end
    
-   for i = 1, 5 do
+   local specCount = 0;
+   local majorCount = 0;
+   local minorCount = 0;
    
-      print("--------");
-      print("---- Ring:", i, "-------");
-      print("--------");
-      local list = getRing(65, 37, i, mapXSize, mapXSize, mapIsRoundWestEast)
+   local majorList = {};
+   local minorList = {};
+   local hasMaori = false;
+   
+   local biasCount = 0;
+   
+   
+   --for i = 1, 40 do
+     -- majorBias[i] = {};
+   --end
       
-      for _, element in ipairs(list) do
-         local x = element[1];
-         local y = element[2];
-         print("X:", x, "Y:", y);
-         ringTest[x + 1][y + 1] = i;
+   
+   tempMajorList = PlayerManager.GetAliveMajorIDs();
+	tempMinorList = PlayerManager.GetAliveMinorIDs();
+   
+   print("List of civs:");
+   print("--------------");
+   print("Majors (players):");
+   
+   for i = 1, PlayerManager.GetAliveMajorsCount() do
+      local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
+      if ( PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName() == "LEADER_SPECTATOR" or PlayerConfigurations[tempMajorList[i]]:GetHandicapTypeID() == 2021024770) then
+         specMajorList[i] = tempMajorList[i];
+         specCount = specCount + 1;
+         ___Debug ("Found a Spectator");
+      else
+         majorList[i] = tempMajorList[i];
+         majorCount = majorCount + 1;
+         local civName = PlayerConfigurations[tempMajorList[i]]:GetCivilizationTypeName();
+         if (civName == "CIVILIZATION_MAORI") then
+            hasMaori = true;
+         end
+         local tempBias = BBS_AssignStartingPlots:__FindBias(civName);
+         
+         --print(tempBias);
+         --print(tempBias[1].Type);
+         
+         local biasCount = 0;
+         local biasScore = 0; -- will be applied for players with no bias
+         
+         if tempBias ~= nil then
+            for _, element in ipairs(tempBias) do
+               local tempScore = 0;
+               biasCount = biasCount + 1;
+               if (element.Tier == 1) then
+                  tempScore = 5000;
+                  if (element.Type == "TERRAINS" and (element.Value == 6 or element.Value == 7)) then --desesrt bias -> prio
+                     tempScore = 5800;
+                  elseif (element.Type == "TERRAINS" and (element.Value == 12 or element.Value == 13)) then --tundra bias -> prio too !
+                     tempScore = 5500;
+                  end
+               elseif (element.Tier == 2) then
+                  tempScore = 4000;
+               elseif (element.Tier == 3) then
+                  tempScore = 3000;
+               elseif (element.Tier == 4) then
+                  tempScore = 2000;
+               elseif (element.Tier == 5) then
+                  tempScore = 1000;
+               end
+               
+               if tempScore > biasScore then
+                  biasScore = tempScore;
+               end
+            end
+         end
+         
+         majorBiases[i] = tempBias;
+         
+         majorAll[i] = {index = i, civName = civName, major = majorList[i], biases = majorBiases[i], biasScore = biasScore, biasCount = biasCount};
+         
          
       end
-      
-      print("--------");
-      print("--------");
-      --for k, v in pairs(list) do
-        -- print("X:", v[k], "Y:", y);
-         --ringTest[x + 1][y + 1] = i;
-      --end
+      print("---------Player ", i, "Leader:", leaderType);
    end
    
-   drawMap(ringTest, mapXSize, mapYSize);
+   
+   print("--------------");
+   print("Majors (players):");
+   print("--------------");
+   
+   for i = 1, PlayerManager.GetAliveMinorsCount() do
+      local leaderType = PlayerConfigurations[tempMinorList[i]]:GetLeaderTypeName();
+      minorList[i] = tempMinorList[i];
+      minorCount = minorCount + 1;
+      local civName = PlayerConfigurations[tempMinorList[i]]:GetCivilizationTypeName();
+      minorBiases[i] = BBS_AssignStartingPlots:__FindBias(civName);
+      
+      print("---------CS ", i, "", leaderType);
+   end
+   
+   print("--------------");
+   print("--------------");
+   
+   --table.sort(majorAll, function(a, b) return a.biasScore > b.biasScore; end);
+         
+   for _, element in ipairs(majorAll) do
+      print(element.civName, element.biasScore);
+   end
+   
+   
+   
+   evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori);
+   
+   
+   
+
+end
+
+function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
+   
+   
+   
+   for i = 0, mapXSize - 1 do
+      local iIndex = i + 1;
+      
+      for j = 0, mapYSize - 1 do 
+         local jIndex = j + 1 ;
+         
+         local maoriSelection = "NONE"; -- possible value : "NONE", "MAIN", "FALLBACK"
+         
+         if (mapSpawnable[iIndex][jIndex]) then -- We already have eliminated a lot of forbidden spawns
+            
+            
+            if (mapTerrainCode[iIndex][jIndex] >= 15) then--If no maori, we can expedite things and not analyse water tiles
+               -- Maori code --
+               if (hasMaori) then
+                  if (mapTerrainCode[iIndex][jIndex] == 15) then
+                     maoriSelection = "FALLBACK";
+                  else
+                     for k = 1, 5 do
+                        local list = getRing(i, j, k, mapXSize, mapYSize, mapIsRoundWestEast);
+                        for _, element in ipairs(list) do
+                           local x = element[1];
+                           local y = element[2];
+                           
+                           if (mapTerrainCode[x + 1][y + 1] < 15) then -- We have land somewhere around -> tile will be fallback
+                              maoriSelection = "FALLBACK";
+                              break;
+                           end
+                        end
+                        
+                        if (maoriSelection == "FALLBACK") then
+                           break; 
+                        end
+                     end
+                     if (maoriSelection ~= "FALLBACK") then -- We have nothing but water -> good maori spawn !
+                        maoriSelection = "MAIN";
+                     end
+                  end
+               end
+               
+               -- END Maori Code --
+            else -- we have a "normal" tile
+            
+               -- collecting stats for each ring
+               -- local ringOneTerrain = {};
+               -- local ringOneResource = {};
+               -- local ringOneFeature = {};
+               -- local ringOneTwoTwo = {};
+               
+               -- local ringTwoTerrain = {};
+               -- local ringTwoResource = {};
+               -- local ringTwoFeature = {};
+               -- local ringTwoTwoTwo = {};
+               
+               -- local ringThreeTerrain = {};
+               -- local ringThreeResource = {};
+               -- local ringThreeFeature = {};
+               -- local ringThreeTwoTwo = {};
+               
+               -- local ringFourTerrain = {};
+               -- local ringFourResource = {};
+               -- local ringFourFeature = {};
+               -- local ringFourTwoTwo = {};
+               
+               -- local ringFiveTerrain = {};
+               -- local ringFiveResource = {};
+               -- local ringFiveFeature = {};
+               -- local ringFiveTwoTwo = {};
+               
+               -- for k = 1, 100 do
+                  -- ringOneTerrain[i] = 0;
+                  -- ringOneResource[i] = 0;
+                  -- ringOneFeature[i] = 0;
+                  -- ringOneTwoTwo[i] = 0;
+                  
+                  -- ringTwoTerrain[i] = 0;
+                  -- ringTwoResource[i] = 0;
+                  -- ringTwoFeature[i] = 0;
+                  -- ringTwoTwoTwo[i] = 0;
+                  
+                  -- ringThreeTerrain[i] = 0;
+                  -- ringThreeResource[i] = 0;
+                  -- ringThreeFeature[i] = 0;
+                  -- ringThreeTwoTwo[i] = 0;
+                  
+                  -- ringFourTerrain[i] = 0;
+                  -- ringFourResource[i] = 0;
+                  -- ringFourFeature[i] = 0;
+                  -- ringFourTwoTwo[i] = 0;
+                  
+                  -- ringFiveTerrain[i] = 0;
+                  -- ringFiveResource[i] = 0;
+                  -- ringFiveFeature[i] = 0;
+                  -- ringFiveTwoTwo[i] = 0;
+               -- end
+               
+               local ringTerrain = {};
+               local ringResource = {};
+               local ringFeature = {};
+               local ringTwoTwo = {};
+               
+               for k = 1, 5 do
+                  ringTerrain[k] = {};
+                  ringResource[k] = {};
+                  ringFeature[k] = {};
+                  ringTwoTwo[k] = 0;
+                  
+                  for l = 1, 100 do
+                     ringTerrain[k][l] = 0;
+                     ringResource[k][l] = 0;
+                     ringFeature[k][l] = 0;
+                  end
+               end
+               
+               
+                
+               
+               --- Now getting the amount of each terrain, resource and feature for each ring !
+               --- Also couting the amount of two-twos
+               for k = 1, 5 do
+                  local list = getRing(i, j, k, mapXSize, mapYSize, mapIsRoundWestEast);
+                  for _, element in ipairs(list) do
+                     local x = element[1];
+                     local y = element[2];
+                     
+                     local xIndex = x + 1;
+                     local yIndex = y + 1;
+                     
+                     local terrain = mapTerrainCode[xIndex][yIndex];
+                     local resource = mapResourceCode[xIndex][yIndex];
+                     local feature = mapFeatureCode[xIndex][yIndex];
+                     
+                     if (terrain > -1) then
+                        ringTerrain[k][terrain + 1] = ringTerrain[k][terrain + 1] + 1;
+                     end
+                     
+                     if (resource > -1) then
+                        ringResource[k][resource + 1] = ringResource[k][resource + 1] + 1;
+                     end
+                     
+                     if (feature > -1) then
+                        ringFeature[k][feature + 1] = ringFeature[k][feature + 1] + 1;
+                     end
+                     
+                     if mapTwoTwo[xIndex][yIndex] then
+                        ringTwoTwo[k] = ringTwoTwo[k] + 1;
+                     end
+                     
+                  end
+               end
+            end
+         end
+      end
+   end
+   
+end
+
+
+
+function isMountainCode(terrain)
+
+   if (terrain == 2 or terrain == 5 or terrain == 8 or terrain == 11 or terrain == 14) then
+      return true;
+   end
+   
+   return false;
 
 end
 
