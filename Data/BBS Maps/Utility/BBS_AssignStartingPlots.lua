@@ -459,6 +459,338 @@ local waterCount = 0;
 local mountainCount = 0;
 local floodPlainsCount = 0;
 
+-- percentage required for a bias Tx t
+
+local TERRAIN_PERCENTAGE_B1_R3 = 0.65;
+local TERRAIN_PERCENTAGE_B1_R5 = 0.55;
+
+local TERRAIN_PERCENTAGE_B2_R3 = 0.6;
+local TERRAIN_PERCENTAGE_B2_R5 = 0.5;
+
+local TERRAIN_PERCENTAGE_B3_R3 = 0.4;
+local TERRAIN_PERCENTAGE_B3_R5 = 0.3;
+
+local TERRAIN_PERCENTAGE_B4_R3 = 0.3;
+local TERRAIN_PERCENTAGE_B4_R5 = 0.2;
+
+local TERRAIN_PERCENTAGE_B5_R3 = 0.2;
+local TERRAIN_PERCENTAGE_B5_R5 = 0.2;
+
+
+-- Negative version
+
+local NEGATIVE_TERRAIN_PERCENTAGE_B1_R3 = 0.02;
+local NEGATIVE_TERRAIN_PERCENTAGE_B1_R5 = 0.05;
+
+local NEGATIVE_TERRAIN_PERCENTAGE_B2_R3 = 0.05;
+local NEGATIVE_TERRAIN_PERCENTAGE_B2_R5 = 0.10;
+
+local NEGATIVE_TERRAIN_PERCENTAGE_B3_R3 = 0.10;
+local NEGATIVE_TERRAIN_PERCENTAGE_B3_R5 = 0.15;
+
+local NEGATIVE_TERRAIN_PERCENTAGE_B4_R3 = 0.15;
+local NEGATIVE_TERRAIN_PERCENTAGE_B4_R5 = 0.20;
+
+local NEGATIVE_TERRAIN_PERCENTAGE_B5_R3 = 0.15;
+local NEGATIVE_TERRAIN_PERCENTAGE_B5_R5 = 0.20;
+
+---- Mountains
+
+local MOUNTAIN_PERCENTAGE_B1_R3 = 0.35;
+local MOUNTAIN_PERCENTAGE_B1_R5 = 0.25;
+
+local MOUNTAIN_PERCENTAGE_B2_R3 = 0.30;
+local MOUNTAIN_PERCENTAGE_B2_R5 = 0.25;
+
+local MOUNTAIN_PERCENTAGE_B3_R3 = 0.25;
+local MOUNTAIN_PERCENTAGE_B3_R5 = 0.20;
+
+local MOUNTAIN_PERCENTAGE_B4_R3 = 0.20;
+local MOUNTAIN_PERCENTAGE_B4_R5 = 0.15;
+
+local MOUNTAIN_PERCENTAGE_B5_R3 = 0.15;
+local MOUNTAIN_PERCENTAGE_B5_R5 = 0.10;
+
+
+-- Negative version
+
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B1_R3 = 0.10;
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B1_R5 = 0.10;
+
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B2_R3 = 0.15;
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B2_R5 = 0.15;
+
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B3_R3 = 0.15;
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B3_R5 = 0.15;
+
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R3 = 0.15;
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R5 = 0.15;
+
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R3 = 0.15;
+local NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R5 = 0.15;
+
+
+function biasTerrainScore(bias, percentageR3, percentageR5)
+
+   local score = 0;
+
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= TERRAIN_PERCENTAGE_B1_R3 and percentageR5 >= TERRAIN_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= TERRAIN_PERCENTAGE_B1_R3 -0.1 and percentageR5 >= TERRAIN_PERCENTAGE_B1_R5 - 0.1 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= TERRAIN_PERCENTAGE_B2_R3 and percentageR5 >= TERRAIN_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= TERRAIN_PERCENTAGE_B2_R3 -0.1 and percentageR5 >= TERRAIN_PERCENTAGE_B2_R5 - 0.1 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= TERRAIN_PERCENTAGE_B3_R3 and percentageR5 >= TERRAIN_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= TERRAIN_PERCENTAGE_B3_R3 -0.1 and percentageR5 >= TERRAIN_PERCENTAGE_B3_R5 - 0.1 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= TERRAIN_PERCENTAGE_B4_R3 and percentageR5 >= TERRAIN_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= TERRAIN_PERCENTAGE_B4_R3 -0.1 and percentageR5 >= TERRAIN_PERCENTAGE_B4_R5 - 0.1 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= TERRAIN_PERCENTAGE_B5_R3 and percentageR5 >= TERRAIN_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias somewhat respected
+      elseif percentageR3 >= TERRAIN_PERCENTAGE_B5_R3 -0.1 and percentageR5 >= TERRAIN_PERCENTAGE_B5_R5 - 0.1 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+      
+   elseif bias == -1 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B1_R3 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B1_R3 + 0.05 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B1_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == -2 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B2_R3 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B2_R3 + 0.05 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B2_R5 - 0.05 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == -3 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B3_R3 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B3_R3 + 0.05 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B3_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == -4 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B4_R3 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B4_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B4_R3 + 0.05 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B4_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == -5 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B5_R3 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B5_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_TERRAIN_PERCENTAGE_B5_R3 + 0.05 and percentageR5 <= NEGATIVE_TERRAIN_PERCENTAGE_B5_R5 - 0.05 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+   
+   end
+   
+   return score
+
+end
+
+
+function biasMountainScore(bias, percentageR3, percentageR5)
+
+   local score = 0;
+
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= MOUNTAIN_PERCENTAGE_B1_R3 and percentageR5 >= MOUNTAIN_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= MOUNTAIN_PERCENTAGE_B1_R3 -0.1 and percentageR5 >= MOUNTAIN_PERCENTAGE_B1_R5 - 0.1 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= MOUNTAIN_PERCENTAGE_B2_R3 and percentageR5 >= MOUNTAIN_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= MOUNTAIN_PERCENTAGE_B2_R3 -0.1 and percentageR5 >= MOUNTAIN_PERCENTAGE_B2_R5 - 0.1 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= MOUNTAIN_PERCENTAGE_B3_R3 and percentageR5 >= MOUNTAIN_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= MOUNTAIN_PERCENTAGE_B3_R3 -0.1 and percentageR5 >= MOUNTAIN_PERCENTAGE_B3_R5 - 0.1 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= MOUNTAIN_PERCENTAGE_B4_R3 and percentageR5 >= MOUNTAIN_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= MOUNTAIN_PERCENTAGE_B4_R3 -0.1 and percentageR5 >= MOUNTAIN_PERCENTAGE_B4_R5 - 0.1 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= MOUNTAIN_PERCENTAGE_B5_R3 and percentageR5 >= MOUNTAIN_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias somewhat respected
+      elseif percentageR3 >= MOUNTAIN_PERCENTAGE_B5_R3 -0.1 and percentageR5 >= MOUNTAIN_PERCENTAGE_B5_R5 - 0.1 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+      
+   elseif bias == -1 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B1_R3 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B1_R3 + 0.05 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B1_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == -2 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B2_R3 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B2_R3 + 0.05 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B2_R5 - 0.05 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == -3 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B3_R3 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B3_R3 + 0.05 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B3_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == -4 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R3 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R3 + 0.05 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == -5 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R3 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R3 + 0.05 and percentageR5 <= NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R5 - 0.05 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+   
+   end
+   
+   return score
+
+end
+
 
 --- End new vars ---
 
@@ -1101,11 +1433,10 @@ function NewBBS()
    --Now Deciding which tiles are going to be "settle forbidden"
    --
    -- Forbidden:
-   --    - Spawn on a luxury (any luxury)
-   --    - Spawn Ring 1 of 1-3 gypsum/Ivory/deer with fresh water (would make capital 2-3)
-   --    - Spawn Ring 1 of diamond/cocoa/amber/coffee in 2-2 ---> NOT NOW, not too game breaker ?
+   --    - Spawn on a resource (any resource)
+   --    - Spawn Ring 1 of 1-3 (1-4) gypsum/Ivory/deer with fresh water or coastal (would make capital 2-3)
    --    - Spawn Ring 2 of a Spice (any spice, any land)
-   --    - Spawn Ring 2 of 4-0 sugar/honey/citrus, with fresh water or coastal (would make cap 4-1) and flat grassland
+   --    - Spawn Ring 2 of 4-0 sugar/honey/citrus, flat grassland, with fresh water or coastal (would make cap 4-1) 
    --    - Spawn on Oasis (unsettleable) or mountain or water (except Maori of course)
    --    - Spawn Ring 3 of a natural wonder (any wonder)
    
@@ -1163,7 +1494,9 @@ function NewBBS()
          ------ gypsum/ivory/deer  needs :----
          ----- Fresh water
          ----- plain hills
-         if ((mapResourceCode[iIndex][jIndex] == 17 or mapResourceCode[iIndex][jIndex] == 4 or mapResourceCode[iIndex][jIndex] == 19) and mapFreshWater[iIndex][jIndex] == true and mapTerrainCode[iIndex][jIndex] == 4) then
+         if ((mapResourceCode[iIndex][jIndex] == 17 or mapResourceCode[iIndex][jIndex] == 4 or mapResourceCode[iIndex][jIndex] == 19) and 
+               mapFreshWater[iIndex][jIndex] == true and
+               mapTerrainCode[iIndex][jIndex] == 4) then
             ___Debug("Found forbidden Gypsum/Ivory/ on X:", i, "Y:", j);
             local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
             for _, element in ipairs(list) do
@@ -1194,7 +1527,7 @@ function NewBBS()
             end
          end
          
-         -- sugar/honey/citrus on fres water/coastal on flat grassland
+         -- sugar/honey/citrus on fresf water/coastal and on flat grassland
          if ((mapResourceCode[iIndex][jIndex] == 53 or mapResourceCode[iIndex][jIndex] == 10 or mapResourceCode[iIndex][jIndex] == 28) and
                (mapFreshWater[iIndex][jIndex] or mapCoastal[iIndex][jIndex]) and
                (mapTerrainCode[iIndex][jIndex] == 0)) then
@@ -1358,13 +1691,31 @@ function NewBBS()
    
    for i = 1, PlayerManager.GetAliveMajorsCount() do
       local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
+      
+      local biasTerrain = {};
+      local biasFeature = {};
+      local biasResource = {};
+      
+      for k = 1, 100 do
+         biasTerrain[k] = 0;
+         biasFeature[k] = 0;
+         biasResource[k] = 0;
+      end
+      
+      local isNorthKing = false;
+      local continentSplit = false;
+      local isHydrophobic = false;
+      local isSalty = false; -- not used here anyway
+      local isMountainLover = false;
+      local riverCiv = 0; -- will put tier as value if civ is river
+      
       if ( PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName() == "LEADER_SPECTATOR" or PlayerConfigurations[tempMajorList[i]]:GetHandicapTypeID() == 2021024770) then
          specMajorList[i] = tempMajorList[i];
          specCount = specCount + 1;
          ___Debug ("Found a Spectator");
       else
          majorList[i] = tempMajorList[i];
-         majorCount = majorCount + 1;
+         
          local civName = PlayerConfigurations[tempMajorList[i]]:GetCivilizationTypeName();
          if (civName == "CIVILIZATION_MAORI") then
             hasMaori = true;
@@ -1381,6 +1732,8 @@ function NewBBS()
             for _, element in ipairs(tempBias) do
                local tempScore = 0;
                biasCount = biasCount + 1;
+               
+               -- computing bias score, will be used to rank civs (placement order)
                if (element.Tier == 1) then
                   tempScore = 5000;
                   if (element.Type == "TERRAINS" and (element.Value == 6 or element.Value == 7)) then --desesrt bias -> prio
@@ -1401,12 +1754,60 @@ function NewBBS()
                if tempScore > biasScore then
                   biasScore = tempScore;
                end
+               
+               -- recomputing biases so that it's easier to work with them later on.
+               -- will still store "raw" biases anyway
+               if (element.Value ~= nil) then
+                  if (element.Type == "TERRAINS") then
+                     biasTerrain[element.Value + 1] = element.Tier;
+                  elseif (element.Type == "FEATURES") then
+                     biasFeature[element.Value + 1] = element.Tier;
+                  elseif (element.Type == "RESOURCES") then
+                     biasResource[element.Value + 1] = element.Tier;
+                  elseif (element.Type == "RIVERS") then
+                     riverCiv = element.Tier;
+                  
+                  -- negative biases, will simply put the value as ... negative !
+                  elseif (element.Type == "NEGATIVE_TERRAINS") then
+                     biasTerrain[element.Value + 1] = 0 - element.Tier;
+                  elseif (element.Type == "NEGATIVE_FEATURES") then
+                     biasFeature[element.Value + 1] = 0 - element.Tier;
+                  elseif (element.Type == "NEGATIVE_RESOURCES") then
+                     biasResource[element.Value + 1] = 0 - element.Tier;
+                  
+                  -- custom biases
+                  elseif (element.Type == "CUSTOM_KING_OF_THE_NORTH") then
+                     isNorthKing = true;
+                  elseif (element.Type == "CUSTOM_HYDROPHOBIC") then
+                     isHydrophobic = true;
+                  elseif (element.Type == "CUSTOM_CONTINENT_SPLIT") then
+                     continentSplit = true;
+                  elseif (element.Type == "CUSTOM_MOUNTAIN_LOVER") then
+                     continentSplit = true;
+                  elseif (element.Type == "CUSTOM_I_AM_SALTY") then
+                     isSalty = true;
+                     
+                  end
+                  
+               else
+                  print("Warning: wrongly read bias:", element.Type, element.Tier, civName);
+               end
+               
+               
             end
+
+            
          end
          
-         majorBiases[i] = tempBias;
+         majorBiases[majorCount] = tempBias;
+         majorCount = majorCount + 1;
          
-         majorAll[i] = {index = i, civName = civName, major = majorList[i], biases = majorBiases[i], biasScore = biasScore, biasCount = biasCount};
+         majorAll[majorCount] = {index = i, civName = civName, major = majorList[i], biases = majorBiases[i], biasScore = biasScore, biasCount = biasCount,
+                          biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource, isNorthKing = isNorthKing, continentSplit = continentSplit,
+                          isHydrophobic = isHydrophobic, isSalty = isSalty, isMountainLover = isMountainLover, riverCiv = riverCiv};
+         print(i, majorAll[majorCount]);
+         print(majorAll[majorCount].index, majorAll[majorCount].civName);
+         
          
          
       end
@@ -1432,10 +1833,16 @@ function NewBBS()
    print("--------------");
    
    --table.sort(majorAll, function(a, b) return a.biasScore > b.biasScore; end);
-         
-   for _, element in ipairs(majorAll) do
-      print(element.civName, element.biasScore);
+   
+
+   for i = 1, majorCount do
+      print("whole", majorAll[i]) 
+      if (majorAll[i] ~= nil) then
+         print("players2 ici: ", majorAll[i].civName, majorAll[i].biasScore);
+      end
    end
+   
+   
    
    
    
@@ -1447,8 +1854,11 @@ function NewBBS()
 end
 
 function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
-   
-   
+
+   if majorCount < 1 then
+      print("No Major Civs to evaluate !");
+      return;
+   end
    
    for i = 0, mapXSize - 1 do
       local iIndex = i + 1;
@@ -1458,9 +1868,11 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
          
          local maoriSelection = "NONE"; -- possible value : "NONE", "MAIN", "FALLBACK"
          
+         ___Debug("Now evaluating tile:", i, j);
+         
          if (mapSpawnable[iIndex][jIndex]) then -- We already have eliminated a lot of forbidden spawns
             
-            
+            ___Debug("is in?", mapTerrainCode[iIndex][jIndex]);
             if (mapTerrainCode[iIndex][jIndex] >= 15) then--If no maori, we can expedite things and not analyse water tiles
                -- Maori code --
                if (hasMaori) then
@@ -1486,11 +1898,13 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      if (maoriSelection ~= "FALLBACK") then -- We have nothing but water -> good maori spawn !
                         maoriSelection = "MAIN";
                      end
-                  end
+                  end -- To finish !
                end
                
                -- END Maori Code --
             else -- we have a "normal" tile
+               ___Debug("is in? 2");
+            
             
                -- collecting stats for each ring
                -- local ringOneTerrain = {};
@@ -1549,12 +1963,20 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                local ringResource = {};
                local ringFeature = {};
                local ringTwoTwo = {};
+               local ringCount = {}; -- Amount of tiles per ring
+               local ringMountainCount = {};
+               local ringLandCount = {};
+               local ringWaterCount = {};
                
                for k = 1, 5 do
                   ringTerrain[k] = {};
                   ringResource[k] = {};
                   ringFeature[k] = {};
                   ringTwoTwo[k] = 0;
+                  ringCount[k] = 0;
+                  ringLandCount[k] = 0;
+                  ringWaterCount[k] = 0;
+                  ringMountainCount[k] = 0;
                   
                   for l = 1, 100 do
                      ringTerrain[k][l] = 0;
@@ -1563,13 +1985,11 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   end
                end
                
-               
-                
-               
                --- Now getting the amount of each terrain, resource and feature for each ring !
                --- Also couting the amount of two-twos
                for k = 1, 5 do
                   local list = getRing(i, j, k, mapXSize, mapYSize, mapIsRoundWestEast);
+                  
                   for _, element in ipairs(list) do
                      local x = element[1];
                      local y = element[2];
@@ -1583,6 +2003,13 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      
                      if (terrain > -1) then
                         ringTerrain[k][terrain + 1] = ringTerrain[k][terrain + 1] + 1;
+                        if (terrain >= 15) then
+                           ringWaterCount[k] = ringWaterCount[k] + 1;
+                        elseif (terrain % 3 == 2) then
+                           ringMountainCount[k] = ringMountainCount[k] + 1;
+                        else
+                           ringLandCount[k] = ringLandCount[k] + 1;
+                        end
                      end
                      
                      if (resource > -1) then
@@ -1596,17 +2023,532 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      if mapTwoTwo[xIndex][yIndex] then
                         ringTwoTwo[k] = ringTwoTwo[k] + 1;
                      end
+
+                     ringCount[k] = ringCount[k] + 1;
+                  end
+               end
+               
+               
+               ---- Now evaluating the biases
+               
+               for k = 1, majorCount do
+               
+                  player = majorAll[k];
+               
+                  ___Debug("Now evaluating player:", player.index, player.civName);
+                  -- Tier 1 and 2
+                  local biasMandatoryScore = 0;
+                  -- Tier 3, 4 and 5
+                  local biasSecondaryScore = 0;
+                  
+                  -- Checking the amount of tiles for each rings
+                  local ring3LandCount = 1 + ringLandCount[1] + ringLandCount[2] + ringLandCount[3];
+                  local ring5LandCount = ring3LandCount + ringLandCount[4] + ringLandCount[5];
+                  
+                  local ring3WaterCount = 1 + ringWaterCount[1] + ringWaterCount[2] + ringWaterCount[3];
+                  local ring5WaterCount = ring3WaterCount + ringWaterCount[4] + ringWaterCount[5];
+                  
+                  local ring3Count = 1 + ringCount[1] + ringCount[2] + ringCount[3];
+                  local ring5Count = ring3Count + ringCount[4] + ringCount[5];
+                  
+                  local ringThreeTerrain = 0;
+                  local ringFiveTerrain = 0;
+
+                  --- TERRAINS ---
+                  
+                  --- if two terrain have the same bias (ex: grassland hills and plain hills), they will be considered as one
+
+                  
+                  -- grassland bias
+                  if (player.biasTerrain[0 + 1] ~= 0) then
                      
+                     local bias = player.biasTerrain[0 + 1];
+                     
+                     local terrainOne = 0;
+                     local terrainTwo = -1;
+                     
+                     -- Actually towards grassland
+                     if (player.biasTerrain[1 + 1] == bias) then
+                        terrainTwo = 1;
+                     
+                     -- Looking for flatland (why would you do that ?)
+                     elseif (player.biasTerrain[3 + 1] == bias) then
+                        terrainTwo = 3;
+                     end
+                  
+
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- Grassland flat score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- primary -- Grassland flat score:", score)
+                     end
+                  end
+                  
+                  -- Grassland hills
+                  if (player.biasTerrain[1 + 1] ~= 0) then
+                  
+                     local bias = player.biasTerrain[1 + 1];
+                  
+                     local terrainOne = 1;
+                     local terrainTwo = -1;
+                     
+                     -- flat grassland, but we already have calculated that !
+                     if (player.biasTerrain[0 + 1] ~= bias) then
+                     
+                        -- Looking for hills
+                        if (player.biasTerrain[4 + 1] == bias) then
+                           terrainTwo = 4;
+                        end
+                        
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Grassland Hill score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- primary -- Grassland Hill score:", score)
+                        end
+                     end
+                  
+                  end
+                  
+                  -- Grassland mountain, different job here
+                  if (player.biasTerrain[2 + 1] ~= 0) then
+                  
+                     local bias = player.biasTerrain[2 + 1];
+                     local terrainOne = 2;
+                     local terrainTwo = -1;
+                     
+                     -- Looking for mountain buddies
+                     if (player.biasTerrain[5 + 1] == bias) then
+                        terrainTwo = 5;
+                     end
+                  
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasMountainScore(bias, percentageR3, percentageR5);
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- Grassland Mountain score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- primary -- Grassland Mountain score:", score)
+                     end
+                  
+                     
+                  end
+                  
+                  
+                  -- Flat plain
+                  if (player.biasTerrain[3 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[3 + 1];
+                     
+                     local terrainOne = 3;
+                     local terrainTwo = -1;
+                     
+                     -- flat grassland, but we already have calculated that !
+                     if (player.biasTerrain[0 + 1] ~= bias) then
+                     
+                        -- Looking for plain hills as well
+                        if (player.biasTerrain[4 + 1] == bias) then
+                           terrainTwo = 4; 
+                        end
+                        
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Plain Flat score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- primary -- Plain Flat score:", score)
+                        end
+                     end
+                  end
+                  
+                  -- Plain hill
+                  if (player.biasTerrain[4 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[4 + 1];
+                     
+                     local terrainOne = 4;
+                     local terrainTwo = -1;
+                     
+                     -- grassland hills or flat plain, that we already have looked !
+                     if (player.biasTerrain[1 + 1] ~= bias and player.biasTerrain[3 + 1] ~= bias) then
+                     
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Plain Hill score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- primary -- Plain Hill score:", score)
+                        end
+                     end
+                  end
+                  
+                  -- Plain mountain, different job here
+                  if (player.biasTerrain[5 + 1] ~= 0) then
+                  
+                     local bias = player.biasTerrain[5 + 1];
+                     local terrainOne = 5;
+                     local terrainTwo = -1;
+                     
+                     -- Grassland mountain that, but we already have calculated that !
+                     if (player.biasTerrain[2 + 1] ~= bias) then
+                        
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasMountainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Plain Mountain score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- primary -- Plain Mountain score:", score)
+                        end
+                     
+                     end
+                  end
+                  
+                  -- Flat desert
+                  if (player.biasTerrain[6 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[6 + 1];
+                     
+                     local terrainOne = 3;
+                     local terrainTwo = -1;
+                     
+                     -- Looking for plain hills as well
+                     if (player.biasTerrain[7 + 1] == bias) then
+                        terrainTwo = 7; 
+                     end
+                     
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- Desert flat score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- Secondary -- Desert flat score:", score)
+                     end
+                  end
+                  
+                  -- dsert hill
+                  if (player.biasTerrain[7 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[7 + 1];
+                     
+                     local terrainOne = 3;
+                     local terrainTwo = -1;
+                     
+                     -- flat desert, but we already have calculated that !
+                     if (player.biasTerrain[6 + 1] ~= bias) then
+                        
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Desert Hill score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- Desert Hill score:", score)
+                        end
+                     end
+                  end
+                  
+                  -- tundra flat bias
+                  if (player.biasTerrain[9 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[9 + 1];
+                     
+                     local terrainOne = 9;
+                     local terrainTwo = -1;
+                     
+                     -- Actually towards tundra
+                     if (player.biasTerrain[10 + 1] == bias) then
+                        terrainTwo = 10;
+                     end
+                  
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                     
+                     ___Debug(ring3LandCount, ring5LandCount);
+                     
+                     ___Debug(ringThreeTerrain, ringFiveTerrain, percentageR3, percentageR5)
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- Tundra flat score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- Secondary -- Tundra flat score:", score)
+                     end
+                     
+                     print("score tundra flat:", biasSecondaryScore);
+
+                  end
+                  
+                  -- tundra hills
+                  if (player.biasTerrain[10 + 1] ~= 0) then
+                  
+                     local bias = player.biasTerrain[10 + 1];
+                  
+                     local terrainOne = 10;
+                     local terrainTwo = -1;
+                     
+                     -- flat tundra, but we already have calculated that !
+                     if (player.biasTerrain[9 + 1] ~= bias) then
+
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Tundra Hill score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- Tundra Hill score:", score)
+                        end
+                     end
+                  
+                  end
+                  
+                  -- tundra mountain, different job here
+                  if (player.biasTerrain[11 + 1] ~= 0) then
+                  
+                     local bias = player.biasTerrain[11 + 1];
+                     local terrainOne = 11;
+                     local terrainTwo = -1;
+                     
+                     -- Looking for mountain buddies
+                     if (player.biasTerrain[14 + 1] == bias) then
+                        terrainTwo = 14;
+                     end
+                  
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasMountainScore(bias, percentageR3, percentageR5);
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- Tundra Mountain score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- Secondary -- Tundra Mountain score:", score)
+                     end
+                  end
+                  
+                  
+                  -- Flat snow
+                  if (player.biasTerrain[12 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[12 + 1];
+                     
+                     local terrainOne = 12;
+                     local terrainTwo = -1;
+                     
+                     -- Looking for snow hills as well
+                     if (player.biasTerrain[13 + 1] == bias) then
+                        terrainTwo = 13; 
+                     end
+                     
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- flat snow score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- Secondary -- flat snow score:", score)
+                     end
+                  end
+                  
+                  -- snow hill
+                  if (player.biasTerrain[13 + 1] ~= 0) then
+                     
+                     local bias = player.biasTerrain[13 + 1];
+                     
+                     local terrainOne = 13;
+                     local terrainTwo = -1;
+                     
+                     -- grassland hills or flat plain, that we already have looked !
+                     if (player.biasTerrain[12 + 1] ~= bias) then
+                     
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Snow hill score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- Snow hill score:", score)
+                        end
+                     end
+                  end
+                  
+                  -- snow mountain, different job here
+                  if (player.biasTerrain[14 + 1] ~= 0) then
+                  
+                     local bias = player.biasTerrain[14 + 1];
+                     local terrainOne = 14;
+                     local terrainTwo = -1;
+                     
+                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     
+                     local percentageR3 = ringThreeTerrain / ring3LandCount;
+                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     
+                     local score = biasMountainScore(bias, percentageR3, percentageR5);
+                     
+                     -- Main bias
+                     if (math.abs(bias) <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- Snow Mountain score:", score)
+                     -- Secondary Bias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- Secondary -- Snow Mountain score:", score)
+                     end
                   end
                end
             end
          end
       end
    end
-   
 end
 
 
+function getRingTerrain (ringStart, ringEnd, tileTerrain, ringTerrain, terrainOne, terrainTwo)
+
+   count = 0;
+   
+   if (tileTerrain == terrainOne or tileTerrain == terrainTwo) then
+      count = count + 1;
+   end
+   
+   if terrainTwo >= 0 then
+      for i = ringStart, ringEnd do
+         count = count + ringTerrain[i][terrainOne + 1] + ringTerrain[i][terrainTwo + 1];
+      end
+   
+   else
+      for i = ringStart, ringEnd do
+         count = count + ringTerrain[i][terrainOne + 1];
+      end
+   end
+   
+   return count;
+
+end
 
 function isMountainCode(terrain)
 
@@ -3546,6 +4488,10 @@ function BBS_AssignStartingPlots:__GetFeatureIndex(featureType)
         return g_FEATURE_FLOODPLAINS_GRASSLAND;
     elseif (featureType == "FEATURE_GEOTHERMAL_FISSURE") then
         return g_FEATURE_GEOTHERMAL_FISSURE;
+    elseif (featureType == "FEATURE_MARSH") then
+        return g_FEATURE_MARSH;
+    elseif (featureType == "FEATURE_OASIS") then
+        return g_FEATURE_OASIS;
     end
 end
 ------------------------------------------------------------------------------
