@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 1.6.7
+--	FILE:	BBS_AssignStartingPlot.lua    -- 1.6.9
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -26,16 +26,11 @@ local g_negative_bias = {}
 local g_custom_bias = {}
 local g_evaluated_plots = {}
 local g_large_islands = {}
-local Major_Distance_Target = 12
+local Major_Distance_Target = 16
 local Base_Major_Distance_Target = 16
 local Minor_Distance_Target = 0
 local bMinDistance = false
 local civs = {};
-
-
-
-
-
 ------------------------------------------------------------------------------
 BBS_AssignStartingPlots = {};
 
@@ -45,348 +40,6 @@ function ___Debug(...)
     print (...);
 end
 
-------------------------------------------------------------------------------
-function BBS_AssignStartingPlots.Create(args)
-	if (GameConfiguration.GetValue("SpawnRecalculation") == nil) then
-		___Debug("BBS_AssignStartingPlots:",GameConfiguration.GetValue("SpawnRecalculation"))
-		Game:SetProperty("BBS_RESPAWN",false)
-		return AssignStartingPlots.Create(args)
-	end
-	___Debug("BBS_AssignStartingPlots: BBS Settings:", GameConfiguration.GetValue("SpawnRecalculation"));
-	if (GameConfiguration.GetValue("SpawnRecalculation") == false) then 
-		___Debug("BBS_AssignStartingPlots:",GameConfiguration.GetValue("SpawnRecalculation"))
-		Game:SetProperty("BBS_RESPAWN",false)
-		return AssignStartingPlots.Create(args)
-	end
-	
-	if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
-		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
-	end
-	
-	g_negative_bias = {}
-	
-	local info_query = "SELECT * from StartBiasNegatives";
-	local info_results = DB.Query(info_query);
-	for k , v in pairs(info_results) do
-		local tmp = { CivilizationType = v.CivilizationType, TerrainType = v.TerrainType, FeatureType = v.FeatureType, Tier = v.Tier, Extra = v.Extra}
-		if tmp.CivilizationType ~= nil then
-			table.insert(g_negative_bias, tmp)
-		end
-	end
-	g_custom_bias = {}
-	
-	local info_query = "SELECT * from StartBiasCustom";
-	local info_results = DB.Query(info_query);
-	for k , v in pairs(info_results) do
-		local tmp = { CivilizationType = v.CivilizationType, CustomPlacement = v.CustomPlacement}
-		___Debug("g_custom_bias",v.CivilizationType,v.CustomPlacement)
-		if tmp.CivilizationType ~= nil then
-			table.insert(g_custom_bias, tmp)
-		end
-	end
-	if (MapConfiguration.GetValue("MAP_SCRIPT") == "Pangaea.lua"
-	or MapConfiguration.GetValue("MAP_SCRIPT") == "Continents.lua"
-	or MapConfiguration.GetValue("MAP_SCRIPT") == "Terra.lua") then
-	print("Calculating Island Size: Start", os.date("%c"));
-	for iPlotIndex = 0, Map.GetPlotCount()-1, 1 do
-		local pPlot = Map.GetPlotByIndex(iPlotIndex)
-		if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
-			local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
-		end
-	end
-	print("Calculating Island Size: End", os.date("%c"));
-	end
-   
-   -- Setting minimal distance between players
-   -- It will be based on the map used and the ratio size/players (more space if map too big, less space if too small)
-   -- Objective is to avoid as much as possible the use of the firaxis placement
-   
-   ___Debug("Map Script: ", MapConfiguration.GetValue("MAP_SCRIPT"));
-   
-   
-   -- Phase 1: Set base minimal distance according to the map.
-   -- Large maps, with low amount of water (ex: highlands, lakes, ...) will see players spawn with a higher distance from each other.
-   -- Smaller maps, with high amount of water (ex: Terra, Fractal, ...) will see player spawn closer to each other.
-   
-   local mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
-   
-   if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" then
-		Major_Distance_Target = 15
-	end
-   
-   if mapScript == "InlandSea.lua" then
-		Major_Distance_Target = 14
-	end
-
-   
-   if mapScript == "Seven_Seas.lua" or mapScript == "Primordial.lua" then
-		Major_Distance_Target = 13
-	end
-   
-	if mapScript == "Pangaea.lua" or mapScript == "DWPangaea.lua" or mapScript == "Shuffle.lua" or mapScript == "Tilted_Axis.lua" then
-		Major_Distance_Target = 12
-	end
-
-
-   if mapScript == "Fractal.lua" or mapScript == "Island_Plates.lua" or mapScript == "Small_Continents.lua"
-      or mapScript == "Archipelago_XP2.lua"  or mapScript == "Continents.lua" or mapScript == "Wetlands_XP2.lua"
-      or mapScript == "Continents_Islands.lua" or mapScript == "Continents_Islands.lua" or mapScript == "Splintered_Fractal.lua"
-      or mapScript == "DWArchipelago.lua" or mapScript == "DWFractal.lua" or mapScript == "DWMixedLand.lua"
-      or mapScript == "DWSmallContinents.lua" or mapScript == "DWMixedIslands.lua" then
-		Major_Distance_Target = 10
-	end
-	
-	if mapScript == "Terra.lua" then
-		Major_Distance_Target = 8
-	end
-   
-   -- Checking if map is earth is flat or not.
-   
-   if mapScript == "Tilted_Axis.lua" or mapScript == "InlandSea.lua" then
-		mapIsRoundWestEast = false
-	end
-   
-   
-   --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
-   
-   -- Enormous ?
-   if Map.GetMapSize() == 6 and  PlayerManager.GetAliveMajorsCount() > 17 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 6 and  PlayerManager.GetAliveMajorsCount() < 15 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-   
-   -- Huge
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() > 13 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() < 11 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Large
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() > 11 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() < 9 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Standard
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() > 9 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() < 7 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Small
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() > 7 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() < 5 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	
-   -- Tiny
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() > 5 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() < 3 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	
-   -- Duel
-	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() > 2  then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end	
-   
-   Base_Major_Distance_Target = Major_Distance_Target
-   
-   --[[
-   
-   ___Debug("Map Script: ", MapConfiguration.GetValue("MAP_SCRIPT"));
-	
-   if MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua" then
-		Major_Distance_Target = 21
-	end
-   
-   if MapConfiguration.GetValue("MAP_SCRIPT") == "Seven_Seas.lua" then
-		Major_Distance_Target = 19
-	end
-   
-	if MapConfiguration.GetValue("MAP_SCRIPT") == "Pangaea.lua" then
-		Major_Distance_Target = 18
-	end	
-	if MapConfiguration.GetValue("MAP_SCRIPT") == "Terra.lua" then
-		Major_Distance_Target = 15
-	end
-	if Teamers_Config == 0 then
-		Major_Distance_Target = Major_Distance_Target - 3 
-	end
-	-- Huge
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() > 11 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() < 8 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Large
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() > 10 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() < 8 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Standard
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() > 7 then
-		Major_Distance_Target = Major_Distance_Target - 3
-	end
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() < 8 then
-		Major_Distance_Target = Major_Distance_Target 
-	end	
-	-- Small
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() > 5 then
-		Major_Distance_Target = Major_Distance_Target - 4
-	end
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() < 6 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end	
-	
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() > 5 then
-		Major_Distance_Target = Major_Distance_Target - 5
-	end
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() < 6 then
-		Major_Distance_Target = Major_Distance_Target - 3
-	end	
-	
-	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() > 2  then
-		Major_Distance_Target = 15
-	end	
-	
-	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() == 2  then
-		Major_Distance_Target = 18
-	end	
-	
-	Base_Major_Distance_Target = Major_Distance_Target
-   
-   
-   --]]
-   
-	Game:SetProperty("BBS_MAJOR_DISTANCE",Major_Distance_Target)
-   local instance = {}
-	instance  = {
-        -- Core Process member methods
-        __InitStartingData					= BBS_AssignStartingPlots.__InitStartingData,
-        __FilterStart                       = BBS_AssignStartingPlots.__FilterStart,
-        __SetStartBias                      = BBS_AssignStartingPlots.__SetStartBias,
-        __BiasRoutine                       = BBS_AssignStartingPlots.__BiasRoutine,
-        __FindBias                          = BBS_AssignStartingPlots.__FindBias,
-        __RateBiasPlots                     = BBS_AssignStartingPlots.__RateBiasPlots,
-        __SettlePlot                   		= BBS_AssignStartingPlots.__SettlePlot,
-        __CountAdjacentTerrainsInRange      = BBS_AssignStartingPlots.__CountAdjacentTerrainsInRange,
-        __ScoreAdjacent   					= BBS_AssignStartingPlots.__ScoreAdjacent,
-        __CountAdjacentFeaturesInRange      = BBS_AssignStartingPlots.__CountAdjacentFeaturesInRange,
-        __CountAdjacentResourcesInRange     = BBS_AssignStartingPlots.__CountAdjacentResourcesInRange,
-        __CountAdjacentYieldsInRange        = BBS_AssignStartingPlots.__CountAdjacentYieldsInRange,
-        __GetTerrainIndex                   = BBS_AssignStartingPlots.__GetTerrainIndex,
-        __GetFeatureIndex                   = BBS_AssignStartingPlots.__GetFeatureIndex,
-        __GetResourceIndex                  = BBS_AssignStartingPlots.__GetResourceIndex,
-		__LuxuryCount						= BBS_AssignStartingPlots.__LuxuryCount,
-        __TryToRemoveBonusResource			= BBS_AssignStartingPlots.__TryToRemoveBonusResource,
-		__NaturalWonderBufferCheck			= BBS_AssignStartingPlots.__NaturalWonderBufferCheck,
-        __LuxuryBufferCheck					= BBS_AssignStartingPlots.__LuxuryBufferCheck,
-        __MajorMajorCivBufferCheck			= BBS_AssignStartingPlots.__MajorMajorCivBufferCheck,
-        __MinorMajorCivBufferCheck			= BBS_AssignStartingPlots.__MinorMajorCivBufferCheck,
-        __MinorMinorCivBufferCheck			= BBS_AssignStartingPlots.__MinorMinorCivBufferCheck,
-        __BaseFertility						= BBS_AssignStartingPlots.__BaseFertility,
-        __AddBonusFoodProduction			= BBS_AssignStartingPlots.__AddBonusFoodProduction,
-        __AddFood							= BBS_AssignStartingPlots.__AddFood,
-        __AddProduction						= BBS_AssignStartingPlots.__AddProduction,
-        __AddResourcesBalanced				= BBS_AssignStartingPlots.__AddResourcesBalanced,
-        __AddResourcesLegendary				= BBS_AssignStartingPlots.__AddResourcesLegendary,
-        __BalancedStrategic					= BBS_AssignStartingPlots.__BalancedStrategic,
-        __FindSpecificStrategic				= BBS_AssignStartingPlots.__FindSpecificStrategic,
-        __AddStrategic						= BBS_AssignStartingPlots.__AddStrategic,
-        __AddLuxury							= BBS_AssignStartingPlots.__AddLuxury,
-		__AddLeyLine						= BBS_AssignStartingPlots.__AddLeyLine,
-        __AddBonus							= BBS_AssignStartingPlots.__AddBonus,
-        __IsContinentalDivide				= BBS_AssignStartingPlots.__IsContinentalDivide,
-        __RemoveBonus						= BBS_AssignStartingPlots.__RemoveBonus,
-        __TableSize						    = BBS_AssignStartingPlots.__TableSize,
-        __GetValidAdjacent					= BBS_AssignStartingPlots.__GetValidAdjacent,
-		__GetShuffledCiv					= BBS_AssignStartingPlots.__GetShuffledCiv,
-		__CountAdjacentContinentsInRange	= BBS_AssignStartingPlots.__CountAdjacentContinentsInRange,
-		__CountAdjacentRiverInRange			= BBS_AssignStartingPlots.__CountAdjacentRiverInRange,
-		__SetStartMaori						= BBS_AssignStartingPlots.__SetStartMaori,
-
-        iNumMajorCivs = 0,
-		iNumSpecMajorCivs = 0,
-        iNumWaterMajorCivs = 0,
-        iNumMinorCivs = 0,
-        iNumRegions		= 0,
-        iDefaultNumberMajor = 0,
-        iDefaultNumberMinor = 0,
-		iTeamPlacement = Teamers_Config,
-        uiMinMajorCivFertility = args.MIN_MAJOR_CIV_FERTILITY or 0,
-        uiMinMinorCivFertility = args.MIN_MINOR_CIV_FERTILITY or 0,
-        uiStartMinY = args.START_MIN_Y or 0,
-        uiStartMaxY = args.START_MAX_Y or 0,
-        uiStartConfig = args.START_CONFIG or 2,
-        waterMap  = args.WATER or false,
-        landMap  = args.LAND or false,
-        noStartBiases = args.IGNORESTARTBIAS or false,
-        startAllOnLand = args.STARTALLONLAND or false,
-        startLargestLandmassOnly = args.START_LARGEST_LANDMASS_ONLY or false,
-        majorStartPlots = {},
-		majorStartPlotsTeam = {},
-        minorStartPlots = {},
-		minorStartPlotsID = {},
-        majorList = {},
-        minorList = {},
-        playerStarts = {},
-		regionTracker = {},
-        aBonusFood = {},
-        aBonusProd = {},
-        rBonus = {},
-        rLuxury = {},
-        rStrategic = {},
-        aMajorStartPlotIndices = {},
-        fallbackPlots = {},
-        tierMax = 0,
-		iHard_Major = Major_Distance_Target,
-		iDistance = 0,
-		iDistance_major_minor = 6,
-		iMinorAttempts = 0,
-        -- Team info variables (not used in the core process, but necessary to many Multiplayer map scripts)
-    }
-
-	instance:__InitStartingData()
-	
-	if bError_major ~= false or bError_proximity ~= false or bError_shit_settle ~= false then
-		print("BBS_AssignStartingPlots: To Many Attempts Failed - Go to Firaxis Placement")
-		Game:SetProperty("BBS_RESPAWN",false)
-		return AssignStartingPlots.Create(args)
-	end	
-	
-
-	print("BBS_AssignStartingPlots: Sending Data")
-	return instance
-	
-	
-end
-
-function isLuxury(resource)
-
-   if(resource >= 10 and resource < 40) then
-      return true;
-   end
-   
-   if (resource == 49 or resource == 50 or resource == 51 or resource == 53) then
-      return true;
-   end
-   
-   return false;
-
-end
 
 --- New vars ---
 
@@ -401,10 +54,13 @@ local mapResourceCode = {};
 local mapTerrainCode = {};
 local mapFeatureCode = {};
 local mapLake = {}; -- true = lake, false = not
+local mapSea = {}; -- true = sea water (not lake)
 local mapCoastal = {}; -- true = Coastal, false = not
 local mapFreshWater = {};
 local mapRiver = {};
 local mapContinent = {};
+-- If another continent is within 3 tiles
+local mapIsContinentSplit = {};
 local mapWonder = {};
 
 
@@ -458,6 +114,7 @@ local hillsnCount = 0;
 local waterCount = 0;
 local mountainCount = 0;
 local floodPlainsCount = 0;
+local twoTwoCount = 0;
 
 -- percentage required for a bias Tx t
 
@@ -528,6 +185,387 @@ local NEGATIVE_MOUNTAIN_PERCENTAGE_B4_R5 = 0.15;
 
 local NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R3 = 0.15;
 local NEGATIVE_MOUNTAIN_PERCENTAGE_B5_R5 = 0.15;
+
+
+-- Resources --
+
+local RESOURCE_PERCENTAGE_B1_R3 = 0.15;
+local RESOURCE_PERCENTAGE_B1_R5 = 0.10;
+
+local RESOURCE_PERCENTAGE_B2_R3 = 0.12;
+local RESOURCE_PERCENTAGE_B2_R5 = 0.09;
+
+local RESOURCE_PERCENTAGE_B3_R3 = 0.10;
+local RESOURCE_PERCENTAGE_B3_R5 = 0.075;
+
+local RESOURCE_PERCENTAGE_B4_R3 = 0.07;
+local RESOURCE_PERCENTAGE_B4_R5 = 0.05;
+
+local RESOURCE_PERCENTAGE_B5_R3 = 0.03;
+local RESOURCE_PERCENTAGE_B5_R5 = 0.03;
+
+--- Negative Resources ---
+--- If more than the percentage is found, bias will be deemed as not respected ! ---
+
+local NEGATIVE_RESOURCE_PERCENTAGE_B1_R3 = 0.15;
+local NEGATIVE_RESOURCE_PERCENTAGE_B1_R5 = 0.10;
+
+local NEGATIVE_RESOURCE_PERCENTAGE_B2_R3 = 0.12;
+local NEGATIVE_RESOURCE_PERCENTAGE_B2_R5 = 0.09;
+
+local NEGATIVE_RESOURCE_PERCENTAGE_B3_R3 = 0.10;
+local NEGATIVE_RESOURCE_PERCENTAGE_B3_R5 = 0.075;
+
+local NEGATIVE_RESOURCE_PERCENTAGE_B4_R3 = 0.07;
+local NEGATIVE_RESOURCE_PERCENTAGE_B4_R5 = 0.05;
+
+local NEGATIVE_RESOURCE_PERCENTAGE_B5_R3 = 0.03;
+local NEGATIVE_RESOURCE_PERCENTAGE_B5_R5 = 0.03;
+
+-- Features --
+
+local FEATURE_PERCENTAGE_B1_R3 = 0.15;
+local FEATURE_PERCENTAGE_B1_R5 = 0.10;
+
+local FEATURE_PERCENTAGE_B2_R3 = 0.12;
+local FEATURE_PERCENTAGE_B2_R5 = 0.09;
+
+local FEATURE_PERCENTAGE_B3_R3 = 0.10;
+local FEATURE_PERCENTAGE_B3_R5 = 0.075;
+
+local FEATURE_PERCENTAGE_B4_R3 = 0.07;
+local FEATURE_PERCENTAGE_B4_R5 = 0.05;
+
+local FEATURE_PERCENTAGE_B5_R3 = 0.03;
+local FEATURE_PERCENTAGE_B5_R5 = 0.03;
+
+--- Negative Resources ---
+--- If more than the percentage is found, bias will be deemed as not respected ! ---
+
+local NEGATIVE_FEATURE_PERCENTAGE_B1_R3 = 0.15;
+local NEGATIVE_FEATURE_PERCENTAGE_B1_R5 = 0.10;
+
+local NEGATIVE_FEATURE_PERCENTAGE_B2_R3 = 0.12;
+local NEGATIVE_FEATURE_PERCENTAGE_B2_R5 = 0.09;
+
+local NEGATIVE_FEATURE_PERCENTAGE_B3_R3 = 0.10;
+local NEGATIVE_FEATURE_PERCENTAGE_B3_R5 = 0.075;
+
+local NEGATIVE_FEATURE_PERCENTAGE_B4_R3 = 0.07;
+local NEGATIVE_FEATURE_PERCENTAGE_B4_R5 = 0.05;
+
+local NEGATIVE_FEATURE_PERCENTAGE_B5_R3 = 0.03;
+local NEGATIVE_FEATURE_PERCENTAGE_B5_R5 = 0.03;
+
+--- River tiles
+
+
+local RIVER_PERCENTAGE_B1_R3 = 0.50;
+local RIVER_PERCENTAGE_B1_R5 = 0.30;
+
+local RIVER_PERCENTAGE_B2_R3 = 0.45;
+local RIVER_PERCENTAGE_B2_R5 = 0.25;
+
+local RIVER_PERCENTAGE_B3_R3 = 0.40;
+local RIVER_PERCENTAGE_B3_R5 = 0.25;
+
+local RIVER_PERCENTAGE_B4_R3 = 0.35;
+local RIVER_PERCENTAGE_B4_R5 = 0.20;
+
+local RIVER_PERCENTAGE_B5_R3 = 0.25;
+local RIVER_PERCENTAGE_B5_R5 = 0.15;
+
+
+--- Used to evaluate the common part of the spawns
+
+-- Max Percentage of usable land that is actually allowed for a spawn 
+local FLOODS_PERCENTAGE_R3 = 0.30;
+local FLOODS_PERCENTAGE_R5 = 0.20;
+
+local MOUNTAINS_PERCENTAGE_R3 = 0.50;
+local MOUNTAINS_PERCENTAGE_R5 = 0.50;
+
+local TUNDRA_PERCENTAGE_R3 = 0.03;
+local TUNDRA_PERCENTAGE_R5 = 0.10;
+
+local DESERT_PERCENTAGE_R3 = 0.03;
+local DESERT_PERCENTAGE_R5 = 0.10;
+
+function biasFeatureScore(bias, percentageR3, percentageR5)
+
+   local score = 0;
+   
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B1_R3 and percentageR5 >= FEATURE_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B1_R3 - 0.03 and percentageR5 >= FEATURE_PERCENTAGE_B1_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B2_R3 and percentageR5 >= FEATURE_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B2_R3 - 0.03 and percentageR5 >= FEATURE_PERCENTAGE_B2_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B3_R3 and percentageR5 >= FEATURE_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B3_R3 - 0.03 and percentageR5 >= FEATURE_PERCENTAGE_B3_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B4_R3 and percentageR5 >= FEATURE_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B4_R3 - 0.02 and percentageR5 >= FEATURE_PERCENTAGE_B4_R5 - 0.02 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B5_R3 and percentageR5 >= FEATURE_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+   else
+      print("Warning, tried to evaluate a bugged Feature bias !");
+   end
+   
+   return score;
+   
+end
+
+function negativeBiasFeatureScore(negativeBias, percentageR3, percentageR5)
+
+   local score = 0;
+   
+   if negativeBias == 1 then
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B1_R3 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B1_R3 - 0.03 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B1_R5 - 0.03 then
+         score = score + 100;
+      -- negativeBias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif negativeBias == 2 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B2_R3 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B2_R3 - 0.03 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B2_R5 - 0.03 then
+         score = score + 100;
+      -- negativeBias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif negativeBias == 3 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B3_R3 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B3_R3 - 0.03 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B3_R5 - 0.03 then
+         score = score + 100;
+      -- negativeBias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif negativeBias == 4 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B4_R3 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B4_R3 - 0.02 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B4_R5 - 0.02 then
+         score = score + 50;
+      -- negativeBias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif negativeBias == 5 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_FEATURE_PERCENTAGE_B5_R3 and percentageR5 <= NEGATIVE_FEATURE_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- negativeBias not respected
+      else
+         score = score - 400;
+      end
+      
+   else
+      print("Warning, tried to evaluate a bugged Negative Feature bias !");
+   end
+   
+   return score;
+   
+end
+
+
+function biasResourceScore(bias, percentageR3, percentageR5)
+
+   local score = 0;
+   
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= RESOURCE_PERCENTAGE_B1_R3 and percentageR5 >= RESOURCE_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= RESOURCE_PERCENTAGE_B1_R3 - 0.03 and percentageR5 >= RESOURCE_PERCENTAGE_B1_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= RESOURCE_PERCENTAGE_B2_R3 and percentageR5 >= RESOURCE_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= RESOURCE_PERCENTAGE_B2_R3 - 0.03 and percentageR5 >= RESOURCE_PERCENTAGE_B2_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= RESOURCE_PERCENTAGE_B3_R3 and percentageR5 >= RESOURCE_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= RESOURCE_PERCENTAGE_B3_R3 - 0.03 and percentageR5 >= RESOURCE_PERCENTAGE_B3_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= RESOURCE_PERCENTAGE_B4_R3 and percentageR5 >= RESOURCE_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= RESOURCE_PERCENTAGE_B4_R3 - 0.02 and percentageR5 >= RESOURCE_PERCENTAGE_B4_R5 - 0.02 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= RESOURCE_PERCENTAGE_B5_R3 and percentageR5 >= RESOURCE_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+      
+   else
+      print("Warning, tried to evaluate a bugged Resource bias !");
+   end
+   
+   return score;
+   
+end
+
+function negativeBiasResourceScore(negativeBias, percentageR3, percentageR5)
+
+   local score = 0;
+   
+   if negativeBias == 1 then
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B1_R3 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B1_R3 - 0.03 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B1_R5 - 0.03 then
+         score = score + 100;
+      -- negativeBias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif negativeBias == 2 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B2_R3 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B2_R3 - 0.03 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B2_R5 - 0.03 then
+         score = score + 100;
+      -- negativeBias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif negativeBias == 3 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B3_R3 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B3_R3 - 0.03 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B3_R5 - 0.03 then
+         score = score + 100;
+      -- negativeBias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif negativeBias == 4 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B4_R3 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- negativeBias somewhat respected
+      elseif percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B4_R3 - 0.02 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B4_R5 - 0.02 then
+         score = score + 50;
+      -- negativeBias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif negativeBias == 5 then 
+      -- negativeBias respected
+      if percentageR3 <= NEGATIVE_RESOURCE_PERCENTAGE_B5_R3 and percentageR5 <= NEGATIVE_RESOURCE_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- negativeBias not respected
+      else
+         score = score - 400;
+      end
+      
+   else
+      print("Warning, tried to evaluate a Nagative Resource bias !");
+   end
+   
+   return score;
+   
+end
 
 
 function biasTerrainScore(bias, percentageR3, percentageR5)
@@ -653,6 +691,8 @@ function biasTerrainScore(bias, percentageR3, percentageR5)
       else
          score = score - 400;
       end
+   else
+      print("Warning, tried to evaluate a Nagative Terrain bias !");
    
    end
    
@@ -784,11 +824,84 @@ function biasMountainScore(bias, percentageR3, percentageR5)
       else
          score = score - 400;
       end
+   else
+      print("Warning, tried to evaluate a bugged Mountain bias !");
    
    end
    
+   
+   
    return score
 
+end
+
+function biasRiverScore(bias, percentageR3, percentageR5)
+
+   local score = 0;
+   
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= RIVER_PERCENTAGE_B1_R3 and percentageR5 >= RIVER_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= RIVER_PERCENTAGE_B1_R3 - 0.03 and percentageR5 >= RIVER_PERCENTAGE_B1_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= RIVER_PERCENTAGE_B2_R3 and percentageR5 >= RIVER_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= RIVER_PERCENTAGE_B2_R3 - 0.03 and percentageR5 >= RIVER_PERCENTAGE_B2_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= RIVER_PERCENTAGE_B3_R3 and percentageR5 >= RIVER_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= RIVER_PERCENTAGE_B3_R3 - 0.03 and percentageR5 >= RIVER_PERCENTAGE_B3_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= RIVER_PERCENTAGE_B4_R3 and percentageR5 >= RIVER_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= RIVER_PERCENTAGE_B4_R3 - 0.02 and percentageR5 >= RIVER_PERCENTAGE_B4_R5 - 0.02 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= RIVER_PERCENTAGE_B5_R3 and percentageR5 >= RIVER_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+   else
+      print("Warning, tried to evaluate a bugged River bias !");
+   
+   end
+   
+   return score;
+   
 end
 
 
@@ -1206,10 +1319,12 @@ function NewBBS()
       mapTerrainCode[i] = {};
       mapFeatureCode[i] = {};
       mapCoastal[i] = {};
-      mapLake[i] = {};
+      mapSea[i] = {}; -- water that is not lake
+      mapLake[i] = {}; -- water that is lake
       mapRiver[i] = {};
       mapFreshWater[i] = {};
       mapContinent[i] = {};
+      mapIsContinentSplit[i] = {};
       mapSpawnable[i] = {};
       mapWonder[i] = {};
       
@@ -1229,8 +1344,10 @@ function NewBBS()
          mapCoastal[i][j] = false;
          mapLake[i][j] = false;
          mapRiver[i][j] = false;
+         mapSea[i][j] = false;
          mapFreshWater[i][j] = false;
          mapContinent[i][j] = 9;
+         mapIsContinentSplit[i][j] = false;
          
          mapFoodYield[i][j] = 0;
          mapProdYield[i][j] = 0;
@@ -1271,7 +1388,7 @@ function NewBBS()
             local feature = plot:GetFeatureType();
             local terrain = plot:GetTerrainType();
             local resource = plot:GetResourceType();
-            local isCoastal = plot:IsCoastalLand();
+            local isCoastal = false;
             local food = plot:GetYield(g_YIELD_FOOD);
             local prod = plot:GetYield(g_YIELD_PRODUCTION);
             local gold = plot:GetYield(g_YIELD_GOLD);
@@ -1316,9 +1433,11 @@ function NewBBS()
                
             elseif (food == 2 and prod == 2) then -- 2-2
                mapTwoTwo[iIndex][jIndex] = 2;
+               twoTwoCount = twoTwoCount + 1;
             
             else -- better than 2-2
                mapTwoTwo[iIndex][jIndex] = 3;
+               twoTwoCount = twoTwoCount + 1;
             end
             --- end mapping 2-2 --
             
@@ -1338,9 +1457,13 @@ function NewBBS()
                terrainCount[terrain + 1] = terrainCount[terrain + 1] + 1;
             end
             
-            if (terrain == 15 and plot:IsLake()) then
-               mapLake[iIndex][jIndex] = true;
-               lakeCount = lakeCount + 1;
+            if (terrain >= 15) then
+               if (plot:IsLake()) then
+                  mapLake[iIndex][jIndex] = true;
+                  lakeCount = lakeCount + 1;
+               else
+                  mapSea[iIndex][jIndex] = true;
+               end
             end
             
             if (terrain < 15) then
@@ -1358,10 +1481,36 @@ function NewBBS()
                floodPlainsCount = floodPlainsCount + 1;
             end
             
+            isCoastal = isCoastalTile(i, j, mapXSize, mapYSize, mapIsRoundWestEast);
+            
             if (isCoastal) then
                coastalCount = coastalCount + 1;
                mapCoastal[iIndex][jIndex] = true;
             end
+            
+            -- Checking Continent Split --
+         local continentID = mapContinent[iIndex][jIndex];
+         
+         ___Debug("-----------------------");
+         ___Debug("Tile Test", i, j);
+         ___Debug("-----------------------");
+         
+         for k = 1, 3 do
+            local list = getRing(i, j, k, mapXSize, mapYSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               ___Debug("x:", x, "y", y);
+               if (mapTerrainCode[x + 1][y + 1] < 15 and continentID ~= mapContinent[x + 1][y + 1]) then
+                  mapIsContinentSplit[iIndex][jIndex] = true;
+                  ___Debug("---- Split Continent", x, "Y:", y);
+                  break;
+               end
+            end
+            if mapIsContinentSplit[iIndex][jIndex] then
+               break;
+            end
+         end
             
             ___Debug("Tile X:", i, "Y:", j);
             ___Debug("-- Terrain:", terrain);
@@ -1448,6 +1597,23 @@ function NewBBS()
       for j = 0, mapYSize - 1 do 
          local jIndex = j + 1 ;
          
+         -- Checking if too many mountains/water around, for a non coastal tile, will ban
+         if (mapCoastal[iIndex][jIndex] == false and mapTerrainCode[iIndex][jIndex] < 15) then
+            local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
+            local unusableTiles = 0;
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               if (isMountainCode(mapTerrainCode[x + 1][j + 1]) or mapTerrainCode[x + 1][j + 1] >= 15) then
+                  unusableTiles = unusableTiles + 1;
+               end
+            end
+            
+            if (unusableTiles >= 4) then
+               ___Debug("not enough workable tiles around X:", i, "Y:", j);
+               mapSpawnable[iIndex][jIndex] = false;
+            end
+         end
          ------ Too close to map border ! ----------
          ------ It is forbidden to settle less than 3 tiles away from the map border ----
          
@@ -1614,6 +1780,7 @@ function NewBBS()
    print("----------Mountains count", mountainCount);
    print("----------Hills count", hillsCount);
    print("------Usable land count (no mountains)", usableLand);
+   print("----------Of which: twoTwos", twoTwoCount);
    print("----------Of which: grasland", terrainCount[0 + 1] + terrainCount[1 + 1]);
    print("----------Of which: plain", terrainCount[3 + 1] + terrainCount[4 + 1]);
    print("----------Of which: desert", terrainCount[6 + 1] + terrainCount[7 + 1]);
@@ -1757,54 +1924,176 @@ function NewBBS()
                
                -- recomputing biases so that it's easier to work with them later on.
                -- will still store "raw" biases anyway
-               if (element.Value ~= nil) then
-                  if (element.Type == "TERRAINS") then
+               
+                  
+               if (element.Type == "TERRAINS") then
+                  if (element.Value ~= nil and element.Tier ~= nil) then
                      biasTerrain[element.Value + 1] = element.Tier;
-                  elseif (element.Type == "FEATURES") then
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
+                  end
+               
+               elseif (element.Type == "FEATURES") then
+                  if (element.Value ~= nil and element.Tier ~= nil) then
                      biasFeature[element.Value + 1] = element.Tier;
-                  elseif (element.Type == "RESOURCES") then
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
+                  end
+               
+               elseif (element.Type == "RESOURCES") then
+                  if (element.Value ~= nil and element.Tier ~= nil) then
                      biasResource[element.Value + 1] = element.Tier;
-                  elseif (element.Type == "RIVERS") then
-                     riverCiv = element.Tier;
-                  
-                  -- negative biases, will simply put the value as ... negative !
-                  elseif (element.Type == "NEGATIVE_TERRAINS") then
-                     biasTerrain[element.Value + 1] = 0 - element.Tier;
-                  elseif (element.Type == "NEGATIVE_FEATURES") then
-                     biasFeature[element.Value + 1] = 0 - element.Tier;
-                  elseif (element.Type == "NEGATIVE_RESOURCES") then
-                     biasResource[element.Value + 1] = 0 - element.Tier;
-                  
-                  -- custom biases
-                  elseif (element.Type == "CUSTOM_KING_OF_THE_NORTH") then
-                     isNorthKing = true;
-                  elseif (element.Type == "CUSTOM_HYDROPHOBIC") then
-                     isHydrophobic = true;
-                  elseif (element.Type == "CUSTOM_CONTINENT_SPLIT") then
-                     continentSplit = true;
-                  elseif (element.Type == "CUSTOM_MOUNTAIN_LOVER") then
-                     continentSplit = true;
-                  elseif (element.Type == "CUSTOM_I_AM_SALTY") then
-                     isSalty = true;
-                     
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
                   end
                   
-               else
-                  print("Warning: wrongly read bias:", element.Type, element.Tier, civName);
-               end
+               elseif (element.Type == "RIVERS") then
+                  if (element.Tier ~= nil) then
+                     
+                     riverCiv = element.Tier;
+                     ___Debug("River bias:", element.Type, element.Value, element.Tier, civName);
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
+                  end
                
+               -- negative biases, will simply put the value as ... negative !
+               elseif (element.Type == "NEGATIVE_TERRAINS") then
+                  if (element.Value ~= nil and element.Tier ~= nil) then
+                     biasTerrain[element.Value + 1] = 0 - element.Tier;
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
+                  end
+                  
+               elseif (element.Type == "NEGATIVE_FEATURES") then
+                  if (element.Value ~= nil and element.Tier ~= nil) then
+                     biasFeature[element.Value + 1] = 0 - element.Tier;
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
+                  end
+                  
+               elseif (element.Type == "NEGATIVE_RESOURCES") then
+                  if (element.Value ~= nil and element.Tier ~= nil) then
+                     biasResource[element.Value + 1] = 0 - element.Tier;
+                  else
+                     print("Warning: wrongly read bias: Type, ID, Tier", element.Type, element.Value, element.Tier, civName);
+                  end
+               
+               -- custom biases
+               elseif (element.Type == "CUSTOM_KING_OF_THE_NORTH") then
+                  isNorthKing = true;
+               elseif (element.Type == "CUSTOM_HYDROPHOBIC") then
+                  isHydrophobic = true;
+               elseif (element.Type == "CUSTOM_CONTINENT_SPLIT") then
+                  continentSplit = true;
+               elseif (element.Type == "CUSTOM_MOUNTAIN_LOVER") then
+                  isMountainLover = true;
+               elseif (element.Type == "CUSTOM_I_AM_SALTY") then
+                  isSalty = true;
+                  
+               end
+
                
             end
 
             
          end
          
+         --- Recomputing the resource biases ---
+         --- Idea is to sort them by bias, so that they can be looked up together if same level ---
+         
+         -- 2D array, x being the bias (1-5) and Y being a list of resources matching that bias
+         local resourcesBiasList = {};
+         -- counter for each 
+         local resourcesBiasListCount = {};
+         
+         local featuresBiasList = {};
+         local featuresBiasListCount = {};
+         
+         -- Negative version
+         local resourcesNegativeBiasList = {};
+         local resourcesNegativeBiasListCount = {};
+         
+         local featuresNegativeBiasList = {};
+         local featuresNegativeBiasListCount = {};
+         
+         for k = 1, 5 do
+            resourcesBiasList[k] = {};
+            resourcesBiasListCount[k] = 0;
+            
+            featuresBiasList[k] = {};
+            featuresBiasListCount[k] = 0;
+            
+            resourcesNegativeBiasList[k] = {};
+            resourcesNegativeBiasListCount[k] = 0;
+            
+            featuresNegativeBiasList[k] = {};
+            featuresNegativeBiasListCount[k] = 0;
+         end
+         
+         for k = 1, 100 do
+         
+            -- value of the bias (ex: Tier 1)
+            local resourceBiasValue = biasResource[k];
+            -- resources with a bias (ex: 10 = citrus)
+            local resource = k - 1;
+            local resourceNegativeBiasValue = 0;
+            
+            
+            if resourceBiasValue > 0 then
+               resourcesBiasListCount[resourceBiasValue] = resourcesBiasListCount[resourceBiasValue] + 1;
+               resourcesBiasList[resourceBiasValue][resourcesBiasListCount[resourceBiasValue]] = resource;
+            else
+               resourceNegativeBiasValue = resourceBiasValue;
+            end   
+            
+            
+            
+            if resourceNegativeBiasValue < 0 then
+               ___Debug("added some negative: bias : value", resourceNegativeBiasValue, feature); 
+               resourceNegativeBiasValue = math.abs(resourceNegativeBiasValue);
+               
+               resourcesNegativeBiasListCount[resourceNegativeBiasValue] = resourcesNegativeBiasListCount[resourceNegativeBiasValue] + 1;
+               resourcesNegativeBiasList[resourceNegativeBiasValue][resourcesNegativeBiasListCount[resourceNegativeBiasValue]] = resource;
+            end
+            
+            -- value of the bias (ex: Tier 1)
+            local featureBiasValue = biasFeature[k];
+            -- features with a bias (ex: 10 = citrus)
+            local feature = k - 1;
+            local featureNegativeBiasValue = 0;
+            
+            if featureBiasValue > 0 then
+               featuresBiasListCount[featureBiasValue] = featuresBiasListCount[featureBiasValue] + 1;
+               featuresBiasList[featureBiasValue][featuresBiasListCount[featureBiasValue]] = feature;
+            else
+               featureNegativeBiasValue = featureBiasValue;
+            end
+            
+            ___Debug("Feature Negative bias", featureNegativeBiasValue, feature);
+            
+            if featureNegativeBiasValue < 0 then
+               ___Debug("added some negative: bias : value", featureNegativeBiasValue, feature); 
+               featureNegativeBiasValue = math.abs(featureNegativeBiasValue);
+               
+               featuresNegativeBiasListCount[featureNegativeBiasValue] = featuresNegativeBiasListCount[featureNegativeBiasValue] + 1;
+               featuresNegativeBiasList[featureNegativeBiasValue][featuresNegativeBiasListCount[featureNegativeBiasValue]] = feature;
+            end
+         
+         end
+         
+         ----------
+         
          majorBiases[majorCount] = tempBias;
          majorCount = majorCount + 1;
          
+         
+         -- Main object --
+         -- This will contain all the player information (leader, civ, biases, ...)
          majorAll[majorCount] = {index = i, civName = civName, major = majorList[i], biases = majorBiases[i], biasScore = biasScore, biasCount = biasCount,
-                          biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource, isNorthKing = isNorthKing, continentSplit = continentSplit,
-                          isHydrophobic = isHydrophobic, isSalty = isSalty, isMountainLover = isMountainLover, riverCiv = riverCiv};
+                          biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource,
+                          resourcesBiasList = resourcesBiasList, resourcesBiasListCount = resourcesBiasListCount, featuresBiasList = featuresBiasList, featuresBiasListCount = featuresBiasListCount, 
+                          resourcesNegativeBiasList = resourcesNegativeBiasList, resourcesNegativeBiasListCount = resourcesNegativeBiasListCount, featuresNegativeBiasList = featuresNegativeBiasList, featuresNegativeBiasListCount = featuresNegativeBiasListCount, 
+                          isNorthKing = isNorthKing, continentSplit = continentSplit, isHydrophobic = isHydrophobic, isSalty = isSalty, isMountainLover = isMountainLover, riverBias = riverCiv};
          print(i, majorAll[majorCount]);
          print(majorAll[majorCount].index, majorAll[majorCount].civName);
          
@@ -1844,21 +2133,53 @@ function NewBBS()
    
    
    
+   --------------------------
+   ------Phase X Spawn analysis -------
+   --------------------------
    
+   print("--------------------------");
+   print("--------------------------");
+   print("Now starting analysis of the spawns");
+   print("--------------------------");
+   print(os.date("%c"));
+   print("--------------------------");
+   print("--------------------------");
    
    evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori);
    
-   
+   print("--------------------------");
+   print("--------------------------");
+   print("Ended spawn evaluation");
+   print("--------------------------");
+   print(os.date("%c"));
+   print("--------------------------");
+   print("--------------------------");
    
 
 end
 
 function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
 
+   
    if majorCount < 1 then
       print("No Major Civs to evaluate !");
       return;
    end
+   
+   
+   
+   
+   local resourceBiases = {};
+   local resourceBiasesCount = {};
+   
+   for i = 0, 5 do
+      resourceBiases[i] = {};
+      resourceBiasesCount[i] = 0;
+   end
+   
+   local topQuartile = mapYSize * 0.75;
+   local bottomQuartile = mapYSize * 0.25;
+   
    
    for i = 0, mapXSize - 1 do
       local iIndex = i + 1;
@@ -1867,12 +2188,13 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
          local jIndex = j + 1 ;
          
          local maoriSelection = "NONE"; -- possible value : "NONE", "MAIN", "FALLBACK"
-         
+         ___Debug("--------------------------");
          ___Debug("Now evaluating tile:", i, j);
+         ___Debug("--------------------------");
          
          if (mapSpawnable[iIndex][jIndex]) then -- We already have eliminated a lot of forbidden spawns
             
-            ___Debug("is in?", mapTerrainCode[iIndex][jIndex]);
+            
             if (mapTerrainCode[iIndex][jIndex] >= 15) then--If no maori, we can expedite things and not analyse water tiles
                -- Maori code --
                if (hasMaori) then
@@ -1903,70 +2225,20 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                
                -- END Maori Code --
             else -- we have a "normal" tile
-               ___Debug("is in? 2");
-            
-            
-               -- collecting stats for each ring
-               -- local ringOneTerrain = {};
-               -- local ringOneResource = {};
-               -- local ringOneFeature = {};
-               -- local ringOneTwoTwo = {};
-               
-               -- local ringTwoTerrain = {};
-               -- local ringTwoResource = {};
-               -- local ringTwoFeature = {};
-               -- local ringTwoTwoTwo = {};
-               
-               -- local ringThreeTerrain = {};
-               -- local ringThreeResource = {};
-               -- local ringThreeFeature = {};
-               -- local ringThreeTwoTwo = {};
-               
-               -- local ringFourTerrain = {};
-               -- local ringFourResource = {};
-               -- local ringFourFeature = {};
-               -- local ringFourTwoTwo = {};
-               
-               -- local ringFiveTerrain = {};
-               -- local ringFiveResource = {};
-               -- local ringFiveFeature = {};
-               -- local ringFiveTwoTwo = {};
-               
-               -- for k = 1, 100 do
-                  -- ringOneTerrain[i] = 0;
-                  -- ringOneResource[i] = 0;
-                  -- ringOneFeature[i] = 0;
-                  -- ringOneTwoTwo[i] = 0;
-                  
-                  -- ringTwoTerrain[i] = 0;
-                  -- ringTwoResource[i] = 0;
-                  -- ringTwoFeature[i] = 0;
-                  -- ringTwoTwoTwo[i] = 0;
-                  
-                  -- ringThreeTerrain[i] = 0;
-                  -- ringThreeResource[i] = 0;
-                  -- ringThreeFeature[i] = 0;
-                  -- ringThreeTwoTwo[i] = 0;
-                  
-                  -- ringFourTerrain[i] = 0;
-                  -- ringFourResource[i] = 0;
-                  -- ringFourFeature[i] = 0;
-                  -- ringFourTwoTwo[i] = 0;
-                  
-                  -- ringFiveTerrain[i] = 0;
-                  -- ringFiveResource[i] = 0;
-                  -- ringFiveFeature[i] = 0;
-                  -- ringFiveTwoTwo[i] = 0;
-               -- end
-               
+
                local ringTerrain = {};
                local ringResource = {};
                local ringFeature = {};
                local ringTwoTwo = {};
                local ringCount = {}; -- Amount of tiles per ring
                local ringMountainCount = {};
+               local ringFloodPlains = {};
                local ringLandCount = {};
+               local ringTundraCount = {};
+               local ringDesertCount = {};
                local ringWaterCount = {};
+               local ringRiver = {};
+               local ringSea = {}; -- Amount of sea (not lake) tiles in ring x
                
                for k = 1, 5 do
                   ringTerrain[k] = {};
@@ -1977,6 +2249,11 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   ringLandCount[k] = 0;
                   ringWaterCount[k] = 0;
                   ringMountainCount[k] = 0;
+                  ringDesertCount[k] = 0;
+                  ringTundraCount[k] = 0;
+                  ringFloodPlains[k] = 0;
+                  ringRiver[k] = 0;
+                  ringSea[k] = 0;
                   
                   for l = 1, 100 do
                      ringTerrain[k][l] = 0;
@@ -1986,7 +2263,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                end
                
                --- Now getting the amount of each terrain, resource and feature for each ring !
-               --- Also couting the amount of two-twos
+               --- Also couting the amount of two-twos and riverTiles
                for k = 1, 5 do
                   local list = getRing(i, j, k, mapXSize, mapYSize, mapIsRoundWestEast);
                   
@@ -2010,6 +2287,12 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         else
                            ringLandCount[k] = ringLandCount[k] + 1;
                         end
+                        
+                        if (terrain == 6 or terrain == 7) then
+                           ringDesertCount[k] = ringDesertCount[k] + 1;
+                        elseif (terrain == 9 or terrain == 10 or terrain == 12 or terrain == 13) then
+                           ringTundraCount[k] = ringTundraCount[k] + 1;
+                        end
                      end
                      
                      if (resource > -1) then
@@ -2018,16 +2301,178 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      
                      if (feature > -1) then
                         ringFeature[k][feature + 1] = ringFeature[k][feature + 1] + 1;
+                        
+                        if (feature == 0 or feature == 31 or feature == 32) then
+                           ringFloodPlains[k] = ringFloodPlains[k] + 1;
+                        end
                      end
                      
                      if mapTwoTwo[xIndex][yIndex] then
                         ringTwoTwo[k] = ringTwoTwo[k] + 1;
+                     end
+                     
+                     if (mapRiver[xIndex][yIndex]) then
+                        ringRiver[k] = ringRiver[k] + 1;
+                     end
+                     
+                     if (mapSea[xIndex][yIndex]) then
+                        ringSea[k] = ringSea[k] + 1;
                      end
 
                      ringCount[k] = ringCount[k] + 1;
                   end
                end
                
+               -- Checking the amount of tiles for each rings
+               local ring3LandCount = 1 + ringLandCount[1] + ringLandCount[2] + ringLandCount[3];
+               local ring5LandCount = ring3LandCount + ringLandCount[4] + ringLandCount[5];
+               
+               local ring3WaterCount = 1 + ringWaterCount[1] + ringWaterCount[2] + ringWaterCount[3];
+               local ring5WaterCount = ring3WaterCount + ringWaterCount[4] + ringWaterCount[5];
+               
+               local ring3Count = 1 + ringCount[1] + ringCount[2] + ringCount[3];
+               local ring5Count = ring3Count + ringCount[4] + ringCount[5];
+               
+               
+               --- Going now for a general analysis of the map --
+               --- Check parameters: 
+                  --- Mountains (not too many around, except for mountains lovers)
+                  --- Floodplains
+                  --- tundra/snow
+                  --- desert
+                 ------ The score will be evaluated for each civs according to their bias (ex: no tundra penalty for Russia/Canada
+               local mountainScore = 0;
+               
+               if ringMountainCount[1] >= 3 then
+                  mountainScore = mountainScore - 1000;
+                  ___Debug("too many mountains ring 1");
+               end
+               
+               local ring3Mountains = ringMountainCount[1] + ringMountainCount[2] + ringMountainCount[3];
+               local ring5Mountains = ring3Mountains + ringMountainCount[4] + ringMountainCount[5];
+               
+               local percentageR3Mountains = ring3Mountains / ring3LandCount;
+               local percentageR5Mountains = ring5Mountains / ring5LandCount;
+               
+               if percentageR3Mountains > MOUNTAINS_PERCENTAGE_R3 then
+                  mountainScore = mountainScore - 1000;
+                  ___Debug("too many mountains ring 1-3");
+               elseif percentageR3Mountains > MOUNTAINS_PERCENTAGE_R3 - 0.05 then
+                  mountainScore = mountainScore - 500;
+                  ___Debug("too many mountains ring 1-3 (minored)");
+               else
+                  mountainScore = mountainScore + 500;
+               end
+               
+               if percentageR3Mountains > MOUNTAINS_PERCENTAGE_R5 then
+                  mountainScore = mountainScore - 1000;
+                  ___Debug("too many mountains ring 1-5");
+               elseif percentageR3Mountains > MOUNTAINS_PERCENTAGE_R5 - 0.05 then
+                  mountainScore = mountainScore - 500;
+                  ___Debug("too many mountains ring 1-5 (minored)");
+               else
+                  mountainScore = mountainScore + 500;
+               end
+                
+                
+               -- Flood Plains calculation
+               local floodsScore = 0
+               
+               
+               local ring3Floods = ringFloodPlains[1] + ringFloodPlains[2] + ringFloodPlains[3];
+               if (mapFeatureCode[iIndex][jIndex] == 0 or mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
+                  ring3Floods = ring3Floods + 1;
+               end
+               
+               local ring5Floods = ring3Floods + ringFloodPlains[4] + ringFloodPlains[5];
+               
+               local percentageR3Floods = ring3Floods / ring3LandCount;
+               local percentageR5Floods = ring5Floods / ring5LandCount;
+               
+               if percentageR3Floods > FLOODS_PERCENTAGE_R3 then
+                  floodsScore = floodsScore - 1000;
+                  ___Debug("too many floods ring 1-3");
+               elseif percentageR3Floods > FLOODS_PERCENTAGE_R3 - 0.05 then
+                  floodsScore = floodsScore - 500;
+                  ___Debug("too many floods ring 1-3 (minored)");
+               else
+                  floodsScore = floodsScore + 500;
+               end
+               
+               if percentageR5Floods > FLOODS_PERCENTAGE_R5 then
+                  floodsScore = floodsScore - 1000;
+                  ___Debug("too many floodss ring 1-5");
+               elseif percentageR5Floods > FLOODS_PERCENTAGE_R5 - 0.05 then
+                  floodsScore = floodsScore - 500;
+                  ___Debug("too many floodss ring 1-5 (minored)");
+               else
+                  floodsScore = floodsScore + 500;
+               end
+               
+               -- tundra (and snow) score
+                  
+               local tundraScore = 0
+               
+               
+               local ring3Tundra = ringTundraCount[1] + ringTundraCount[2] + ringTundraCount[3];
+               if (mapTerrainCode[iIndex][jIndex] == 9 or mapTerrainCode[iIndex][jIndex] == 10 or 
+                    mapTerrainCode[iIndex][jIndex] == 12 or mapTerrainCode[iIndex][jIndex] == 13) then
+                  ring3Tundra = ring3Tundra + 1;
+               end
+               
+               local ring5Tundra = ring3Tundra + ringTundraCount[4] + ringTundraCount[5];
+               
+               local percentageR3Tundra = ring3Tundra / ring3LandCount;
+               local percentageR5Tundra = ring5Tundra / ring5LandCount;
+               
+               if percentageR3Tundra > TUNDRA_PERCENTAGE_R3 then
+                  tundraScore = tundraScore - 1000;
+                  ___Debug("too many tundra ring 1-3");
+                else
+                  tundraScore = tundraScore + 500;
+               end
+               
+               if percentageR5Tundra > TUNDRA_PERCENTAGE_R5 then
+                  tundraScore = tundraScore - 1000;
+                  ___Debug("too many tundras ring 1-5");
+               elseif percentageR5Tundra > TUNDRA_PERCENTAGE_R5 - 0.02 then
+                  tundraScore = tundraScore - 500;
+                  ___Debug("too many tundras ring 1-5 (minored)");
+               else
+                  tundraScore = tundraScore + 500;
+               end
+               
+               -- desert score
+                  
+               local desertScore = 0
+               
+               
+               local ring3Desert = ringDesertCount[1] + ringDesertCount[2] + ringDesertCount[3];
+               if (mapTerrainCode[iIndex][jIndex] == 6 or mapTerrainCode[iIndex][jIndex] == 7) then
+                  ring3Desert = ring3Desert + 1;
+               end
+               
+               local ring5Desert = ring3Desert + ringDesertCount[4] + ringDesertCount[5];
+               
+               local percentageR3Desert = ring3Desert / ring3LandCount;
+               local percentageR5Desert = ring5Desert / ring5LandCount;
+               
+               if percentageR3Desert > DESERT_PERCENTAGE_R3 then
+                  desertScore = desertScore - 1000;
+                  ___Debug("too many desert ring 1-3");
+                else
+                  desertScore = desertScore + 500;
+               end
+               
+               if percentageR5Desert > DESERT_PERCENTAGE_R5 then
+                  desertScore = desertScore - 1000;
+                  ___Debug("too many desert ring 1-5");
+               elseif percentageR5Desert > DESERT_PERCENTAGE_R5 - 0.02 then
+                  desertScore = desertScore - 500;
+                  ___Debug("too many desert ring 1-5 (minored)");
+               else
+                  desertScore = desertScore + 500;
+               end
                
                ---- Now evaluating the biases
                
@@ -2035,30 +2480,24 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                
                   player = majorAll[k];
                
-                  ___Debug("Now evaluating player:", player.index, player.civName);
+                  ___Debug("--------------------------");
+                  ___Debug("---- Now evaluating player:", player.index, player.civName);
+                  ___Debug("--------------------------");
                   -- Tier 1 and 2
                   local biasMandatoryScore = 0;
                   -- Tier 3, 4 and 5
                   local biasSecondaryScore = 0;
                   
-                  -- Checking the amount of tiles for each rings
-                  local ring3LandCount = 1 + ringLandCount[1] + ringLandCount[2] + ringLandCount[3];
-                  local ring5LandCount = ring3LandCount + ringLandCount[4] + ringLandCount[5];
                   
-                  local ring3WaterCount = 1 + ringWaterCount[1] + ringWaterCount[2] + ringWaterCount[3];
-                  local ring5WaterCount = ring3WaterCount + ringWaterCount[4] + ringWaterCount[5];
-                  
-                  local ring3Count = 1 + ringCount[1] + ringCount[2] + ringCount[3];
-                  local ring5Count = ring3Count + ringCount[4] + ringCount[5];
                   
                   local ringThreeTerrain = 0;
                   local ringFiveTerrain = 0;
 
                   --- TERRAINS ---
-                  
                   --- if two terrain have the same bias (ex: grassland hills and plain hills), they will be considered as one
-
                   
+                  ___Debug("------- Looking at Terrain first");
+
                   -- grassland bias
                   if (player.biasTerrain[0 + 1] ~= 0) then
                      
@@ -2297,7 +2736,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      end
                   end
                   
-                  -- dsert hill
+                  -- desert hill
                   if (player.biasTerrain[7 + 1] ~= 0) then
                      
                      local bias = player.biasTerrain[7 + 1];
@@ -2519,6 +2958,326 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         ___Debug("-- Secondary -- Snow Mountain score:", score)
                      end
                   end
+                  
+                  
+                  -- Coastal spawn.
+                  -- Simply gonna check if the tile is coastal or not
+                  if (player.biasTerrain[15 + 1] ~= 0) then
+                     local bias = player.biasTerrain[14 + 1];
+                     if (mapCoastal[iIndex][jIndex]) then
+
+                        if (bias <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + 2000;
+                           ___Debug("-- primary -- tile IS coastal", 2000)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + 1000;
+                           ___Debug("-- Secondary -- tile IS coastal", 1000)
+                        end 
+                     -- non coastal tile
+                     else
+                        if (bias <= 2) then
+                           biasMandatoryScore = biasMandatoryScore - 2000;
+                           ___Debug("-- primary -- tile IS NOT coastal", -2000)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore - 1000;
+                           ___Debug("-- Secondary -- tile IS NOT coastal", -1000)
+                        end 
+                     end
+                  end
+                  
+                  
+                  --- NEXT Phase --
+                  --- Resource bias calculation ---
+                  
+                  
+                  ___Debug("---Resources biases---");
+                  
+                  local ringThreeResource = 0;
+                  local ringFiveResource = 0;
+
+                  for k = 1, 5 do
+                     if (player.resourcesBiasListCount[k] > 0) then
+                     
+                        ___Debug("For bias:", k, ",resources list:");
+                        for l = 1, player.resourcesBiasListCount[k] do
+                           ___Debug("-----resources looked at:", player.resourcesBiasList[k][l]);
+                        end
+                     
+                        ringThreeResource = getRingResource(1, 3, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesBiasList[k], player.resourcesBiasListCount[k]);
+                        ringFiveResource = ringThreeResource + getRingResource(4, 5, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesBiasList[k], player.resourcesBiasListCount[k]);
+                  
+                         ___Debug("nombre de resources:", ringThreeResource, ringFiveResource);
+                  
+                        local percentageR3 = ringThreeResource / ring3LandCount;
+                        local percentageR5 = ringFiveResource / ring5LandCount;
+                  
+                        ___Debug("pourcentage de resources:", percentageR3, percentageR5);
+                  
+                        local score = biasResourceScore(k, percentageR3, percentageR5);
+                  
+                        ___Debug("Resource score:", score);
+                        
+                        -- primary bias
+                        if (k <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- score:", score)
+                        end
+                     end
+                     
+                  end
+                  
+                  ___Debug("--- NEGATIVE Resources biases---");
+                  
+                  for k = 1, 5 do
+                     if (player.resourcesNegativeBiasListCount[k] > 0) then
+                     
+                        ___Debug("For bias:", k, ",resources list:");
+                        for l = 1, player.resourcesNegativeBiasListCount[k] do
+                           ___Debug("-----resources looked at:", player.resourcesNegativeBiasList[k][l]);
+                        end
+                     
+                        ringThreeResource = getRingResource(1, 3, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesNegativeBiasList[k], player.resourcesNegativeBiasListCount[k]);
+                        ringFiveResource = ringThreeResource + getRingResource(4, 5, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesNegativeBiasList[k], player.resourcesNegativeBiasListCount[k]);
+                  
+                         ___Debug("nombre de resources:", ringThreeResource, ringFiveResource);
+                  
+                        local percentageR3 = ringThreeResource / ring3LandCount;
+                        local percentageR5 = ringFiveResource / ring5LandCount;
+                  
+                        ___Debug("pourcentage de resources:", percentageR3, percentageR5);
+                  
+                        local score = NegativeBiasResourceScore(k, percentageR3, percentageR5);
+                  
+                        ___Debug("Resource score:", score);
+                        
+                        -- primary bias
+                        if (k <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- score:", score)
+                        -- Secondary NegativeBias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- score:", score)
+                        end
+                     end
+                     
+                  end
+                  
+                  ___Debug("---Feature biases---");
+                  
+                  --- Next Phase ---
+                  --- Feature bias calculation ---
+                  
+                  local ringThreeFeature = 0;
+                  local ringFiveFeature = 0;
+
+                  for k = 1, 5 do
+                     if (player.featuresBiasListCount[k] > 0) then
+                     
+                        ___Debug("For bias:", k, ",features list:");
+                        for l = 1, player.featuresBiasListCount[k] do
+                           ___Debug("-----features looked at:", player.featuresBiasList[k][l]);
+                        end
+                     
+                        ringThreeFeature = getRingFeature(1, 3, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresBiasList[k], player.featuresBiasListCount[k]);
+                        ringFiveFeature = ringThreeFeature + getRingFeature(4, 5, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresBiasList[k], player.featuresBiasListCount[k]);
+                  
+                         ___Debug("nombre de features:", ringThreeFeature, ringFiveFeature);
+                  
+                        local percentageR3 = ringThreeFeature / ring3LandCount;
+                        local percentageR5 = ringFiveFeature / ring5LandCount;
+                  
+                        ___Debug("pourcentage de features:", percentageR3, percentageR5);
+                  
+                        local score = biasFeatureScore(k, percentageR3, percentageR5);
+                  
+                        ___Debug("Feature score:", score);
+                        
+                        -- primary bias
+                        if (k <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- score:", score)
+                        end
+                     end
+                     
+                  end
+                  
+                  ___Debug("--- NEGATIVE Feature biases---");
+                  
+                  for k = 1, 5 do
+                     if (player.featuresNegativeBiasListCount[k] > 0) then
+                     
+                        ___Debug("For bias:", k, ", NEGATIVE features list:");
+                        for l = 1, player.featuresNegativeBiasListCount[k] do
+                           ___Debug("-----Negative features looked at:", player.featuresNegativeBiasList[k][l]);
+                        end
+                     
+                        ringThreeFeature = getRingFeature(1, 3, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresNegativeBiasList[k], player.featuresNegativeBiasListCount[k]);
+                        ringFiveFeature = ringThreeFeature + getRingFeature(4, 5, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresNegativeBiasList[k], player.featuresNegativeBiasListCount[k]);
+                  
+                         ___Debug("nombre de features:", ringThreeFeature, ringFiveFeature);
+                  
+                        local percentageR3 = ringThreeFeature / ring3LandCount;
+                        local percentageR5 = ringFiveFeature / ring5LandCount;
+                  
+                        ___Debug("pourcentage de feature:", percentageR3, percentageR5);
+                  
+                        local score = negativeBiasFeatureScore(k, percentageR3, percentageR5);
+                  
+                        ___Debug("Feature score:", score);
+                        
+                        -- primary bias
+                        if (k <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- score:", score)
+                        -- Secondary NegativeBias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- score:", score)
+                        end
+                     end
+                     
+                  end
+                  
+                  
+                  local ringThreeRiver = 0;
+                  local ringFiveRiver = 0;
+                  
+                  ___Debug("------------------");
+                  ___Debug("--- River Bias ---");
+                  ___Debug("------------------");
+                  
+                  if (player.riverBias > 0 ) then
+                     local score = 0;
+                     
+                     -- Tile is not a river, not even evaluating --
+                     if( not mapRiver[iIndex][jIndex]) then
+                        
+                        if (player.riverBias < 3 ) then
+                           score = 0 - 2000;
+                        else
+                           score = 0 - 1000;
+                        end
+                     -- Tile is a River
+                     else
+                        ringThreeRiver = getRingRiver(1, 3, ringRiver);
+                        ringFiveRiver = ringThreeRiver + getRingRiver(4, 5, ringRiver);
+                        
+                        ___Debug("nombre de cases de riviere:", ringThreeRiver, ringFiveRiver);
+                  
+                        local percentageR3 = ringThreeRiver / ring3LandCount;
+                        local percentageR5 = ringFiveRiver / ring5LandCount;
+                  
+                        ___Debug("pourcentage de rivieres", percentageR3, percentageR5);
+                  
+                        score = biasRiverScore(player.riverBias, percentageR3, percentageR5);
+                  
+                        ___Debug("River score:", score);
+                     end
+                     
+                     -- primary bias
+                     if (k <= 2) then
+                        biasMandatoryScore = biasMandatoryScore + score;
+                        ___Debug("-- primary -- score:", score)
+                     -- Secondary NegativeBias
+                     else
+                        biasSecondaryScore = biasSecondaryScore + score;
+                        ___Debug("-- Secondary -- score:", score)
+                     end
+                  end
+                  
+                  
+                  -- Is Salty does not matter for positioning and will be ignored here
+                  -- Australia already has a bias for coast
+                  
+                  -- Mountain lover as well: Inca has a bias towards mountain
+                  -- It will be used to allow more mountains in the general placement
+                  
+                  -----------------
+                  -- CUSTOM BIASES ---
+                  -----------------
+                
+                  --- Continent split ---
+                
+                  if (player.continentSplit) then
+                     if (mapIsContinentSplit[iIndex][jIndex]) then
+                        biasMandatoryScore = biasMandatoryScore + 800;
+                        ___Debug("Tile is Continent Split: score: +800");
+                     else
+                        biasMandatoryScore = biasMandatoryScore - 1600;
+                        ___Debug("Tile is NOT Continent Split: score: -1600");
+                     end
+                  end
+                  
+                  --- Hydrophobic ---
+                  
+                  if (player.isHydrophobic) then
+                     local hasWater = false;
+                     for k = 1, 3 do
+                        if (ringSea[k] > 0) then
+                           ___Debug("Found sea water in ring", k, " Breaking");
+                           hasWater = true;
+                           break;
+                        end
+                     end
+                     
+                     if (not hasWater) then
+                        -- I will allow a maximum of 2 coastal/deap water tiles ring 4
+                        if (ringSea[4] > 2) then
+                           ___Debug("Found sea water in ring 4");
+                           hasWater = true;
+                        end
+                        
+                        -- I will allow a maximum of 4 coastal/deap water tiles ring 5
+                        if (ringSea[5] > 4) then
+                           ___Debug("Found sea water in ring 5");
+                           hasWater = true;
+                        end
+                     end
+                     
+                     if (not hasWater) then
+                        biasMandatoryScore = biasMandatoryScore + 800;
+                        ___Debug("Tile is far enough from the sea: score: +800");
+                     else
+                        biasMandatoryScore = biasMandatoryScore - 1600;
+                        ___Debug("Tile is too close to the sea: score: -1600");
+                     end
+                  end
+                  
+                  
+                     
+                  
+                  if (player.isNorthKing) then
+                     -- King of the North --
+                     if MapConfiguration.GetValue("MAP_SCRIPT") == "Tilted_Axis.lua"  then
+                        if j > bottomQuartile and j < topQuartile and i > bottomQuartile and i < topQuartile then
+                           ___Debug("Tile is Northen/Southern enough (Tilted version");
+                           biasMandatoryScore = biasMandatoryScore + 800;
+                        else
+                           ___Debug("Tile is NOT Northen/Southern enough (Tilted version)");
+                           biasMandatoryScore = biasMandatoryScore - 1600;
+                        end
+                     else
+                        if j < bottomQuartile or j > topQuartile then
+                           ___Debug("Tile is Northen/Southern enough");
+                           biasMandatoryScore = biasMandatoryScore + 800;
+                        else
+                           ___Debug("Tile is NOT Northen/Southern enough");
+                           biasMandatoryScore = biasMandatoryScore - 1600;
+                        end
+                     end
+                  end
+                   --- End biasis checks
                end
             end
          end
@@ -2529,7 +3288,7 @@ end
 
 function getRingTerrain (ringStart, ringEnd, tileTerrain, ringTerrain, terrainOne, terrainTwo)
 
-   count = 0;
+   local count = 0;
    
    if (tileTerrain == terrainOne or tileTerrain == terrainTwo) then
       count = count + 1;
@@ -2550,6 +3309,62 @@ function getRingTerrain (ringStart, ringEnd, tileTerrain, ringTerrain, terrainOn
 
 end
 
+function getRingResource (ringStart, ringEnd, tileResource, ringResource, biasesList, biasesListCount)
+
+   local count = 0;
+   
+   for i = 1, biasesListCount do
+      if (biasesList[i] == tileResource) then
+         print("biases:", biasesList[i]);
+         count = count + 1;
+      end
+   end
+   
+   for i = ringStart, ringEnd do
+      for j = 1, biasesListCount do
+          count = count + ringResource[i][biasesList[j] + 1];
+      end
+   end
+   
+   return count;
+
+end
+
+
+function getRingFeature (ringStart, ringEnd, tileFeature, ringFeature, biasesList, biasesListCount)
+
+   local count = 0;
+   
+   for i = 1, biasesListCount do
+      if (biasesList[i] == tileFeature) then
+         print("biases:", biasesList[i]);
+         count = count + 1;
+      end
+   end
+   
+   for i = ringStart, ringEnd do
+      for j = 1, biasesListCount do
+          count = count + ringFeature[i][biasesList[j] + 1];
+      end
+   end
+   
+   return count;
+
+end
+
+
+function getRingRiver (ringStart, ringEnd, ringRiver)
+
+   local count = 0;
+   
+   for i = ringStart, ringEnd do
+      count = count + ringRiver[i];
+   end
+   
+   return count;
+
+end
+
 function isMountainCode(terrain)
 
    if (terrain == 2 or terrain == 5 or terrain == 8 or terrain == 11 or terrain == 14) then
@@ -2560,13 +3375,50 @@ function isMountainCode(terrain)
 
 end
 
+function isLuxury(resource)
+
+   if(resource >= 10 and resource < 40) then
+      return true;
+   end
+   
+   if (resource == 49 or resource == 50 or resource == 51 or resource == 53) then
+      return true;
+   end
+   
+   return false;
+end
+
+
+
+-- Firaxis function would return true for tiles bordering lakes, which we don't want--
+function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
+
+   -- the tile is water, no sense to evaluate
+   if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
+      return false;
+   end
+   
+   local ring1 = getRing(xStart, yStart, 1, xSize, ySize, mapIsRoundWestEast);
+   for _, element in ipairs(ring1) do
+      local x = element[1];
+      local y = element[2];
+      
+      if (mapTerrainCode[x + 1][y + 1] == 15 and mapLake[x + 1][y + 1] == false) then
+         ___Debug("TEST THIS TILE IS WATER", x, y);
+         return true;
+      end
+   end
+   
+   return false;
+end
+
 ------------------------------------------------------------------------------
 function BBS_AssignStartingPlots:__InitStartingData()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
       
       
    ---- TEMPORARY !!! -----
-   NewBBS();
+   --NewBBS();
    
    ---- END ----
    
