@@ -40,6 +40,328 @@ function ___Debug(...)
     print (...);
 end
 
+------------------------------------------------------------------------------
+function BBS_AssignStartingPlots.Create(args)
+	if (GameConfiguration.GetValue("SpawnRecalculation") == nil) then
+		___Debug("BBS_AssignStartingPlots:",GameConfiguration.GetValue("SpawnRecalculation"))
+		Game:SetProperty("BBS_RESPAWN",false)
+		return AssignStartingPlots.Create(args)
+	end
+	___Debug("BBS_AssignStartingPlots: BBS Settings:", GameConfiguration.GetValue("SpawnRecalculation"));
+	if (GameConfiguration.GetValue("SpawnRecalculation") == false) then 
+		___Debug("BBS_AssignStartingPlots:",GameConfiguration.GetValue("SpawnRecalculation"))
+		Game:SetProperty("BBS_RESPAWN",false)
+		return AssignStartingPlots.Create(args)
+	end
+	
+	if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
+		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
+	end
+	
+	g_negative_bias = {}
+	
+	local info_query = "SELECT * from StartBiasNegatives";
+	local info_results = DB.Query(info_query);
+	for k , v in pairs(info_results) do
+		local tmp = { CivilizationType = v.CivilizationType, TerrainType = v.TerrainType, FeatureType = v.FeatureType, Tier = v.Tier, Extra = v.Extra}
+		if tmp.CivilizationType ~= nil then
+			table.insert(g_negative_bias, tmp)
+		end
+	end
+	g_custom_bias = {}
+	
+	local info_query = "SELECT * from StartBiasCustom";
+	local info_results = DB.Query(info_query);
+	for k , v in pairs(info_results) do
+		local tmp = { CivilizationType = v.CivilizationType, CustomPlacement = v.CustomPlacement}
+		___Debug("g_custom_bias",v.CivilizationType,v.CustomPlacement)
+		if tmp.CivilizationType ~= nil then
+			table.insert(g_custom_bias, tmp)
+		end
+	end
+	if (MapConfiguration.GetValue("MAP_SCRIPT") == "Pangaea.lua"
+	or MapConfiguration.GetValue("MAP_SCRIPT") == "Continents.lua"
+	or MapConfiguration.GetValue("MAP_SCRIPT") == "Terra.lua") then
+	print("Calculating Island Size: Start", os.date("%c"));
+	for iPlotIndex = 0, Map.GetPlotCount()-1, 1 do
+		local pPlot = Map.GetPlotByIndex(iPlotIndex)
+		if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
+			local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
+		end
+	end
+	print("Calculating Island Size: End", os.date("%c"));
+	end
+  -- Setting minimal distance between players
+   -- It will be based on the map used and the ratio size/players (more space if map too big, less space if too small)
+   -- Objective is to avoid as much as possible the use of the firaxis placement
+   
+   ___Debug("Map Script: ", MapConfiguration.GetValue("MAP_SCRIPT"));
+   
+   
+   -- Phase 1: Set base minimal distance according to the map.
+   -- Large maps, with low amount of water (ex: highlands, lakes, ...) will see players spawn with a higher distance from each other.
+   -- Smaller maps, with high amount of water (ex: Terra, Fractal, ...) will see player spawn closer to each other.
+   
+   local mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
+   
+   if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" then
+		Major_Distance_Target = 15
+	end
+   
+   if mapScript == "InlandSea.lua" then
+		Major_Distance_Target = 14
+	end
+
+   
+   if mapScript == "Seven_Seas.lua" or mapScript == "Primordial.lua" then
+		Major_Distance_Target = 13
+	end
+   
+	if mapScript == "Pangaea.lua" or mapScript == "DWPangaea.lua" or mapScript == "Shuffle.lua" or mapScript == "Tilted_Axis.lua" then
+		Major_Distance_Target = 12
+	end
+
+
+   if mapScript == "Fractal.lua" or mapScript == "Island_Plates.lua" or mapScript == "Small_Continents.lua"
+      or mapScript == "Archipelago_XP2.lua"  or mapScript == "Continents.lua" or mapScript == "Wetlands_XP2.lua"
+      or mapScript == "Continents_Islands.lua" or mapScript == "Continents_Islands.lua" or mapScript == "Splintered_Fractal.lua"
+      or mapScript == "DWArchipelago.lua" or mapScript == "DWFractal.lua" or mapScript == "DWMixedLand.lua"
+      or mapScript == "DWSmallContinents.lua" or mapScript == "DWMixedIslands.lua" then
+		Major_Distance_Target = 10
+	end
+
+   
+	
+	if mapScript == "Terra.lua" then
+		Major_Distance_Target = 8
+	end
+   
+   
+   --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
+   
+   -- Enormous ?
+   if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() > 17 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() < 15 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+   
+   -- Huge
+	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() > 13 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() < 11 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	-- Large
+	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() > 11 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() < 9 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	-- Standard
+	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() > 9 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() < 7 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	-- Small
+	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() > 7 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() < 5 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	
+   -- Tiny
+	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() > 5 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() < 3 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	
+   -- Duel
+	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() > 2  then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end	
+   
+   Base_Major_Distance_Target = Major_Distance_Target
+   
+   --[[
+   
+   ___Debug("Map Script: ", MapConfiguration.GetValue("MAP_SCRIPT"));
+	
+   if MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua" then
+		Major_Distance_Target = 21
+	end
+   
+   if MapConfiguration.GetValue("MAP_SCRIPT") == "Seven_Seas.lua" then
+		Major_Distance_Target = 19
+	end
+   
+	if MapConfiguration.GetValue("MAP_SCRIPT") == "Pangaea.lua" then
+		Major_Distance_Target = 18
+	end	
+	if MapConfiguration.GetValue("MAP_SCRIPT") == "Terra.lua" then
+		Major_Distance_Target = 15
+	end
+	if Teamers_Config == 0 then
+		Major_Distance_Target = Major_Distance_Target - 3 
+	end
+	-- Huge
+	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() > 11 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() < 8 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	-- Large
+	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() > 10 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end
+	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() < 8 then
+		Major_Distance_Target = Major_Distance_Target + 2
+	end	
+	-- Standard
+	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() > 7 then
+		Major_Distance_Target = Major_Distance_Target - 3
+	end
+	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() < 8 then
+		Major_Distance_Target = Major_Distance_Target 
+	end	
+	-- Small
+	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() > 5 then
+		Major_Distance_Target = Major_Distance_Target - 4
+	end
+	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() < 6 then
+		Major_Distance_Target = Major_Distance_Target - 2
+	end	
+	
+	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() > 5 then
+		Major_Distance_Target = Major_Distance_Target - 5
+	end
+	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() < 6 then
+		Major_Distance_Target = Major_Distance_Target - 3
+	end	
+	
+	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() > 2  then
+		Major_Distance_Target = 15
+	end	
+	
+	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() == 2  then
+		Major_Distance_Target = 18
+	end	
+	
+	Base_Major_Distance_Target = Major_Distance_Target
+   
+   
+   --]]
+	Base_Major_Distance_Target = Major_Distance_Target
+	Game:SetProperty("BBS_MAJOR_DISTANCE",Major_Distance_Target)
+	instance  = {
+        -- Core Process member methods
+        __InitStartingData					= BBS_AssignStartingPlots.__InitStartingData,
+        __FilterStart                       = BBS_AssignStartingPlots.__FilterStart,
+        __SetStartBias                      = BBS_AssignStartingPlots.__SetStartBias,
+        __BiasRoutine                       = BBS_AssignStartingPlots.__BiasRoutine,
+        __FindBias                          = BBS_AssignStartingPlots.__FindBias,
+        __RateBiasPlots                     = BBS_AssignStartingPlots.__RateBiasPlots,
+        __SettlePlot                   		= BBS_AssignStartingPlots.__SettlePlot,
+        __CountAdjacentTerrainsInRange      = BBS_AssignStartingPlots.__CountAdjacentTerrainsInRange,
+        __ScoreAdjacent   					= BBS_AssignStartingPlots.__ScoreAdjacent,
+        __CountAdjacentFeaturesInRange      = BBS_AssignStartingPlots.__CountAdjacentFeaturesInRange,
+        __CountAdjacentResourcesInRange     = BBS_AssignStartingPlots.__CountAdjacentResourcesInRange,
+        __CountAdjacentYieldsInRange        = BBS_AssignStartingPlots.__CountAdjacentYieldsInRange,
+        __GetTerrainIndex                   = BBS_AssignStartingPlots.__GetTerrainIndex,
+        __GetFeatureIndex                   = BBS_AssignStartingPlots.__GetFeatureIndex,
+        __GetResourceIndex                  = BBS_AssignStartingPlots.__GetResourceIndex,
+		__LuxuryCount						= BBS_AssignStartingPlots.__LuxuryCount,
+        __TryToRemoveBonusResource			= BBS_AssignStartingPlots.__TryToRemoveBonusResource,
+		__NaturalWonderBufferCheck			= BBS_AssignStartingPlots.__NaturalWonderBufferCheck,
+        __LuxuryBufferCheck					= BBS_AssignStartingPlots.__LuxuryBufferCheck,
+        __MajorMajorCivBufferCheck			= BBS_AssignStartingPlots.__MajorMajorCivBufferCheck,
+        __MinorMajorCivBufferCheck			= BBS_AssignStartingPlots.__MinorMajorCivBufferCheck,
+        __MinorMinorCivBufferCheck			= BBS_AssignStartingPlots.__MinorMinorCivBufferCheck,
+        __BaseFertility						= BBS_AssignStartingPlots.__BaseFertility,
+        __AddBonusFoodProduction			= BBS_AssignStartingPlots.__AddBonusFoodProduction,
+        __AddFood							= BBS_AssignStartingPlots.__AddFood,
+        __AddProduction						= BBS_AssignStartingPlots.__AddProduction,
+        __AddResourcesBalanced				= BBS_AssignStartingPlots.__AddResourcesBalanced,
+        __AddResourcesLegendary				= BBS_AssignStartingPlots.__AddResourcesLegendary,
+        __BalancedStrategic					= BBS_AssignStartingPlots.__BalancedStrategic,
+        __FindSpecificStrategic				= BBS_AssignStartingPlots.__FindSpecificStrategic,
+        __AddStrategic						= BBS_AssignStartingPlots.__AddStrategic,
+        __AddLuxury							= BBS_AssignStartingPlots.__AddLuxury,
+		__AddLeyLine						= BBS_AssignStartingPlots.__AddLeyLine,
+        __AddBonus							= BBS_AssignStartingPlots.__AddBonus,
+        __IsContinentalDivide				= BBS_AssignStartingPlots.__IsContinentalDivide,
+        __RemoveBonus						= BBS_AssignStartingPlots.__RemoveBonus,
+        __TableSize						    = BBS_AssignStartingPlots.__TableSize,
+        __GetValidAdjacent					= BBS_AssignStartingPlots.__GetValidAdjacent,
+		__GetShuffledCiv					= BBS_AssignStartingPlots.__GetShuffledCiv,
+		__CountAdjacentContinentsInRange	= BBS_AssignStartingPlots.__CountAdjacentContinentsInRange,
+		__CountAdjacentRiverInRange			= BBS_AssignStartingPlots.__CountAdjacentRiverInRange,
+		__SetStartMaori						= BBS_AssignStartingPlots.__SetStartMaori,
+
+        iNumMajorCivs = 0,
+		iNumSpecMajorCivs = 0,
+        iNumWaterMajorCivs = 0,
+        iNumMinorCivs = 0,
+        iNumRegions		= 0,
+        iDefaultNumberMajor = 0,
+        iDefaultNumberMinor = 0,
+		iTeamPlacement = Teamers_Config,
+        uiMinMajorCivFertility = args.MIN_MAJOR_CIV_FERTILITY or 0,
+        uiMinMinorCivFertility = args.MIN_MINOR_CIV_FERTILITY or 0,
+        uiStartMinY = args.START_MIN_Y or 0,
+        uiStartMaxY = args.START_MAX_Y or 0,
+        uiStartConfig = args.START_CONFIG or 2,
+        waterMap  = args.WATER or false,
+        landMap  = args.LAND or false,
+        noStartBiases = args.IGNORESTARTBIAS or false,
+        startAllOnLand = args.STARTALLONLAND or false,
+        startLargestLandmassOnly = args.START_LARGEST_LANDMASS_ONLY or false,
+        majorStartPlots = {},
+		majorStartPlotsTeam = {},
+        minorStartPlots = {},
+		minorStartPlotsID = {},
+        majorList = {},
+        minorList = {},
+        playerStarts = {},
+		regionTracker = {},
+        aBonusFood = {},
+        aBonusProd = {},
+        rBonus = {},
+        rLuxury = {},
+        rStrategic = {},
+        aMajorStartPlotIndices = {},
+        fallbackPlots = {},
+        tierMax = 0,
+		iHard_Major = Major_Distance_Target,
+		iDistance = 0,
+		iDistance_major_minor = 6,
+		iMinorAttempts = 0,
+        -- Team info variables (not used in the core process, but necessary to many Multiplayer map scripts)
+    }
+
+	instance:__InitStartingData()
+	
+	if bError_major ~= false or bError_proximity ~= false or bError_shit_settle ~= false then
+		print("BBS_AssignStartingPlots: To Many Attempts Failed - Go to Firaxis Placement")
+		Game:SetProperty("BBS_RESPAWN",false)
+		return AssignStartingPlots.Create(args)
+	end	
+	
+
+	print("BBS_AssignStartingPlots: Sending Data")
+	return instance
+	
+	
+end
 
 --- New vars ---
 
@@ -62,6 +384,7 @@ local mapContinent = {};
 -- If another continent is within 3 tiles
 local mapIsContinentSplit = {};
 local mapWonder = {};
+local mapDesert = {};
 
 
 local mapFoodYield = {};
@@ -76,13 +399,35 @@ local mapFaithYield = {};
 local majorList = {};
 local majorBiases = {};
 
+--- Spawns tables ---
 
-local majorBiasOKlandOKWaterOK = {};
-local majorBiasOKlandOKWaterNOK = {};
-local majorBiasOKlandNOKWaterOK = {};
-local majorBiasOKlandOKWaterNOK = {};
-local majorBiasNOKlandOK = {};
-local majorBiasNOKlandNOK = {};
+-- Will handle all the tiles where a player can spawn.
+------ Without fresh water nor coast
+local standardNoWater = {};
+local standardNoWaterCount = 0;
+-- Index of the last read index
+local standardNoWaterIndex = 0;
+
+------ With either fresh water
+local standardWater = {};
+local standardWaterCount = 0;
+-- Index of the last read index
+local standardWaterIndex = 0;
+
+------ With either fresh water
+local standardCoast = {};
+local standardCoastCount = 0;
+-- Index of the last read index
+local standardCoastIndex = 0;
+
+-- All biases respected
+local majorPrimaryOKSecondaryOKWaterOK = {};
+local majorPrimaryOKSecondaryOKWaterNOK = {};
+
+-- Major Bias respected, secondary NOT respected
+local majorPrimaryOKSecondaryNOKWaterOK = {};
+local majorPrimaryOKSecondaryNOKWaterNOK = {};
+
 
 local minorList = {};
 local minorBiases = {};
@@ -116,6 +461,11 @@ local mountainCount = 0;
 local floodPlainsCount = 0;
 local twoTwoCount = 0;
 
+-- Bias Score --
+
+local TUNDRA_BIAS_SCORE = 180000;
+local DESERT_BIAS_SCORE = 190000;
+
 -- percentage required for a bias Tx t
 
 local TERRAIN_PERCENTAGE_B1_R3 = 0.65;
@@ -133,6 +483,22 @@ local TERRAIN_PERCENTAGE_B4_R5 = 0.2;
 local TERRAIN_PERCENTAGE_B5_R3 = 0.2;
 local TERRAIN_PERCENTAGE_B5_R5 = 0.2;
 
+-- percentage required for a bias Tx t
+
+local DESERT_PERCENTAGE_B1_R3 = 0.50;
+local DESERT_PERCENTAGE_B1_R5 = 0.25;
+
+local DESERT_PERCENTAGE_B2_R3 = 0.6;
+local DESERT_PERCENTAGE_B2_R5 = 0.25;
+
+local DESERT_PERCENTAGE_B3_R3 = 0.4;
+local DESERT_PERCENTAGE_B3_R5 = 0.2;
+
+local DESERT_PERCENTAGE_B4_R3 = 0.3;
+local DESERT_PERCENTAGE_B4_R5 = 0.1;
+
+local DESERT_PERCENTAGE_B5_R3 = 0.2;
+local DESERT_PERCENTAGE_B5_R5 = 0.1;
 
 -- Negative version
 
@@ -288,8 +654,14 @@ local MOUNTAINS_PERCENTAGE_R5 = 0.50;
 local TUNDRA_PERCENTAGE_R3 = 0.03;
 local TUNDRA_PERCENTAGE_R5 = 0.10;
 
+local SNOW_PERCENTAGE_R3 = 0.03;
+local SNOW_PERCENTAGE_R5 = 0.10;
+
 local DESERT_PERCENTAGE_R3 = 0.03;
 local DESERT_PERCENTAGE_R5 = 0.10;
+
+local SHIT_PERCENTAGE_R3 = 0.30;
+local SHIT_PERCENTAGE_R5 = 0.20;
 
 function biasFeatureScore(bias, percentageR3, percentageR5)
 
@@ -428,6 +800,137 @@ function negativeBiasFeatureScore(negativeBias, percentageR3, percentageR5)
    
 end
 
+function biasDesertScore(bias, percentageR3, percentageR5)
+
+   local score = 0;
+
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= DESERT_PERCENTAGE_B1_R3 and percentageR5 >= DESERT_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= DESERT_PERCENTAGE_B1_R3 - 0.4 and percentageR5 >= DESERT_PERCENTAGE_B1_R5 - 0.2 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= DESERT_PERCENTAGE_B2_R3 and percentageR5 >= DESERT_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= DESERT_PERCENTAGE_B2_R3 -0.4 and percentageR5 >= DESERT_PERCENTAGE_B2_R5 - 0.2 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= DESERT_PERCENTAGE_B3_R3 and percentageR5 >= DESERT_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= DESERT_PERCENTAGE_B3_R3 -0.4 and percentageR5 >= DESERT_PERCENTAGE_B3_R5 - 0.2 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= DESERT_PERCENTAGE_B4_R3 and percentageR5 >= DESERT_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= DESERT_PERCENTAGE_B4_R3 -0.4 and percentageR5 >= DESERT_PERCENTAGE_B4_R5 - 0.2 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= DESERT_PERCENTAGE_B5_R3 and percentageR5 >= DESERT_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias somewhat respected
+      elseif percentageR3 >= DESERT_PERCENTAGE_B5_R3 -0.4 and percentageR5 >= DESERT_PERCENTAGE_B5_R5 - 0.2 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+      
+   elseif bias == -1 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B1_R3 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B1_R3 + 0.05 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B1_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == -2 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B2_R3 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B2_R3 + 0.05 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B2_R5 - 0.05 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+      
+   elseif bias == -3 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B3_R3 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B3_R3 + 0.05 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B3_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == -4 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B4_R3 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B4_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B4_R3 + 0.05 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B4_R5 - 0.05 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == -5 then 
+      -- bias respected
+      if percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B5_R3 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B5_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 <= NEGATIVE_DESERT_PERCENTAGE_B5_R3 + 0.05 and percentageR5 <= NEGATIVE_DESERT_PERCENTAGE_B5_R5 - 0.05 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+   else
+      print("Warning, tried to evaluate a Nagative Desert bias !");
+   
+   end
+   
+   return score
+
+end
 
 function biasResourceScore(bias, percentageR3, percentageR5)
 
@@ -1335,6 +1838,7 @@ function NewBBS()
       mapScienceYield[i] = {};
       mapCultureYield[i] = {};
       mapFaithYield[i] = {};
+      mapDesert[i] = {};
       
       for j = 1, mapYSize do
          mapResourceCode[i][j] = -1;
@@ -1356,6 +1860,7 @@ function NewBBS()
          mapCultureYield[i][j] = 0;
          mapFaithYield[i][j] = 0;
          mapWonder[i][j] = false;
+         mapDesert[i][j] = false;
          
          isPlayerProximityBlocked[i][j] = false;
          mapSpawnable[i][j] = true;
@@ -1470,6 +1975,11 @@ function NewBBS()
                mapContinent[iIndex][jIndex] = plot:GetContinentType();
             end
             
+            if (terrain == 6 or terrain == 7) then
+               mapDesert[iIndex][jIndex] = true;
+            end
+            
+            
             if (resource >= 0) then
                resourceCount[resource + 1] = resourceCount[resource + 1] + 1;
             end
@@ -1500,7 +2010,7 @@ function NewBBS()
             for _, element in ipairs(list) do
                local x = element[1];
                local y = element[2];
-               ___Debug("x:", x, "y", y);
+               --___Debug("x:", x, "y", y);
                if (mapTerrainCode[x + 1][y + 1] < 15 and continentID ~= mapContinent[x + 1][y + 1]) then
                   mapIsContinentSplit[iIndex][jIndex] = true;
                   ___Debug("---- Split Continent", x, "Y:", y);
@@ -1597,8 +2107,8 @@ function NewBBS()
       for j = 0, mapYSize - 1 do 
          local jIndex = j + 1 ;
          
-         -- Checking if too many mountains/water around, for a non coastal tile, will ban
-         if (mapCoastal[iIndex][jIndex] == false and mapTerrainCode[iIndex][jIndex] < 15) then
+         -- Checking if too many mountains/water around, will ban
+         if (mapTerrainCode[iIndex][jIndex] < 15) then
             local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
             local unusableTiles = 0;
             for _, element in ipairs(list) do
@@ -1617,14 +2127,14 @@ function NewBBS()
          ------ Too close to map border ! ----------
          ------ It is forbidden to settle less than 3 tiles away from the map border ----
          
-         if (j <= 1 or ((mapYSize - j) <= 1)) then
+         if (j <= 2 or ((mapYSize - j) <= 2)) then
             mapSpawnable[iIndex][jIndex] = false;
             
             ___Debug("---- Banning border of the map X:", i, "Y:", j);
          end
          
          if (mapIsRoundWestEast == false) then
-            if (i <= 1 or ((mapXSize - i) <= 1)) then
+            if (i <= 2 or ((mapXSize - i) <= 2)) then
             mapSpawnable[iIndex][jIndex] = false;
             
             ___Debug("---- Banning border of the map X:", i, "Y:", j);
@@ -1647,11 +2157,13 @@ function NewBBS()
          ----- removing mountains ----------
          if isMountainCode(mapTerrainCode[iIndex][jIndex]) then
             mapSpawnable[iIndex][jIndex] = false;
+            ___Debug("---- Banning Mountain X:", i, "Y:", j);
          end
          
          ----- removing oasis ------------
          if (mapFeatureCode[iIndex][jIndex] == 4) then
             mapSpawnable[iIndex][jIndex] = false;
+            ___Debug("---- Banning Oasis X:", i, "Y:", j);
          end
         
          ---- now starting more complex tasks ----
@@ -1804,6 +2316,17 @@ function NewBBS()
    ___Debug("---------------");
    ___Debug("---------------");
    ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("--- Desert map ---");
+   drawMapBoolean(mapDesert, mapXSize, mapYSize);
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
    
 
    ----------------------
@@ -1894,6 +2417,7 @@ function NewBBS()
          
          local biasCount = 0;
          local biasScore = 0; -- will be applied for players with no bias
+         local bestBias = 9;
          
          if tempBias ~= nil then
             for _, element in ipairs(tempBias) do
@@ -1902,24 +2426,29 @@ function NewBBS()
                
                -- computing bias score, will be used to rank civs (placement order)
                if (element.Tier == 1) then
-                  tempScore = 5000;
+                  tempScore = 100000;
                   if (element.Type == "TERRAINS" and (element.Value == 6 or element.Value == 7)) then --desesrt bias -> prio
-                     tempScore = 5800;
-                  elseif (element.Type == "TERRAINS" and (element.Value == 12 or element.Value == 13)) then --tundra bias -> prio too !
-                     tempScore = 5500;
+                     tempScore = DESERT_BIAS_SCORE;
+                  elseif (element.Type == "TERRAINS" and (element.Value == 9 or element.Value == 10)) then --tundra bias -> prio too !
+                     ___Debug("tundra bias");
+                     tempScore = TUNDRA_BIAS_SCORE;
                   end
                elseif (element.Tier == 2) then
-                  tempScore = 4000;
+                  tempScore = 10000;
                elseif (element.Tier == 3) then
-                  tempScore = 3000;
-               elseif (element.Tier == 4) then
-                  tempScore = 2000;
-               elseif (element.Tier == 5) then
                   tempScore = 1000;
+               elseif (element.Tier == 4) then
+                  tempScore = 100;
+               elseif (element.Tier == 5) then
+                  tempScore = 10;
                end
                
                if tempScore > biasScore then
                   biasScore = tempScore;
+               end
+               
+               if element.Tier < bestBias then
+                  bestBias = element.Tier;
                end
                
                -- recomputing biases so that it's easier to work with them later on.
@@ -2090,10 +2619,16 @@ function NewBBS()
          -- Main object --
          -- This will contain all the player information (leader, civ, biases, ...)
          majorAll[majorCount] = {index = i, civName = civName, major = majorList[i], biases = majorBiases[i], biasScore = biasScore, biasCount = biasCount,
-                          biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource,
+                          biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource, bestBias = bestBias,
                           resourcesBiasList = resourcesBiasList, resourcesBiasListCount = resourcesBiasListCount, featuresBiasList = featuresBiasList, featuresBiasListCount = featuresBiasListCount, 
                           resourcesNegativeBiasList = resourcesNegativeBiasList, resourcesNegativeBiasListCount = resourcesNegativeBiasListCount, featuresNegativeBiasList = featuresNegativeBiasList, featuresNegativeBiasListCount = featuresNegativeBiasListCount, 
-                          isNorthKing = isNorthKing, continentSplit = continentSplit, isHydrophobic = isHydrophobic, isSalty = isSalty, isMountainLover = isMountainLover, riverBias = riverCiv};
+                          isNorthKing = isNorthKing, continentSplit = continentSplit, isHydrophobic = isHydrophobic, isSalty = isSalty, isMountainLover = isMountainLover, riverBias = riverCiv,
+                          majorPrimaryOKSecondaryOKWaterOK = {}, majorPrimaryOKSecondaryOKSeaOK = {}, majorPrimaryOKSecondaryOKWaterNOK = {},
+                          majorPrimaryOKSecondaryNOKWaterOK = {}, majorPrimaryOKSecondaryNOKSeaOK = {}, majorPrimaryOKSecondaryNOKWaterNOK = {},
+                          majorPrimaryOKSecondaryOKWaterOKCount = 0, majorPrimaryOKSecondaryOKSeaOKCount = 0, majorPrimaryOKSecondaryOKWaterNOKCount = 0,
+                          majorPrimaryOKSecondaryNOKWaterOKCount = 0, majorPrimaryOKSecondaryNOKSeaOKCount = 0, majorPrimaryOKSecondaryNOKWaterNOKCount = 0,
+                          spawnX = -1, spawnY = -1
+                          };
          print(i, majorAll[majorCount]);
          print(majorAll[majorCount].index, majorAll[majorCount].civName);
          
@@ -2155,7 +2690,607 @@ function NewBBS()
    print("--------------------------");
    print("--------------------------");
    
+   
+   print("--------------------------");
+   print("--------------------------");
+   print("Now starting spawn assignation");
+   print("--------------------------");
+   print("--------------------------");
+   print("--------------------------");
+   
+   assignSpawns(majorAll, majorCount, minorList, minorCount, 10);
+   
+   
+   print("--------------------------");
+   print("--------------------------");
+   print("End spawn assignation");
+   print("--------------------------");
+   print(os.date("%c"));
+   print("--------------------------");
+   print("--------------------------");
 
+end
+
+
+local MAX_SPAWN_TRIES = 10;
+
+function assignSpawns(majorAll, majorCount, minorList, minorCount, playerDistance)
+
+   -- Sorting biases out, civs with highest biases up
+   --table.sort(majorAll, function(a, b) return a.biasScore > b.biasScore; end);
+   local tierDesert = {};
+   local tierTundra = {};
+   local tier1 = {};
+   local tier2 = {};
+   local tier3 = {};
+   local tier4 = {};
+   local tier5 = {};
+   local tier9 = {}; -- no bias
+   
+   local tierDesertCount = 0;
+   local tierTundraCount = 0;
+   local tier1Count = 0;
+   local tier2Count = 0;
+   local tier3Count = 0;
+   local tier4Count = 0;
+   local tier5Count = 0;
+   local tier9Count = 0;
+   
+   for i = 1, majorCount do
+      if majorAll[i].biasScore >= DESERT_BIAS_SCORE then
+         table.insert(tierDesert, majorAll[i]);
+         tierDesertCount = tierDesertCount + 1;
+      elseif majorAll[i].biasScore >= TUNDRA_BIAS_SCORE then
+         table.insert(tierTundra, majorAll[i]);
+         tierTundraCount = tierTundraCount + 1;
+      elseif majorAll[i].biasScore >= 100000 then
+         table.insert(tier1, majorAll[i]);
+         tier1Count = tier1Count + 1;
+      elseif majorAll[i].biasScore >= 10000 then
+         table.insert(tier2, majorAll[i]);
+         tier2Count = tier2Count + 1;
+      elseif majorAll[i].biasScore >= 1000 then
+         tier3Count = tier3Count + 1;
+         table.insert(tier3, majorAll[i]);
+      elseif majorAll[i].biasScore >= 100 then
+         table.insert(tier4, majorAll[i]);
+         tier4Count = tier4Count + 1;
+      elseif majorAll[i].biasScore >= 10 then
+         table.insert(tier5, majorAll[i]);
+         tier5Count = tier5Count + 1;
+      else
+         table.insert(tier9, majorAll[i]);
+         tier9Count = tier9Count + 1;
+      end
+   end
+   
+   if tierDesertCount > 1 then
+      tierDesert = GetShuffledCopyOfTable(tierDesert);
+   end
+   
+   if tierTundraCount > 1 then
+      tierTundra = GetShuffledCopyOfTable(tierTundra);
+   end
+   
+   if tier1Count > 1 then
+      tier1 = GetShuffledCopyOfTable(tier1);
+   end
+   
+   if tier2Count > 1 then
+      tier2 = GetShuffledCopyOfTable(tier2);
+   end
+   
+   if tier3Count > 1 then
+      tier3 = GetShuffledCopyOfTable(tier3);
+   end
+   
+   if tier4Count > 1 then
+      tier4 = GetShuffledCopyOfTable(tier4);
+   end
+   
+   if tier5Count > 1 then
+      tier5 = GetShuffledCopyOfTable(tier5);
+   end
+   
+   ___Debug("The civs will be placed in the following order:");
+   -- Debug print --
+   for i = 1, tierDesertCount do
+      ___Debug("Player:", tierDesert[i].index, tierDesert[i].civName, "is in Tier Desert (top prio)");
+   end
+   
+   for i = 1, tierTundraCount do
+      ___Debug("Player:", tierTundra[i].index, tierTundra[i].civName, "is in Tier Tundra (second prio)");
+   end
+   
+   for i = 1, tier1Count do
+      ___Debug("Player:", tier1[i].index, tier1[i].civName, "is in Tier 1");
+   end
+   
+   for i = 1, tier2Count do
+      ___Debug("Player:", tier2[i].index, tier2[i].civName, "is in Tier 2");
+   end
+   
+   for i = 1, tier3Count do
+      ___Debug("Player:", tier3[i].index, tier3[i].civName, "is in Tier 3");
+   end
+   
+   for i = 1, tier4Count do
+      ___Debug("Player:", tier4[i].index, tier4[i].civName, "is in Tier 4");
+   end
+   
+   for i = 1, tier5Count do
+      ___Debug("Player:", tier5[i].index, tier5[i].civName, "is in Tier 5");
+   end
+   
+   for i = 1, tier9Count do
+      ___Debug("Player:", tier9[i].index, tier9[i].civName, "is in no Tier queue");
+   end
+   
+   local playerDistance = 10 -- TO CHANGE !!
+   local settleSuccess = false;
+   
+   for i = 1, 10 do
+      local distance = playerDistance -- TO CHANGE
+      
+      -- shuffle all the spawns of the civs first
+      shuffleSpawns(majorAll, majorCount);
+      
+      if i >= 8 then
+         distance = distance - 3;
+      elseif i >= 6 then
+         distance = distance - 2;
+      elseif i >= 4 then
+         distance = distance - 1;
+      end
+      
+      local proximityMap = {}
+   
+      for i = 1, mapXSize do
+         proximityMap[i] = {};
+         for j = 1, mapYSize do
+            proximityMap[i][j] = false;
+         end
+      end
+      
+      standardNoWaterIndex = 0;
+      standardWaterIndex = 0;
+      standardCoastIndex = 0;
+      
+         
+      print("Attempt n°", i, "Distance:", distance);
+   
+      if(recursivePlacement(majorAll, majorCount, 1, proximityMap, distance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+         print("Attempt sucessful !");
+         settleSuccess = true;
+         break;
+      end
+   end
+      
+   if (settleSuccess) then
+      ___Debug("-------------------------------------------------");
+      ___Debug("-------------------------------------------------");
+      for i = 1, majorCount do
+         local player = majorAll[i];
+         ___Debug("Player:", player.index, player.civName, "spawned at:", player.spawnX, player.spawnY);
+      end
+      ___Debug("-------------------------------------------------");
+      ___Debug("-------------------------------------------------");
+   end
+   
+   
+   
+
+   return;
+   
+end
+
+function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)      
+   local player = majorAll[currentIndex];
+   local triedTiles = 0; -- Amount of valid tiles that were tried by the system
+   
+   if (player.biasCount == 0) then -- no bias civ
+      ___Debug("starting at index:", standardWaterIndex);
+      
+      for i = standardWaterIndex + 1, standardWaterCount do
+         standardWaterIndex = standardWaterIndex + 1;
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;
+         end
+         
+         local x = standardWater[i][1];
+         local y = standardWater[i][2];
+         
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      for i = standardCoastIndex + 1, standardCoastCount do
+         standardCoastIndex = standardCoastIndex + 1;
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;
+         end
+         
+         local x = standardCoast[i][1];
+         local y = standardCoast[i][2];
+         
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      for i = standardNoWaterIndex + 1, standardNoWaterCount do
+         standardNoWaterIndex = standardNoWaterIndex + 1;
+         
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = standardNoWater[i][1];
+         local y = standardNoWater[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+          
+      end
+      
+   
+   else -- civ with at least a bias. Will use dedicated spawn lists
+      for i = 1, player.majorPrimaryOKSecondaryOKWaterOKCount do
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = player.majorPrimaryOKSecondaryOKWaterOK[i][1];
+         local y = player.majorPrimaryOKSecondaryOKWaterOK[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      for i = 1, player.majorPrimaryOKSecondaryOKSeaOKCount do
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = player.majorPrimaryOKSecondaryOKSeaOK[i][1];
+         local y = player.majorPrimaryOKSecondaryOKSeaOK[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      for i = 1, player.majorPrimaryOKSecondaryOKWaterNOKCount do
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = player.majorPrimaryOKSecondaryOKWaterNOK[i][1];
+         local y = player.majorPrimaryOKSecondaryOKWaterNOK[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+     
+      
+      for i = 1, player.majorPrimaryOKSecondaryNOKWaterOKCount do
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = player.majorPrimaryOKSecondaryNOKWaterOK[i][1];
+         local y = player.majorPrimaryOKSecondaryNOKWaterOK[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      for i = 1, player.majorPrimaryOKSecondaryNOKSeaOKCount do
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = player.majorPrimaryOKSecondaryNOKSeaOK[i][1];
+         local y = player.majorPrimaryOKSecondaryNOKSeaOK[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      for i = 1, player.majorPrimaryOKSecondaryNOKWaterNOKCount do
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;  
+         end
+          
+         local x = player.majorPrimaryOKSecondaryNOKWaterNOK[i][1];
+         local y = player.majorPrimaryOKSecondaryNOKWaterNOK[i][2];
+          
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+            if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
+         end
+      end
+      
+      if (player.name == "CIVILIZATION_MALI") then
+         ___Debug("We have a mali, we'll try standard tiles as the civ had no proper tile !");
+         for i = standardWaterIndex + 1, standardWaterCount do
+         
+         standardWaterIndex = standardWaterIndex + 1;
+         
+            if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+               return false;
+            end
+            
+            local x = standardWater[i][1];
+            local y = standardWater[i][2];
+            
+            if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+               if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true;
+               end
+               
+               triedTiles = triedTiles + 1;
+               local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true; -- all next players have been placed successfuly !
+               end
+            end
+         end
+      
+         for i = standardCoastIndex + 1, standardCoastCount do
+            
+            standardCoastIndex = standardCoastIndex + 1;
+            
+            if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+               return false;
+            end
+            
+            local x = standardCoast[i][1];
+            local y = standardCoast[i][2];
+            
+            if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+               if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true;
+               end
+               
+               triedTiles = triedTiles + 1;
+               local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true; -- all next players have been placed successfuly !
+               end
+            end
+         end
+         
+         for i = standardNoWaterIndex + 1, standardNoWaterCount do
+         
+            standardNoWaterIndex = standardNoWaterIndex + 1;
+         
+            if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+               return false;  
+            end
+             
+            local x = standardNoWater[i][1];
+            local y = standardNoWater[i][2];
+             
+            if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+               if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true;
+               end
+               
+               triedTiles = triedTiles + 1;
+               local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true; -- all next players have been placed successfuly !
+               end
+            end
+             
+         end
+      
+      end
+      
+   end
+   
+   ___Debug("We ran out of tiles for player", player.index, player.civName);
+   return false;
+end
+
+function setPlayerProximity (playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast)
+   local newMap = {}
+   
+   for i = 1, mapXSize do
+      newMap[i] = {};
+      for j = 1, mapYSize do
+         newMap[i][j] = playerProximityMap[i][j];
+      end
+   end
+   
+   newMap[x + 1][y + 1] = true;
+   
+   for i = 1, playerDistance do
+      local list = getRing(x, y, i, mapXSize, mapYSize, mapIsRoundWestEast);
+      for _, element in ipairs(list) do
+         local a = element[1];
+         local b = element[2];
+         newMap[a + 1][b + 1] = true;
+      end
+   end
+   
+   return newMap;
+end
+
+function shuffleSpawns(majorAll, majorCount)
+
+   standardNoWater = GetShuffledCopyOfTable(standardNoWater);
+   standardWater = GetShuffledCopyOfTable(standardWater);
+   standardCoast = GetShuffledCopyOfTable(standardCoast);
+   
+   for i = 1, majorCount do
+      local player = majorAll[i];
+      if player ~= nil then
+         if (player.majorPrimaryOKSecondaryOKWaterOKCount > 0) then
+            player.majorPrimaryOKSecondaryOKWaterOK = GetShuffledCopyOfTable(player.majorPrimaryOKSecondaryOKWaterOK);
+         end
+         
+         if (player.majorPrimaryOKSecondaryOKSeaOKCount > 0) then
+            player.majorPrimaryOKSecondaryOKSeaOK = GetShuffledCopyOfTable(player.majorPrimaryOKSecondaryOKSeaOK);
+         end
+         
+         if (player.majorPrimaryOKSecondaryOKWaterNOKCount > 0) then
+            player.majorPrimaryOKSecondaryOKWaterNOK = GetShuffledCopyOfTable(player.majorPrimaryOKSecondaryOKWaterNOK);
+         end
+         
+         if (player.majorPrimaryOKSecondaryNOKWaterOKCount > 0) then
+            player.majorPrimaryOKSecondaryNOKWaterOK = GetShuffledCopyOfTable(player.majorPrimaryOKSecondaryNOKWaterOK);
+         end
+         
+         if (player.majorPrimaryOKSecondaryNOKSeaOKCount > 0) then
+            player.majorPrimaryOKSecondaryNOKSeaOK = GetShuffledCopyOfTable(player.majorPrimaryOKSecondaryNOKSeaOK);
+         end
+         
+         if (player.majorPrimaryOKSecondaryNOKWaterNOKCount > 0) then
+            player.majorPrimaryOKSecondaryNOKWaterNOK = GetShuffledCopyOfTable(player.majorPrimaryOKSecondaryNOKWaterNOK);
+         end
+      end
+   end
+   
+   return;
 end
 
 function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
@@ -2165,9 +3300,6 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
       print("No Major Civs to evaluate !");
       return;
    end
-   
-   
-   
    
    local resourceBiases = {};
    local resourceBiasesCount = {};
@@ -2235,6 +3367,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                local ringFloodPlains = {};
                local ringLandCount = {};
                local ringTundraCount = {};
+               local ringSnowCount = {};
                local ringDesertCount = {};
                local ringWaterCount = {};
                local ringRiver = {};
@@ -2251,6 +3384,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   ringMountainCount[k] = 0;
                   ringDesertCount[k] = 0;
                   ringTundraCount[k] = 0;
+                  ringSnowCount[k] = 0;
                   ringFloodPlains[k] = 0;
                   ringRiver[k] = 0;
                   ringSea[k] = 0;
@@ -2290,8 +3424,10 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         
                         if (terrain == 6 or terrain == 7) then
                            ringDesertCount[k] = ringDesertCount[k] + 1;
-                        elseif (terrain == 9 or terrain == 10 or terrain == 12 or terrain == 13) then
+                        elseif (terrain == 9 or terrain == 10) then
                            ringTundraCount[k] = ringTundraCount[k] + 1;
+                        elseif (terrain == 12 or terrain == 13) then
+                           ringSnowCount[k] = ringSnowCount[k] + 1;
                         end
                      end
                      
@@ -2334,7 +3470,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                local ring5Count = ring3Count + ringCount[4] + ringCount[5];
                
                
-               --- Going now for a general analysis of the map --
+               --- Going now for a general analysis of the land around the tile --
                --- Check parameters: 
                   --- Mountains (not too many around, except for mountains lovers)
                   --- Floodplains
@@ -2409,14 +3545,13 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   floodsScore = floodsScore + 500;
                end
                
-               -- tundra (and snow) score
+               -- tundra score
                   
                local tundraScore = 0
                
                
                local ring3Tundra = ringTundraCount[1] + ringTundraCount[2] + ringTundraCount[3];
-               if (mapTerrainCode[iIndex][jIndex] == 9 or mapTerrainCode[iIndex][jIndex] == 10 or 
-                    mapTerrainCode[iIndex][jIndex] == 12 or mapTerrainCode[iIndex][jIndex] == 13) then
+               if (mapTerrainCode[iIndex][jIndex] == 9 or mapTerrainCode[iIndex][jIndex] == 10) then
                   ring3Tundra = ring3Tundra + 1;
                end
                
@@ -2440,6 +3575,39 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   ___Debug("too many tundras ring 1-5 (minored)");
                else
                   tundraScore = tundraScore + 500;
+               end
+               
+               -- snow
+               
+               local snowScore = 0
+               
+               
+               local ring3Snow = ringSnowCount[1] + ringSnowCount[2] + ringSnowCount[3];
+               if (mapTerrainCode[iIndex][jIndex] == 9 or mapTerrainCode[iIndex][jIndex] == 10 or 
+                    mapTerrainCode[iIndex][jIndex] == 12 or mapTerrainCode[iIndex][jIndex] == 13) then
+                  ring3Snow = ring3Snow + 1;
+               end
+               
+               local ring5Snow = ring3Snow + ringSnowCount[4] + ringSnowCount[5];
+               
+               local percentageR3Snow = ring3Snow / ring3LandCount;
+               local percentageR5Snow = ring5Snow / ring5LandCount;
+               
+               if percentageR3Snow > SNOW_PERCENTAGE_R3 then
+                  snowScore = snowScore - 1000;
+                  ___Debug("too many snow ring 1-3");
+                else
+                  snowScore = snowScore + 500;
+               end
+               
+               if percentageR5Snow > SNOW_PERCENTAGE_R5 then
+                  snowScore = snowScore - 1000;
+                  ___Debug("too many snows ring 1-5");
+               elseif percentageR5Snow > SNOW_PERCENTAGE_R5 - 0.02 then
+                  snowScore = snowScore - 500;
+                  ___Debug("too many snows ring 1-5 (minored)");
+               else
+                  snowScore = snowScore + 500;
                end
                
                -- desert score
@@ -2474,83 +3642,106 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   desertScore = desertScore + 500;
                end
                
-               ---- Now evaluating the biases
+               
+               -- test only
+               local ring3Shit = ring3Desert + ring3Snow + ring3Tundra + ring3Floods * 0.75;
+               local percentageR3Shit = ring3Shit / ring3LandCount;
+               
+               local ring5Shit = ring5Desert + ring5Snow + ring5Tundra + ring5Floods * 0.75;
+               local percentageR5Shit = ring5Shit / ring5LandCount;
+               
+               ___Debug("Shits ring 3 count:", ring3Shit, "percentage:", percentageR3Shit)
+               ___Debug("Shits ring 5 count:", ring5Shit, "percentage:", percentageR5Shit)
+               
+               -- Score of the tile, without taking biases in account
+               local standardScore = 0;
+               
+               if percentageR3Shit > SHIT_PERCENTAGE_R3 then
+                  standardScore = standardScore - 2000;
+                  ___Debug("too many shit ring 1-3");
+               elseif percentageR3Shit > SHIT_PERCENTAGE_R3 - 0.05 then
+                  standardScore = standardScore - 1000;
+                  ___Debug("Not so great ring 1-3");
+               else
+                  standardScore = standardScore + 500;
+               end
+               
+               if percentageR5Shit > SHIT_PERCENTAGE_R5 then
+                  standardScore = standardScore - 2000;
+                  ___Debug("too many shit ring 1-5");
+               elseif percentageR5Shit > SHIT_PERCENTAGE_R5 - 0.05 then
+                  standardScore = standardScore - 1000;
+                  ___Debug("too many shit ring 1-5 (minored)");
+               else
+                  standardScore = standardScore + 500;
+               end
+               
+               ___Debug("Regular Tile Score:", standardScore);
+               
+               if standardScore > 0 then -- Acceptable tile
+                  -- put in correct stack
+                  if mapFreshWater[iIndex][jIndex] then
+                     table.insert(standardWater, {i, j});
+                     standardWaterCount = standardWaterCount + 1;
+                     ___Debug("Tile added in standard Water");
+                  elseif mapCoastal[iIndex][jIndex] then
+                     table.insert(standardCoast, {i, j});
+                     standardCoastCount = standardCoastCount + 1;
+                     ___Debug("Tile added in standard Coast");
+                  else
+                     table.insert(standardNoWater, {i, j});
+                     standardNoWaterCount = standardNoWaterCount + 1;
+                     ___Debug("Tile added in standard NO Water");
+                  end
+               else
+                  ___Debug("Tile is NOT added");
+               end
+               
+               ---- Now evaluating the biases for each civ and assignating the tile into the correct table
                
                for k = 1, majorCount do
-               
                   player = majorAll[k];
-               
-                  ___Debug("--------------------------");
-                  ___Debug("---- Now evaluating player:", player.index, player.civName);
-                  ___Debug("--------------------------");
-                  -- Tier 1 and 2
-                  local biasMandatoryScore = 0;
-                  -- Tier 3, 4 and 5
-                  local biasSecondaryScore = 0;
                   
-                  
-                  
-                  local ringThreeTerrain = 0;
-                  local ringFiveTerrain = 0;
+                  if player.biasCount <= 0 then
+                     ___Debug("No bias for player:", player.index, player.civName, "Skipping");
+                     
+                  else
+                     ___Debug("--------------------------");
+                     ___Debug("---- Now evaluating player:", player.index, player.civName);
+                     ___Debug("--------------------------");
+                     -- Tier 1 and 2
+                     local biasMandatoryScore = 0;
+                     -- Tier 3, 4 and 5
+                     local biasSecondaryScore = 0;
+                     
+                     
+                     
+                     local ringThreeTerrain = 0;
+                     local ringFiveTerrain = 0;
 
-                  --- TERRAINS ---
-                  --- if two terrain have the same bias (ex: grassland hills and plain hills), they will be considered as one
-                  
-                  ___Debug("------- Looking at Terrain first");
+                     --- TERRAINS ---
+                     --- if two terrain have the same bias (ex: grassland hills and plain hills), they will be considered as one
+                     
+                     ___Debug("------- Looking at Terrain first");
 
-                  -- grassland bias
-                  if (player.biasTerrain[0 + 1] ~= 0) then
-                     
-                     local bias = player.biasTerrain[0 + 1];
-                     
-                     local terrainOne = 0;
-                     local terrainTwo = -1;
-                     
-                     -- Actually towards grassland
-                     if (player.biasTerrain[1 + 1] == bias) then
-                        terrainTwo = 1;
-                     
-                     -- Looking for flatland (why would you do that ?)
-                     elseif (player.biasTerrain[3 + 1] == bias) then
-                        terrainTwo = 3;
-                     end
-                  
-
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
-                     
-                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
-                     
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- Grassland flat score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- primary -- Grassland flat score:", score)
-                     end
-                  end
-                  
-                  -- Grassland hills
-                  if (player.biasTerrain[1 + 1] ~= 0) then
-                  
-                     local bias = player.biasTerrain[1 + 1];
-                  
-                     local terrainOne = 1;
-                     local terrainTwo = -1;
-                     
-                     -- flat grassland, but we already have calculated that !
-                     if (player.biasTerrain[0 + 1] ~= bias) then
-                     
-                        -- Looking for hills
-                        if (player.biasTerrain[4 + 1] == bias) then
-                           terrainTwo = 4;
-                        end
+                     -- grassland bias
+                     if (player.biasTerrain[0 + 1] ~= 0) then
                         
+                        local bias = player.biasTerrain[0 + 1];
+                        
+                        local terrainOne = 0;
+                        local terrainTwo = -1;
+                        
+                        -- Actually towards grassland
+                        if (player.biasTerrain[1 + 1] == bias) then
+                           terrainTwo = 1;
+                        
+                        -- Looking for flatland (why would you do that ?)
+                        elseif (player.biasTerrain[3 + 1] == bias) then
+                           terrainTwo = 3;
+                        end
+                     
+
                         ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
                         ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
                         
@@ -2562,64 +3753,374 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         -- Main bias
                         if (math.abs(bias) <= 2) then
                            biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Grassland Hill score:", score)
+                           ___Debug("-- primary -- Grassland flat score:", score)
                         -- Secondary Bias
                         else
                            biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- primary -- Grassland Hill score:", score)
+                           ___Debug("-- primary -- Grassland flat score:", score)
                         end
                      end
-                  
-                  end
-                  
-                  -- Grassland mountain, different job here
-                  if (player.biasTerrain[2 + 1] ~= 0) then
-                  
-                     local bias = player.biasTerrain[2 + 1];
-                     local terrainOne = 2;
-                     local terrainTwo = -1;
                      
-                     -- Looking for mountain buddies
-                     if (player.biasTerrain[5 + 1] == bias) then
-                        terrainTwo = 5;
+                     -- Grassland hills
+                     if (player.biasTerrain[1 + 1] ~= 0) then
+                     
+                        local bias = player.biasTerrain[1 + 1];
+                     
+                        local terrainOne = 1;
+                        local terrainTwo = -1;
+                        
+                        -- flat grassland, but we already have calculated that !
+                        if (player.biasTerrain[0 + 1] ~= bias) then
+                        
+                           -- Looking for hills
+                           if (player.biasTerrain[4 + 1] == bias) then
+                              terrainTwo = 4;
+                           end
+                           
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Grassland Hill score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- primary -- Grassland Hill score:", score)
+                           end
+                        end
+                     
                      end
-                  
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
                      
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     -- Grassland mountain, different job here
+                     if (player.biasTerrain[2 + 1] ~= 0) then
                      
-                     local score = biasMountainScore(bias, percentageR3, percentageR5);
+                        local bias = player.biasTerrain[2 + 1];
+                        local terrainOne = 2;
+                        local terrainTwo = -1;
+                        
+                        -- Looking for mountain buddies
+                        if (player.biasTerrain[5 + 1] == bias) then
+                           terrainTwo = 5;
+                        end
                      
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- Grassland Mountain score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- primary -- Grassland Mountain score:", score)
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasMountainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Grassland Mountain score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- primary -- Grassland Mountain score:", score)
+                        end
+                     
+                        
                      end
-                  
                      
-                  end
-                  
-                  
-                  -- Flat plain
-                  if (player.biasTerrain[3 + 1] ~= 0) then
                      
-                     local bias = player.biasTerrain[3 + 1];
+                     -- Flat plain
+                     if (player.biasTerrain[3 + 1] ~= 0) then
+                        
+                        local bias = player.biasTerrain[3 + 1];
+                        
+                        local terrainOne = 3;
+                        local terrainTwo = -1;
+                        
+                        -- flat grassland, but we already have calculated that !
+                        if (player.biasTerrain[0 + 1] ~= bias) then
+                        
+                           -- Looking for plain hills as well
+                           if (player.biasTerrain[4 + 1] == bias) then
+                              terrainTwo = 4; 
+                           end
+                           
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Plain Flat score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- primary -- Plain Flat score:", score)
+                           end
+                        end
+                     end
                      
-                     local terrainOne = 3;
-                     local terrainTwo = -1;
+                     -- Plain hill
+                     if (player.biasTerrain[4 + 1] ~= 0) then
+                        
+                        local bias = player.biasTerrain[4 + 1];
+                        
+                        local terrainOne = 4;
+                        local terrainTwo = -1;
+                        
+                        -- grassland hills or flat plain, that we already have looked !
+                        if (player.biasTerrain[1 + 1] ~= bias and player.biasTerrain[3 + 1] ~= bias) then
+                        
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Plain Hill score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- primary -- Plain Hill score:", score)
+                           end
+                        end
+                     end
                      
-                     -- flat grassland, but we already have calculated that !
-                     if (player.biasTerrain[0 + 1] ~= bias) then
+                     -- Plain mountain, different job here
+                     if (player.biasTerrain[5 + 1] ~= 0) then
                      
+                        local bias = player.biasTerrain[5 + 1];
+                        local terrainOne = 5;
+                        local terrainTwo = -1;
+                        
+                        -- Grassland mountain that, but we already have calculated that !
+                        if (player.biasTerrain[2 + 1] ~= bias) then
+                           
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasMountainScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Plain Mountain score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- primary -- Plain Mountain score:", score)
+                           end
+                        
+                        end
+                     end
+                     
+                     -- Flat desert
+                     if (player.biasTerrain[6 + 1] ~= 0) then
+                        
+                        local bias = player.biasTerrain[6 + 1];
+                        
+                        local terrainOne = 6;
+                        local terrainTwo = -1;
+                        
                         -- Looking for plain hills as well
-                        if (player.biasTerrain[4 + 1] == bias) then
-                           terrainTwo = 4; 
+                        if (player.biasTerrain[7 + 1] == bias) then
+                           terrainTwo = 7; 
+                        end
+                        
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        ___Debug("Desert count R3:", ringThreeTerrain);
+                        ___Debug("Desert count R5:", ringFiveTerrain);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        ___Debug("Percentage desert R3:", percentageR3);
+                        ___Debug("Percentage desert R5:", percentageR5);
+                        
+                        local score = biasDesertScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           -- Mali specifics
+                           if score < 800 then
+                              biasSecondaryScore = biasSecondaryScore - 2000;
+                           
+                              ___Debug("Primary OK, but will be put in secondary queue", score)
+                           else
+                              biasSecondaryScore = biasSecondaryScore + 2000;
+                              ___Debug("Full primary", score)
+                           end
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- Desert flat score:", score)
+                        end
+                     end
+                     
+                     -- desert hill
+                     if (player.biasTerrain[7 + 1] ~= 0) then
+                        
+                        local bias = player.biasTerrain[7 + 1];
+                        
+                        local terrainOne = 7;
+                        local terrainTwo = -1;
+                        
+                        -- flat desert, but we already have calculated that !
+                        if (player.biasTerrain[6 + 1] ~= bias) then
+                           
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasDesertScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Desert Hill score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- Desert Hill score:", score)
+                           end
+                        end
+                     end
+                     
+                     -- tundra flat bias
+                     if (player.biasTerrain[9 + 1] ~= 0) then
+                        
+                        local bias = player.biasTerrain[9 + 1];
+                        
+                        local terrainOne = 9;
+                        local terrainTwo = -1;
+                        
+                        -- Actually towards tundra
+                        if (player.biasTerrain[10 + 1] == bias) then
+                           terrainTwo = 10;
+                        end
+                     
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        
+                        ___Debug(ring3LandCount, ring5LandCount);
+                        
+                        ___Debug(ringThreeTerrain, ringFiveTerrain, percentageR3, percentageR5)
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Tundra flat score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- Tundra flat score:", score)
+                        end
+                        
+                        print("score tundra flat:", biasSecondaryScore);
+
+                     end
+                     
+                     -- tundra hills
+                     if (player.biasTerrain[10 + 1] ~= 0) then
+                     
+                        local bias = player.biasTerrain[10 + 1];
+                     
+                        local terrainOne = 10;
+                        local terrainTwo = -1;
+                        
+                        -- flat tundra, but we already have calculated that !
+                        if (player.biasTerrain[9 + 1] ~= bias) then
+
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Tundra Hill score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- Tundra Hill score:", score)
+                           end
+                        end
+                     
+                     end
+                     
+                     -- tundra mountain, different job here
+                     if (player.biasTerrain[11 + 1] ~= 0) then
+                     
+                        local bias = player.biasTerrain[11 + 1];
+                        local terrainOne = 11;
+                        local terrainTwo = -1;
+                        
+                        -- Looking for mountain buddies
+                        if (player.biasTerrain[14 + 1] == bias) then
+                           terrainTwo = 14;
+                        end
+                     
+                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                        
+                        local percentageR3 = ringThreeTerrain / ring3LandCount;
+                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        
+                        local score = biasMountainScore(bias, percentageR3, percentageR5);
+                        
+                        -- Main bias
+                        if (math.abs(bias) <= 2) then
+                           biasMandatoryScore = biasMandatoryScore + score;
+                           ___Debug("-- primary -- Tundra Mountain score:", score)
+                        -- Secondary Bias
+                        else
+                           biasSecondaryScore = biasSecondaryScore + score;
+                           ___Debug("-- Secondary -- Tundra Mountain score:", score)
+                        end
+                     end
+                     
+                     
+                     -- Flat snow
+                     if (player.biasTerrain[12 + 1] ~= 0) then
+                        
+                        local bias = player.biasTerrain[12 + 1];
+                        
+                        local terrainOne = 12;
+                        local terrainTwo = -1;
+                        
+                        -- Looking for snow hills as well
+                        if (player.biasTerrain[13 + 1] == bias) then
+                           terrainTwo = 13; 
                         end
                         
                         ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
@@ -2633,55 +4134,51 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         -- Main bias
                         if (math.abs(bias) <= 2) then
                            biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Plain Flat score:", score)
+                           ___Debug("-- primary -- flat snow score:", score)
                         -- Secondary Bias
                         else
                            biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- primary -- Plain Flat score:", score)
+                           ___Debug("-- Secondary -- flat snow score:", score)
                         end
                      end
-                  end
-                  
-                  -- Plain hill
-                  if (player.biasTerrain[4 + 1] ~= 0) then
                      
-                     local bias = player.biasTerrain[4 + 1];
-                     
-                     local terrainOne = 4;
-                     local terrainTwo = -1;
-                     
-                     -- grassland hills or flat plain, that we already have looked !
-                     if (player.biasTerrain[1 + 1] ~= bias and player.biasTerrain[3 + 1] ~= bias) then
-                     
-                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     -- snow hill
+                     if (player.biasTerrain[13 + 1] ~= 0) then
                         
-                        local percentageR3 = ringThreeTerrain / ring3LandCount;
-                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                        local bias = player.biasTerrain[13 + 1];
                         
-                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                        local terrainOne = 13;
+                        local terrainTwo = -1;
                         
-                        -- Main bias
-                        if (math.abs(bias) <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Plain Hill score:", score)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- primary -- Plain Hill score:", score)
+                        -- grassland hills or flat plain, that we already have looked !
+                        if (player.biasTerrain[12 + 1] ~= bias) then
+                        
+                           ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                           
+                           local percentageR3 = ringThreeTerrain / ring3LandCount;
+                           local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           
+                           local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                           
+                           -- Main bias
+                           if (math.abs(bias) <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- Snow hill score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- Snow hill score:", score)
+                           end
                         end
                      end
-                  end
-                  
-                  -- Plain mountain, different job here
-                  if (player.biasTerrain[5 + 1] ~= 0) then
-                  
-                     local bias = player.biasTerrain[5 + 1];
-                     local terrainOne = 5;
-                     local terrainTwo = -1;
                      
-                     -- Grassland mountain that, but we already have calculated that !
-                     if (player.biasTerrain[2 + 1] ~= bias) then
+                     -- snow mountain, different job here
+                     if (player.biasTerrain[14 + 1] ~= 0) then
+                     
+                        local bias = player.biasTerrain[14 + 1];
+                        local terrainOne = 14;
+                        local terrainTwo = -1;
                         
                         ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
                         ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
@@ -2694,367 +4191,238 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         -- Main bias
                         if (math.abs(bias) <= 2) then
                            biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Plain Mountain score:", score)
                         -- Secondary Bias
                         else
                            biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- primary -- Plain Mountain score:", score)
-                        end
-                     
-                     end
-                  end
-                  
-                  -- Flat desert
-                  if (player.biasTerrain[6 + 1] ~= 0) then
-                     
-                     local bias = player.biasTerrain[6 + 1];
-                     
-                     local terrainOne = 3;
-                     local terrainTwo = -1;
-                     
-                     -- Looking for plain hills as well
-                     if (player.biasTerrain[7 + 1] == bias) then
-                        terrainTwo = 7; 
-                     end
-                     
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
-                     
-                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
-                     
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- Desert flat score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- Secondary -- Desert flat score:", score)
-                     end
-                  end
-                  
-                  -- desert hill
-                  if (player.biasTerrain[7 + 1] ~= 0) then
-                     
-                     local bias = player.biasTerrain[7 + 1];
-                     
-                     local terrainOne = 3;
-                     local terrainTwo = -1;
-                     
-                     -- flat desert, but we already have calculated that !
-                     if (player.biasTerrain[6 + 1] ~= bias) then
-                        
-                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                        
-                        local percentageR3 = ringThreeTerrain / ring3LandCount;
-                        local percentageR5 = ringFiveTerrain / ring5LandCount;
-                        
-                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
-                        
-                        -- Main bias
-                        if (math.abs(bias) <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Desert Hill score:", score)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- Secondary -- Desert Hill score:", score)
+                           ___Debug("-- Secondary -- Snow Mountain score:", score)
                         end
                      end
-                  end
-                  
-                  -- tundra flat bias
-                  if (player.biasTerrain[9 + 1] ~= 0) then
                      
-                     local bias = player.biasTerrain[9 + 1];
                      
-                     local terrainOne = 9;
-                     local terrainTwo = -1;
-                     
-                     -- Actually towards tundra
-                     if (player.biasTerrain[10 + 1] == bias) then
-                        terrainTwo = 10;
-                     end
-                  
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
-                     
-                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
-                     
-                     ___Debug(ring3LandCount, ring5LandCount);
-                     
-                     ___Debug(ringThreeTerrain, ringFiveTerrain, percentageR3, percentageR5)
-                     
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- Tundra flat score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- Secondary -- Tundra flat score:", score)
-                     end
-                     
-                     print("score tundra flat:", biasSecondaryScore);
+                     -- Coastal spawn.
+                     -- Simply gonna check if the tile is coastal or not
+                     if (player.biasTerrain[15 + 1] ~= 0) then
+                        local bias = player.biasTerrain[14 + 1];
+                        if (mapCoastal[iIndex][jIndex]) then
 
-                  end
-                  
-                  -- tundra hills
-                  if (player.biasTerrain[10 + 1] ~= 0) then
-                  
-                     local bias = player.biasTerrain[10 + 1];
-                  
-                     local terrainOne = 10;
-                     local terrainTwo = -1;
+                           if (bias <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + 2000;
+                              ___Debug("-- primary -- tile IS coastal", 2000)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + 1000;
+                              ___Debug("-- Secondary -- tile IS coastal", 1000)
+                           end 
+                        -- non coastal tile
+                        else
+                           if (bias <= 2) then
+                              biasMandatoryScore = biasMandatoryScore - 2000;
+                              ___Debug("-- primary -- tile IS NOT coastal", -2000)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore - 1000;
+                              ___Debug("-- Secondary -- tile IS NOT coastal", -1000)
+                           end 
+                        end
+                     end
                      
-                     -- flat tundra, but we already have calculated that !
-                     if (player.biasTerrain[9 + 1] ~= bias) then
+                     
+                     --- NEXT Phase --
+                     --- Resource bias calculation ---
+                     
+                     
+                     ___Debug("---Resources biases---");
+                     
+                     local ringThreeResource = 0;
+                     local ringFiveResource = 0;
 
-                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     for k = 1, 5 do
+                        if (player.resourcesBiasListCount[k] > 0) then
                         
-                        local percentageR3 = ringThreeTerrain / ring3LandCount;
-                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                           ___Debug("For bias:", k, ",resources list:");
+                           for l = 1, player.resourcesBiasListCount[k] do
+                              ___Debug("-----resources looked at:", player.resourcesBiasList[k][l]);
+                           end
                         
-                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
-                        
-                        -- Main bias
-                        if (math.abs(bias) <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Tundra Hill score:", score)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- Secondary -- Tundra Hill score:", score)
+                           ringThreeResource = getRingResource(1, 3, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesBiasList[k], player.resourcesBiasListCount[k]);
+                           ringFiveResource = ringThreeResource + getRingResource(4, 5, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesBiasList[k], player.resourcesBiasListCount[k]);
+                     
+                            ___Debug("nombre de resources:", ringThreeResource, ringFiveResource);
+                     
+                           local percentageR3 = ringThreeResource / ring3LandCount;
+                           local percentageR5 = ringFiveResource / ring5LandCount;
+                     
+                           ___Debug("pourcentage de resources:", percentageR3, percentageR5);
+                     
+                           local score = biasResourceScore(k, percentageR3, percentageR5);
+                     
+                           ___Debug("Resource score:", score);
+                           
+                           -- primary bias
+                           if (k <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- score:", score)
+                           end
                         end
-                     end
-                  
-                  end
-                  
-                  -- tundra mountain, different job here
-                  if (player.biasTerrain[11 + 1] ~= 0) then
-                  
-                     local bias = player.biasTerrain[11 + 1];
-                     local terrainOne = 11;
-                     local terrainTwo = -1;
-                     
-                     -- Looking for mountain buddies
-                     if (player.biasTerrain[14 + 1] == bias) then
-                        terrainTwo = 14;
-                     end
-                  
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
-                     
-                     local score = biasMountainScore(bias, percentageR3, percentageR5);
-                     
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- Tundra Mountain score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- Secondary -- Tundra Mountain score:", score)
-                     end
-                  end
-                  
-                  
-                  -- Flat snow
-                  if (player.biasTerrain[12 + 1] ~= 0) then
-                     
-                     local bias = player.biasTerrain[12 + 1];
-                     
-                     local terrainOne = 12;
-                     local terrainTwo = -1;
-                     
-                     -- Looking for snow hills as well
-                     if (player.biasTerrain[13 + 1] == bias) then
-                        terrainTwo = 13; 
-                     end
-                     
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
-                     
-                     local score = biasTerrainScore(bias, percentageR3, percentageR5);
-                     
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- flat snow score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- Secondary -- flat snow score:", score)
-                     end
-                  end
-                  
-                  -- snow hill
-                  if (player.biasTerrain[13 + 1] ~= 0) then
-                     
-                     local bias = player.biasTerrain[13 + 1];
-                     
-                     local terrainOne = 13;
-                     local terrainTwo = -1;
-                     
-                     -- grassland hills or flat plain, that we already have looked !
-                     if (player.biasTerrain[12 + 1] ~= bias) then
-                     
-                        ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                        ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
                         
-                        local percentageR3 = ringThreeTerrain / ring3LandCount;
-                        local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     end
+                     
+                     ___Debug("--- NEGATIVE Resources biases---");
+                     
+                     for k = 1, 5 do
+                        if (player.resourcesNegativeBiasListCount[k] > 0) then
                         
-                        local score = biasTerrainScore(bias, percentageR3, percentageR5);
+                           ___Debug("For bias:", k, ",resources list:");
+                           for l = 1, player.resourcesNegativeBiasListCount[k] do
+                              ___Debug("-----resources looked at:", player.resourcesNegativeBiasList[k][l]);
+                           end
                         
-                        -- Main bias
-                        if (math.abs(bias) <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- Snow hill score:", score)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- Secondary -- Snow hill score:", score)
+                           ringThreeResource = getRingResource(1, 3, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesNegativeBiasList[k], player.resourcesNegativeBiasListCount[k]);
+                           ringFiveResource = ringThreeResource + getRingResource(4, 5, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesNegativeBiasList[k], player.resourcesNegativeBiasListCount[k]);
+                     
+                            ___Debug("nombre de resources:", ringThreeResource, ringFiveResource);
+                     
+                           local percentageR3 = ringThreeResource / ring3LandCount;
+                           local percentageR5 = ringFiveResource / ring5LandCount;
+                     
+                           ___Debug("pourcentage de resources:", percentageR3, percentageR5);
+                     
+                           local score = NegativeBiasResourceScore(k, percentageR3, percentageR5);
+                     
+                           ___Debug("Resource score:", score);
+                           
+                           -- primary bias
+                           if (k <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- score:", score)
+                           -- Secondary NegativeBias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- score:", score)
+                           end
                         end
+                        
                      end
-                  end
-                  
-                  -- snow mountain, different job here
-                  if (player.biasTerrain[14 + 1] ~= 0) then
-                  
-                     local bias = player.biasTerrain[14 + 1];
-                     local terrainOne = 14;
-                     local terrainTwo = -1;
                      
-                     ringThreeTerrain = getRingTerrain(1, 3, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
-                     ringFiveTerrain = ringThreeTerrain + getRingTerrain(4, 5, mapTerrainCode[iIndex][jIndex], ringTerrain, terrainOne, terrainTwo);
+                     ___Debug("---Feature biases---");
                      
-                     local percentageR3 = ringThreeTerrain / ring3LandCount;
-                     local percentageR5 = ringFiveTerrain / ring5LandCount;
+                     --- Next Phase ---
+                     --- Feature bias calculation ---
                      
-                     local score = biasMountainScore(bias, percentageR3, percentageR5);
-                     
-                     -- Main bias
-                     if (math.abs(bias) <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- Snow Mountain score:", score)
-                     -- Secondary Bias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- Secondary -- Snow Mountain score:", score)
-                     end
-                  end
-                  
-                  
-                  -- Coastal spawn.
-                  -- Simply gonna check if the tile is coastal or not
-                  if (player.biasTerrain[15 + 1] ~= 0) then
-                     local bias = player.biasTerrain[14 + 1];
-                     if (mapCoastal[iIndex][jIndex]) then
+                     local ringThreeFeature = 0;
+                     local ringFiveFeature = 0;
 
-                        if (bias <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + 2000;
-                           ___Debug("-- primary -- tile IS coastal", 2000)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + 1000;
-                           ___Debug("-- Secondary -- tile IS coastal", 1000)
-                        end 
-                     -- non coastal tile
-                     else
-                        if (bias <= 2) then
-                           biasMandatoryScore = biasMandatoryScore - 2000;
-                           ___Debug("-- primary -- tile IS NOT coastal", -2000)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore - 1000;
-                           ___Debug("-- Secondary -- tile IS NOT coastal", -1000)
-                        end 
-                     end
-                  end
-                  
-                  
-                  --- NEXT Phase --
-                  --- Resource bias calculation ---
-                  
-                  
-                  ___Debug("---Resources biases---");
-                  
-                  local ringThreeResource = 0;
-                  local ringFiveResource = 0;
-
-                  for k = 1, 5 do
-                     if (player.resourcesBiasListCount[k] > 0) then
-                     
-                        ___Debug("For bias:", k, ",resources list:");
-                        for l = 1, player.resourcesBiasListCount[k] do
-                           ___Debug("-----resources looked at:", player.resourcesBiasList[k][l]);
-                        end
-                     
-                        ringThreeResource = getRingResource(1, 3, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesBiasList[k], player.resourcesBiasListCount[k]);
-                        ringFiveResource = ringThreeResource + getRingResource(4, 5, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesBiasList[k], player.resourcesBiasListCount[k]);
-                  
-                         ___Debug("nombre de resources:", ringThreeResource, ringFiveResource);
-                  
-                        local percentageR3 = ringThreeResource / ring3LandCount;
-                        local percentageR5 = ringFiveResource / ring5LandCount;
-                  
-                        ___Debug("pourcentage de resources:", percentageR3, percentageR5);
-                  
-                        local score = biasResourceScore(k, percentageR3, percentageR5);
-                  
-                        ___Debug("Resource score:", score);
+                     for k = 1, 5 do
+                        if (player.featuresBiasListCount[k] > 0) then
                         
-                        -- primary bias
-                        if (k <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- score:", score)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- Secondary -- score:", score)
+                           ___Debug("For bias:", k, ",features list:");
+                           for l = 1, player.featuresBiasListCount[k] do
+                              ___Debug("-----features looked at:", player.featuresBiasList[k][l]);
+                           end
+                        
+                           ringThreeFeature = getRingFeature(1, 3, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresBiasList[k], player.featuresBiasListCount[k]);
+                           ringFiveFeature = ringThreeFeature + getRingFeature(4, 5, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresBiasList[k], player.featuresBiasListCount[k]);
+                     
+                            ___Debug("nombre de features:", ringThreeFeature, ringFiveFeature);
+                     
+                           local percentageR3 = ringThreeFeature / ring3LandCount;
+                           local percentageR5 = ringFiveFeature / ring5LandCount;
+                     
+                           ___Debug("pourcentage de features:", percentageR3, percentageR5);
+                     
+                           local score = biasFeatureScore(k, percentageR3, percentageR5);
+                     
+                           ___Debug("Feature score:", score);
+                           
+                           -- primary bias
+                           if (k <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- score:", score)
+                           -- Secondary Bias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- score:", score)
+                           end
                         end
+                        
                      end
                      
-                  end
-                  
-                  ___Debug("--- NEGATIVE Resources biases---");
-                  
-                  for k = 1, 5 do
-                     if (player.resourcesNegativeBiasListCount[k] > 0) then
+                     ___Debug("--- NEGATIVE Feature biases---");
                      
-                        ___Debug("For bias:", k, ",resources list:");
-                        for l = 1, player.resourcesNegativeBiasListCount[k] do
-                           ___Debug("-----resources looked at:", player.resourcesNegativeBiasList[k][l]);
+                     for k = 1, 5 do
+                        if (player.featuresNegativeBiasListCount[k] > 0) then
+                        
+                           ___Debug("For bias:", k, ", NEGATIVE features list:");
+                           for l = 1, player.featuresNegativeBiasListCount[k] do
+                              ___Debug("-----Negative features looked at:", player.featuresNegativeBiasList[k][l]);
+                           end
+                        
+                           ringThreeFeature = getRingFeature(1, 3, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresNegativeBiasList[k], player.featuresNegativeBiasListCount[k]);
+                           ringFiveFeature = ringThreeFeature + getRingFeature(4, 5, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresNegativeBiasList[k], player.featuresNegativeBiasListCount[k]);
+                     
+                            ___Debug("nombre de features:", ringThreeFeature, ringFiveFeature);
+                     
+                           local percentageR3 = ringThreeFeature / ring3LandCount;
+                           local percentageR5 = ringFiveFeature / ring5LandCount;
+                     
+                           ___Debug("pourcentage de feature:", percentageR3, percentageR5);
+                     
+                           local score = negativeBiasFeatureScore(k, percentageR3, percentageR5);
+                     
+                           ___Debug("Feature score:", score);
+                           
+                           -- primary bias
+                           if (k <= 2) then
+                              biasMandatoryScore = biasMandatoryScore + score;
+                              ___Debug("-- primary -- score:", score)
+                           -- Secondary NegativeBias
+                           else
+                              biasSecondaryScore = biasSecondaryScore + score;
+                              ___Debug("-- Secondary -- score:", score)
+                           end
                         end
+                        
+                     end
                      
-                        ringThreeResource = getRingResource(1, 3, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesNegativeBiasList[k], player.resourcesNegativeBiasListCount[k]);
-                        ringFiveResource = ringThreeResource + getRingResource(4, 5, mapResourceCode[iIndex][jIndex], ringResource, player.resourcesNegativeBiasList[k], player.resourcesNegativeBiasListCount[k]);
-                  
-                         ___Debug("nombre de resources:", ringThreeResource, ringFiveResource);
-                  
-                        local percentageR3 = ringThreeResource / ring3LandCount;
-                        local percentageR5 = ringFiveResource / ring5LandCount;
-                  
-                        ___Debug("pourcentage de resources:", percentageR3, percentageR5);
-                  
-                        local score = NegativeBiasResourceScore(k, percentageR3, percentageR5);
-                  
-                        ___Debug("Resource score:", score);
+                     
+                     local ringThreeRiver = 0;
+                     local ringFiveRiver = 0;
+                     
+                     ___Debug("------------------");
+                     ___Debug("--- River Bias ---");
+                     ___Debug("------------------");
+                     
+                     if (player.riverBias > 0 ) then
+                        local score = 0;
+                        
+                        -- Tile is not a river, not even evaluating --
+                        if( not mapRiver[iIndex][jIndex]) then
+                           
+                           if (player.riverBias < 3 ) then
+                              score = 0 - 2000;
+                           else
+                              score = 0 - 1000;
+                           end
+                        -- Tile is a River
+                        else
+                           ringThreeRiver = getRingRiver(1, 3, ringRiver);
+                           ringFiveRiver = ringThreeRiver + getRingRiver(4, 5, ringRiver);
+                           
+                           ___Debug("nombre de cases de riviere:", ringThreeRiver, ringFiveRiver);
+                     
+                           local percentageR3 = ringThreeRiver / ring3LandCount;
+                           local percentageR5 = ringFiveRiver / ring5LandCount;
+                     
+                           ___Debug("pourcentage de rivieres", percentageR3, percentageR5);
+                     
+                           score = biasRiverScore(player.riverBias, percentageR3, percentageR5);
+                     
+                           ___Debug("River score:", score);
+                        end
                         
                         -- primary bias
                         if (k <= 2) then
@@ -3067,222 +4435,245 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         end
                      end
                      
-                  end
-                  
-                  ___Debug("---Feature biases---");
-                  
-                  --- Next Phase ---
-                  --- Feature bias calculation ---
-                  
-                  local ringThreeFeature = 0;
-                  local ringFiveFeature = 0;
-
-                  for k = 1, 5 do
-                     if (player.featuresBiasListCount[k] > 0) then
                      
-                        ___Debug("For bias:", k, ",features list:");
-                        for l = 1, player.featuresBiasListCount[k] do
-                           ___Debug("-----features looked at:", player.featuresBiasList[k][l]);
-                        end
+                     -- Is Salty does not matter for positioning and will be ignored here
+                     -- Australia already has a bias for coast
                      
-                        ringThreeFeature = getRingFeature(1, 3, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresBiasList[k], player.featuresBiasListCount[k]);
-                        ringFiveFeature = ringThreeFeature + getRingFeature(4, 5, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresBiasList[k], player.featuresBiasListCount[k]);
-                  
-                         ___Debug("nombre de features:", ringThreeFeature, ringFiveFeature);
-                  
-                        local percentageR3 = ringThreeFeature / ring3LandCount;
-                        local percentageR5 = ringFiveFeature / ring5LandCount;
-                  
-                        ___Debug("pourcentage de features:", percentageR3, percentageR5);
-                  
-                        local score = biasFeatureScore(k, percentageR3, percentageR5);
-                  
-                        ___Debug("Feature score:", score);
-                        
-                        -- primary bias
-                        if (k <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- score:", score)
-                        -- Secondary Bias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- Secondary -- score:", score)
-                        end
-                     end
+                     -- Mountain lover as well: Inca has a bias towards mountain
+                     -- It will be used to allow more mountains in the general placement
                      
-                  end
-                  
-                  ___Debug("--- NEGATIVE Feature biases---");
-                  
-                  for k = 1, 5 do
-                     if (player.featuresNegativeBiasListCount[k] > 0) then
-                     
-                        ___Debug("For bias:", k, ", NEGATIVE features list:");
-                        for l = 1, player.featuresNegativeBiasListCount[k] do
-                           ___Debug("-----Negative features looked at:", player.featuresNegativeBiasList[k][l]);
-                        end
-                     
-                        ringThreeFeature = getRingFeature(1, 3, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresNegativeBiasList[k], player.featuresNegativeBiasListCount[k]);
-                        ringFiveFeature = ringThreeFeature + getRingFeature(4, 5, mapFeatureCode[iIndex][jIndex], ringFeature, player.featuresNegativeBiasList[k], player.featuresNegativeBiasListCount[k]);
-                  
-                         ___Debug("nombre de features:", ringThreeFeature, ringFiveFeature);
-                  
-                        local percentageR3 = ringThreeFeature / ring3LandCount;
-                        local percentageR5 = ringFiveFeature / ring5LandCount;
-                  
-                        ___Debug("pourcentage de feature:", percentageR3, percentageR5);
-                  
-                        local score = negativeBiasFeatureScore(k, percentageR3, percentageR5);
-                  
-                        ___Debug("Feature score:", score);
-                        
-                        -- primary bias
-                        if (k <= 2) then
-                           biasMandatoryScore = biasMandatoryScore + score;
-                           ___Debug("-- primary -- score:", score)
-                        -- Secondary NegativeBias
-                        else
-                           biasSecondaryScore = biasSecondaryScore + score;
-                           ___Debug("-- Secondary -- score:", score)
-                        end
-                     end
-                     
-                  end
-                  
-                  
-                  local ringThreeRiver = 0;
-                  local ringFiveRiver = 0;
-                  
-                  ___Debug("------------------");
-                  ___Debug("--- River Bias ---");
-                  ___Debug("------------------");
-                  
-                  if (player.riverBias > 0 ) then
-                     local score = 0;
-                     
-                     -- Tile is not a river, not even evaluating --
-                     if( not mapRiver[iIndex][jIndex]) then
-                        
-                        if (player.riverBias < 3 ) then
-                           score = 0 - 2000;
-                        else
-                           score = 0 - 1000;
-                        end
-                     -- Tile is a River
-                     else
-                        ringThreeRiver = getRingRiver(1, 3, ringRiver);
-                        ringFiveRiver = ringThreeRiver + getRingRiver(4, 5, ringRiver);
-                        
-                        ___Debug("nombre de cases de riviere:", ringThreeRiver, ringFiveRiver);
-                  
-                        local percentageR3 = ringThreeRiver / ring3LandCount;
-                        local percentageR5 = ringFiveRiver / ring5LandCount;
-                  
-                        ___Debug("pourcentage de rivieres", percentageR3, percentageR5);
-                  
-                        score = biasRiverScore(player.riverBias, percentageR3, percentageR5);
-                  
-                        ___Debug("River score:", score);
-                     end
-                     
-                     -- primary bias
-                     if (k <= 2) then
-                        biasMandatoryScore = biasMandatoryScore + score;
-                        ___Debug("-- primary -- score:", score)
-                     -- Secondary NegativeBias
-                     else
-                        biasSecondaryScore = biasSecondaryScore + score;
-                        ___Debug("-- Secondary -- score:", score)
-                     end
-                  end
-                  
-                  
-                  -- Is Salty does not matter for positioning and will be ignored here
-                  -- Australia already has a bias for coast
-                  
-                  -- Mountain lover as well: Inca has a bias towards mountain
-                  -- It will be used to allow more mountains in the general placement
-                  
-                  -----------------
-                  -- CUSTOM BIASES ---
-                  -----------------
-                
-                  --- Continent split ---
-                
-                  if (player.continentSplit) then
-                     if (mapIsContinentSplit[iIndex][jIndex]) then
-                        biasMandatoryScore = biasMandatoryScore + 800;
-                        ___Debug("Tile is Continent Split: score: +800");
-                     else
-                        biasMandatoryScore = biasMandatoryScore - 1600;
-                        ___Debug("Tile is NOT Continent Split: score: -1600");
-                     end
-                  end
-                  
-                  --- Hydrophobic ---
-                  
-                  if (player.isHydrophobic) then
-                     local hasWater = false;
-                     for k = 1, 3 do
-                        if (ringSea[k] > 0) then
-                           ___Debug("Found sea water in ring", k, " Breaking");
-                           hasWater = true;
-                           break;
-                        end
-                     end
-                     
-                     if (not hasWater) then
-                        -- I will allow a maximum of 2 coastal/deap water tiles ring 4
-                        if (ringSea[4] > 2) then
-                           ___Debug("Found sea water in ring 4");
-                           hasWater = true;
-                        end
-                        
-                        -- I will allow a maximum of 4 coastal/deap water tiles ring 5
-                        if (ringSea[5] > 4) then
-                           ___Debug("Found sea water in ring 5");
-                           hasWater = true;
-                        end
-                     end
-                     
-                     if (not hasWater) then
-                        biasMandatoryScore = biasMandatoryScore + 800;
-                        ___Debug("Tile is far enough from the sea: score: +800");
-                     else
-                        biasMandatoryScore = biasMandatoryScore - 1600;
-                        ___Debug("Tile is too close to the sea: score: -1600");
-                     end
-                  end
-                  
-                  
-                     
-                  
-                  if (player.isNorthKing) then
-                     -- King of the North --
-                     if MapConfiguration.GetValue("MAP_SCRIPT") == "Tilted_Axis.lua"  then
-                        if j > bottomQuartile and j < topQuartile and i > bottomQuartile and i < topQuartile then
-                           ___Debug("Tile is Northen/Southern enough (Tilted version");
+                     -----------------
+                     -- CUSTOM BIASES ---
+                     -----------------
+                   
+                     --- Continent split ---
+                   
+                     if (player.continentSplit) then
+                        if (mapIsContinentSplit[iIndex][jIndex]) then
                            biasMandatoryScore = biasMandatoryScore + 800;
+                           ___Debug("Tile is Continent Split: score: +800");
                         else
-                           ___Debug("Tile is NOT Northen/Southern enough (Tilted version)");
                            biasMandatoryScore = biasMandatoryScore - 1600;
-                        end
-                     else
-                        if j < bottomQuartile or j > topQuartile then
-                           ___Debug("Tile is Northen/Southern enough");
-                           biasMandatoryScore = biasMandatoryScore + 800;
-                        else
-                           ___Debug("Tile is NOT Northen/Southern enough");
-                           biasMandatoryScore = biasMandatoryScore - 1600;
+                           ___Debug("Tile is NOT Continent Split: score: -1600");
                         end
                      end
+                     
+                     --- Hydrophobic ---
+                     
+                     if (player.isHydrophobic) then
+                        local hasWater = false;
+                        for k = 1, 3 do
+                           if (ringSea[k] > 0) then
+                              ___Debug("Found sea water in ring", k, " Breaking");
+                              hasWater = true;
+                              break;
+                           end
+                        end
+                        
+                        if (not hasWater) then
+                           -- I will allow a maximum of 2 coastal/deap water tiles ring 4
+                           if (ringSea[4] > 2) then
+                              ___Debug("Found sea water in ring 4");
+                              hasWater = true;
+                           end
+                           
+                           -- I will allow a maximum of 4 coastal/deap water tiles ring 5
+                           if (ringSea[5] > 4) then
+                              ___Debug("Found sea water in ring 5");
+                              hasWater = true;
+                           end
+                        end
+                        
+                        if (not hasWater) then
+                           biasMandatoryScore = biasMandatoryScore + 800;
+                           ___Debug("Tile is far enough from the sea: score: +800");
+                        else
+                           biasMandatoryScore = biasMandatoryScore - 1600;
+                           ___Debug("Tile is too close to the sea: score: -1600");
+                        end
+                     end
+                     
+                     
+                        
+                     
+                     if (player.isNorthKing) then
+                        -- King of the North --
+                        if MapConfiguration.GetValue("MAP_SCRIPT") == "Tilted_Axis.lua"  then
+                           if j > bottomQuartile and j < topQuartile and i > bottomQuartile and i < topQuartile then
+                              ___Debug("Tile is Northen/Southern enough (Tilted version");
+                              biasMandatoryScore = biasMandatoryScore + 800;
+                           else
+                              ___Debug("Tile is NOT Northen/Southern enough (Tilted version)");
+                              biasMandatoryScore = biasMandatoryScore - 1600;
+                           end
+                        else
+                           if j < bottomQuartile or j > topQuartile then
+                              ___Debug("Tile is Northen/Southern enough");
+                              biasMandatoryScore = biasMandatoryScore + 800;
+                           else
+                              ___Debug("Tile is NOT Northen/Southern enough");
+                              biasMandatoryScore = biasMandatoryScore - 1600;
+                           end
+                        end
+                     end
+                     --- End biasis checks
+                     
+                     -- calculating standardScore for the civ
+                     -- checking for biases before adding the shit tiles
+                     -- for some civs, floodplains or tundra or desert can actually be good, not repulsive !
+                     standardScore = 0;
+                     
+                     ring3Shit = 0;
+                     ring5Shit = 0;
+                     
+                     -- desert
+                     if (player.biasTerrain[6 + 1] == 0 and player.biasTerrain[7 + 1] == 0) then
+                        ring3Shit = ring3Shit + ring3Desert;
+                        ring5Shit = ring5Shit + ring5Desert;
+                     end
+                     
+                     -- tundra
+                     if (player.biasTerrain[9 + 1] == 0 and player.biasTerrain[10 + 1] == 0) then
+                        ring3Shit = ring3Shit + ring3Tundra;
+                        ring5Shit = ring5Shit + ring5Tundra;
+                     end
+                     
+                     -- snow
+                     if (player.biasTerrain[12 + 1] == 0 and player.biasTerrain[13 + 1] == 0) then
+                        ring3Shit = ring3Shit + ring3Snow;
+                        ring5Shit = ring5Shit + ring3Snow;
+                     end
+                     
+                     if (player.biasFeature[0 + 1] <= 0 and player.biasFeature[31 + 1] <= 0 and player.biasFeature[32 + 1] <= 0) then
+                        ring3Shit = ring3Shit + ring3Floods;
+                        ring5Shit = ring5Shit + ring5Floods;
+                     end
+                     
+                     percentageR3Shit = ring3Shit / ring3LandCount;
+                     percentageR5Shit = ring5Shit / ring5LandCount;
+                     
+                     
+                     standardScore = 0;
+               
+                     if percentageR3Shit > SHIT_PERCENTAGE_R3 then
+                        standardScore = standardScore - 2000;
+                        ___Debug("too many shit ring 1-3");
+                     elseif percentageR3Shit > SHIT_PERCENTAGE_R3 - 0.05 then
+                        standardScore = standardScore - 1000;
+                        ___Debug("Not so great ring 1-3");
+                     else
+                        standardScore = standardScore + 500;
+                     end
+                     
+                     if percentageR5Shit > SHIT_PERCENTAGE_R5 then
+                        standardScore = standardScore - 2000;
+                        ___Debug("too many shit ring 1-5");
+                     elseif percentageR5Shit > SHIT_PERCENTAGE_R5 - 0.05 then
+                        standardScore = standardScore - 1000;
+                        ___Debug("too many shit ring 1-5 (minored)");
+                     else
+                        standardScore = standardScore + 500;
+                     end
+                     
+                     ___Debug("Regular Tile Score:", standardScore);
+                     
+                     -- Now deciding where we are going to put the tile --
+                     if (standardScore > 0) then
+                        -- Bias Tier 1-2 respected
+                        if biasMandatoryScore >= 0 then
+                           -- Bias Tier 3-5 respected
+                           if biasSecondaryScore >= 0 then
+                              -- with Fresh water
+                              if mapFreshWater[iIndex][jIndex] then
+                                 table.insert(player.majorPrimaryOKSecondaryOKWaterOK, {i, j});
+                                 player.majorPrimaryOKSecondaryOKWaterOKCount = player.majorPrimaryOKSecondaryOKWaterOKCount + 1;
+                                 ___Debug("Tile assigned to: Pri OK, SEC OK, Water OK");
+                              elseif mapCoastal[iIndex][jIndex] then
+                                 table.insert(player.majorPrimaryOKSecondaryOKSeaOK, {i, j});
+                                 player.majorPrimaryOKSecondaryOKSeaOKCount = player.majorPrimaryOKSecondaryOKSeaOKCount + 1;
+                                 ___Debug("Tile assigned to: Pri OK, SEC OK, Sea OK");
+                              else
+                                 table.insert(player.majorPrimaryOKSecondaryOKWaterNOK, {i, j});
+                                 player.majorPrimaryOKSecondaryOKWaterNOKCount = player.majorPrimaryOKSecondaryOKWaterNOKCount + 1;
+                                 ___Debug("Tile assigned to: Pri OK, SEC OK, Water NOK");
+                              end
+                           --- Bias Tier 3-5 NOT respected
+                           else
+                              if mapFreshWater[iIndex][jIndex] then
+                                 table.insert(player.majorPrimaryOKSecondaryNOKWaterOK, {i, j});
+                                 player.majorPrimaryOKSecondaryNOKWaterOKCount = player.majorPrimaryOKSecondaryNOKWaterOKCount + 1;
+                                 ___Debug("Tile assigned to: Pri OK, SEC NOK, Water OK");
+                              elseif mapCoastal[iIndex][jIndex] then
+                                 table.insert(player.majorPrimaryOKSecondaryNOKSeaOK, {i, j});
+                                 player.majorPrimaryOKSecondaryNOKSeaOKCount = player.majorPrimaryOKSecondaryNOKSeaOKCount + 1;
+                                 ___Debug("Tile assigned to: Pri OK, SEC NOK, Sea OK");
+                              else
+                                 table.insert(player.majorPrimaryOKSecondaryNOKWaterNOK, {i, j});
+                                 player.majorPrimaryOKSecondaryNOKWaterNOKCount = player.majorPrimaryOKSecondaryNOKWaterNOKCount + 1;
+                                 ___Debug("Tile assigned to: Pri OK, SEC NOK, Water NOK");
+                              end
+                           end
+                        -- no "else", as we simply do not wanna store a tile where major bias is not respected
+                        end
+                     else
+                        ___Debug("The tile was too shitty to be added, score:", standardScore);
+                     end
+                     
+                     
                   end
-                   --- End biasis checks
+                  
                end
+               
+               
             end
+         else
+            ___Debug("Tile tagged as not setteable !");
          end
       end
    end
+   for i = 1, majorCount do
+      local player = majorAll[i];
+      if (player.civName == "CIVILIZATION_MALI") then
+         ___Debug("For player", player.index, player.civName, "We have the following:");
+         ___Debug("Full Ok, water OK", player.majorPrimaryOKSecondaryOKWaterOKCount);
+         for j = 1, player.majorPrimaryOKSecondaryOKWaterOKCount do
+            ___Debug(player.majorPrimaryOKSecondaryOKWaterOK[j][1], player.majorPrimaryOKSecondaryOKWaterOK[j][2])
+         end
+         ___Debug("Full Ok, Sea OK", player.majorPrimaryOKSecondaryOKSeaOKCount);
+         for j = 1, player.majorPrimaryOKSecondaryOKSeaOKCount do
+            ___Debug(player.majorPrimaryOKSecondaryOKSeaOK[j][1], player.majorPrimaryOKSecondaryOKSeaOK[j][2])
+         end
+         ___Debug("Full Ok, water NOK", player.majorPrimaryOKSecondaryOKWaterNOKCount);
+         for j = 1, player.majorPrimaryOKSecondaryOKWaterNOKCount do
+            ___Debug(player.majorPrimaryOKSecondaryOKWaterNOK[j][1], player.majorPrimaryOKSecondaryOKWaterNOK[j][2])
+         end
+         ___Debug("SEC NOk, water OK", player.majorPrimaryOKSecondaryNOKWaterOKCount);
+         for j = 1, player.majorPrimaryOKSecondaryNOKWaterOKCount do
+            ___Debug(player.majorPrimaryOKSecondaryNOKWaterOK[j][1], player.majorPrimaryOKSecondaryNOKWaterOK[j][2])
+         end
+         ___Debug("SEC NOk, Sea OK", player.majorPrimaryOKSecondaryNOKSeaOKCount);
+         for j = 1, player.majorPrimaryOKSecondaryOKWaterOKCount do
+            ___Debug(player.majorPrimaryOKSecondaryNOKSeaOK[j][1], player.majorPrimaryOKSecondaryNOKSeaOK[j][2])
+         end
+         ___Debug("SEC NOk, water NOK", player.majorPrimaryOKSecondaryNOKWaterNOKCount);
+         for j = 1, player.majorPrimaryOKSecondaryNOKWaterNOKCount do
+            ___Debug(player.majorPrimaryOKSecondaryNOKWaterNOK[j][1], player.majorPrimaryOKSecondaryNOKWaterNOK[j][2])
+         end
+      else
+         ___Debug("For player", player.index, player.civName, "We have the following:");
+         ___Debug("Full Ok, water OK", player.majorPrimaryOKSecondaryOKWaterOKCount);
+         ___Debug("Full Ok, Sea OK", player.majorPrimaryOKSecondaryOKSeaOKCount);
+         ___Debug("Full Ok, water NOK", player.majorPrimaryOKSecondaryOKWaterNOKCount);
+         ___Debug("SEC NOk, water OK", player.majorPrimaryOKSecondaryNOKWaterOKCount);
+         ___Debug("SEC NOk, Sea OK", player.majorPrimaryOKSecondaryNOKSeaOKCount);
+         ___Debug("SEC NOk, water NOK", player.majorPrimaryOKSecondaryNOKWaterNOKCount);
+      end
+   end
+   
+   ___Debug("For non bias civs:")
+   ___Debug("OK With fresh water:", standardWaterCount);
+   ___Debug("OK With Coastal water:", standardCoastCount);
+   ___Debug("OK With NO fresh water:", standardNoWaterCount);
 end
 
 
@@ -3404,7 +4795,7 @@ function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
       local y = element[2];
       
       if (mapTerrainCode[x + 1][y + 1] == 15 and mapLake[x + 1][y + 1] == false) then
-         ___Debug("TEST THIS TILE IS WATER", x, y);
+         --___Debug("TEST THIS TILE IS WATER", x, y);
          return true;
       end
    end
@@ -3412,16 +4803,17 @@ function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
    return false;
 end
 
+
 ------------------------------------------------------------------------------
 function BBS_AssignStartingPlots:__InitStartingData()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
       
+      --temp--
       
-   ---- TEMPORARY !!! -----
-   --NewBBS();
-   
-   ---- END ----
-   
+   --NewBBS()
+     
+     -- temp --
+      
     if(self.uiMinMajorCivFertility <= 0) then
         self.uiMinMajorCivFertility = 110;
     end
@@ -4332,8 +5724,7 @@ function BBS_AssignStartingPlots:__RateBiasPlots(biases, startPlots, major, regi
          ratedPlot.Score = ratedPlot.Score - 5000;
          bskip = true;
          ___Debug("Found oasis, gonna apply negative score");
-      end
-		
+      end							   
 		if (major == false) then
 			local IsNotBreaching_major, Distance_maj = self:__MinorMajorCivBufferCheck(ratedPlot.Plot)
 			local IsNotBreaching_minor, Distance_min = self:__MinorMinorCivBufferCheck(ratedPlot.Plot)
@@ -4342,8 +5733,6 @@ function BBS_AssignStartingPlots:__RateBiasPlots(biases, startPlots, major, regi
 				bskip = true
 			end
 		end
-      
-      
 		
 		if 	(bskip == false or (bRepeatPlacement == true and major == true)) and region_index ~= -1 then
 		
@@ -4755,7 +6144,7 @@ function BBS_AssignStartingPlots:__RateBiasPlots(biases, startPlots, major, regi
 			local count_desert = 0
 			local count_tundra = 0
 			local count_flood = 0
-         local count_snow = 0
+			local count_snow = 0				 
 			for k = 60, 30, -1 do
 				local scanPlot = GetAdjacentTiles(ratedPlot.Plot, k)
 				if scanPlot ~= nil then
@@ -4773,7 +6162,7 @@ function BBS_AssignStartingPlots:__RateBiasPlots(biases, startPlots, major, regi
                
                if (scanPlot:GetTerrainType() ==  g_TERRAIN_TYPE_SNOW or scanPlot:GetTerrainType() ==  g_TERRAIN_TYPE_SNOW_HILLS) then
                   count_snow = count_snow + 1;
-               end
+               end																																	 
 					
 					if (scanPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS or scanPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS or scanPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND ) then
 					
@@ -4802,8 +6191,7 @@ function BBS_AssignStartingPlots:__RateBiasPlots(biases, startPlots, major, regi
          if count_snow > 2 and foundBiasToundra == false then
 				region_bonus = region_bonus - 2500
             ___Debug("Snow malus: ", count_snow )
-			end
-         
+			end							  
 			if count_desert > 5 and foundBiasDesert == false then
 				region_bonus = region_bonus - 250
 			end
@@ -5340,10 +6728,6 @@ function BBS_AssignStartingPlots:__GetFeatureIndex(featureType)
         return g_FEATURE_FLOODPLAINS_GRASSLAND;
     elseif (featureType == "FEATURE_GEOTHERMAL_FISSURE") then
         return g_FEATURE_GEOTHERMAL_FISSURE;
-    elseif (featureType == "FEATURE_MARSH") then
-        return g_FEATURE_MARSH;
-    elseif (featureType == "FEATURE_OASIS") then
-        return g_FEATURE_OASIS;
     end
 end
 ------------------------------------------------------------------------------
