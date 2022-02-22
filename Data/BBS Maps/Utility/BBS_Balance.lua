@@ -7,6 +7,8 @@ ExposedMembers.LuaEvents = LuaEvents
 
 include "MapEnums"
 include "SupportFunctions"
+include "BBS_AssignStartingPlots"
+include( "MapUtilities" );
 
 local world_age = 2;
 local high_roll = 0.15;
@@ -76,10 +78,105 @@ local PENINSULA_PENALTY = -50;
 local COASTAL_CIVS = {"LEADER_VICTORIA", "LEADER_HOJO", "LEADER_DIDO"};  -- Use a IsCoastalCiv ? Like IsTundraCiv 
 local COASTAL_LEADERS = {"LEADER_VICTORIA", "LEADER_HOJO", "LEADER_DIDO"};
 
+
+------ New Vars ------
+
+local spawnTwoTwo = 0.2
+local spawnHills = 0.5
+
+-------------
+
+-- Returns:
+-- -1 = no
+-- 0  = Fallback (you will need to remove the resource)
+-- 1  = Yes
+
+function isHillAble (x, y)
+
+   if x < 0 or y < 0 then
+      __Debug("Hillable: invalid index", x, y)
+      return -1;
+   end
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   local feature = mapFeatureCode[xIndex][yIndex];
+   local terrain = mapTerrainCode[xIndex][yIndex];
+   local resource = mapResourceCode[xIndex][yIndex];
+   
+   -- anything that is not: forest or rainforest
+   if (feature == 0 or feature > 4) then
+      return -1;
+   end
+   
+   -- We only look at plains/grassland
+   if terrain >= 6 then
+      return -1;
+   end
+   
+   -- Mountain
+   if terrain % 3 == 2 then
+      return -1;
+   end
+   
+   -- Mountain
+   if terrain % 3 == 1 then
+      __Debug("Is already a hill ...", x, y);
+      return -1;
+   end
+   
+   -- Rice, wheat, cattle and Maize: will need to remove if we wanna change
+   if resource == 1 or resource == 6 or resource == 9 or resource == 52 then
+      return 0;
+   end
+   
+   -- resources only found on flat land
+   if (resource == 10 or resource == 12 or resource == 18 or resource == 20 or resource == 22 or resource == 24 or resource == 27 or resource == 28
+       or resource == 42 or resource == 44 or resource == 45 or resource == 53) then
+      return -1;
+   end
+   
+   return 1;
+   
+end
+
+-- Will transform a functionning tile to hill
+function toHill (x, y, cleanResource, cleanFeature)
+   if x < 0 or y < 0 then
+      __Debug("toHill: invalid index", x, y)
+      return -1;
+   end
+   
+   __Debug("Transforming this tile to hill:", x, y);
+
+   local xIndex = x + 1;
+   local yIndex = Y + 1;
+   local plot = Map.GetPlot(x, y)
+   local terrain = mapTerrainCode[xIndex][yIndex];
+   
+   if cleanResource then
+      ResourceBuilder.SetResourceType(plot, -1);
+      mapResourceCode[xIndex][yIndex] = -1;
+   end
+   
+   if cleanFeature then
+      TerrainBuilder.SetFeatureType(plot, -1);
+      mapFeatureCode[xIndex][yIndex] = -1;
+   end
+   
+   TerrainBuilder.SetTerrainType(plot, terrain + 1);
+   mapTerrainCode[xIndex][yIndex] = mapTerrainCode[xIndex][yIndex] + 1;
+   
+   return;
+
+end
+
 -----------------------------------------------------------------------------------------------------------------------------------
 
 function BBS_Script()
 	print ("Initialization Balancing Spawn", os.date("%c"))
+   print ("test autre scrip", CS_CS_MIN_DISTANCE);
 	
 	local currentTurn = Game.GetCurrentGameTurn();
 	eContinents	= {};
@@ -133,6 +230,16 @@ function BBS_Script()
 		local sea_level = MapConfiguration.GetValue("sea_level")
 		local rainfall = MapConfiguration.GetValue("rainfall");
 		world_age = MapConfiguration.GetValue("world_age");
+      if (world_age == 1) then -- new
+         spawnHills = 0.5;
+      else
+         spawnHills = 0.35;
+      end
+      
+      if (MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua") then
+         spawnHills = 0.7;
+      end
+      
 		local ridge = MapConfiguration.GetValue("BBSRidge");
 		print ("Init: Map Size: ", mapSize, "2 = Small, 5 = Huge");
 		print ("Context",GameConfiguration.IsAnyMultiplayer())
@@ -314,6 +421,98 @@ function BBS_Script()
 
 		print ("Initialization - Completed", os.date("%c"))
 
+       ---- LARGE SPAWN CORRECTION -----
+      ---- Here we will ensure that all player receive a decent amount of hills/two-twos ---
+      ----------------------------
+      
+      -- With 12 distance, we are going to fix up to ring 7
+      local fixedRing = math.floor((Major_Distance_Target / 2) + 1);
+      
+      print("Major count", majorCount);
+      
+      for i = 1, majorCount do
+         local player = majorAll[i];
+         local spawnX = player.spawnX;
+         local spawnY = player.spawnY;
+         print("-----------------");
+         print("Player", player.civName);
+         print("-----------------");
+         
+         local missingHills = 0;
+         local missingTwoTwo = 0;
+         
+         for j = 3, fixedRing do
+         
+            local okToHill = {};
+            local okToHillCount = 0;
+            
+            local okToHillBkp = {}; -- use as failback: will need to remove resource
+            local okToHillBkpCount = 0;
+            
+            local hillCount = 0;
+            local twoTwoCount = 0;
+            local plainGrasslandTile = 0; -- this tile is workable
+            
+            
+            
+            local list = getRing(spawnX, spawnY, j, mapXSize, mapYSize, mapIsRoundWestEast);
+            
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               
+               local xIndex = x + 1;
+               local yIndex = y + 1;
+               
+               if mapTwoTwo[xIndex][yIndex] >= 2 then
+                  twoTwoCount = twoTwoCount + 1;
+               end
+               
+               if (mapTerrainCode[xIndex][yIndex] == 0 or mapTerrainCode[xIndex][yIndex] == 1 or mapTerrainCode[xIndex][yIndex] == 3
+                      or mapTerrainCode[xIndex][yIndex] == 4) then -- we are looking at plain/grassland only
+                  plainGrasslandTile = plainGrasslandTile + 1;
+                  if (mapTerrainCode[xIndex][yIndex] == 4 or mapTerrainCode[xIndex][yIndex] == 1) then
+                     hillCount = hillCount + 1;
+                  end
+               end
+               
+               local hillReturn = isHillAble(x, y);
+               if hillReturn == 1 then
+                  table.insert(okToHill, {x, y});
+                  okToHillCount = okToHillCount + 1;
+               elseif hillReturn == 0 then
+                  table.insert(okToHillBkp, {x, y});
+                  okToHillBkpCount = okToHillBkpCount + 1;
+               end
+            end
+            
+            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo + 1);
+            local aimedHills =  math.floor(plainGrasslandTile * spawnHills + 1);
+            
+            print("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
+            print("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
+            print("Ring ", j, "Workable tiles", plainGrasslandTile);
+            
+            local hillDiff = aimedHills - hillCount;
+            local twotwoDiff = aimedTwoTwo - twoTwoCount;
+            
+            if (hillDiff > 0) then
+               missingHills = missingHills + hillDiff;
+            end
+            
+            if (twotwoDiff > 0) then
+               missingTwoTwo = missingTwoTwo + twotwoDiff;
+            end
+            
+            
+            okToHill = GetShuffledCopyOfTable(okToHill);
+            okToHillBkp = GetShuffledCopyOfTable(okToHillBkp);
+            
+            
+         end
+         
+         print("Missing", missingTwoTwo, "Two-twos and ", missingHills, "hills");
+      end
 
 		--------------------------------------------------------------------------------------
 		-- Terrain Balancing - Init
@@ -429,6 +628,11 @@ function BBS_Script()
 
         print("---");
         print("--- End debug information ---");
+        
+     
+      
+      -----------------
+      
 		-- Fix lack of freshwater
 		--[[
 		for i = 1, major_count do
@@ -885,7 +1089,7 @@ function BBS_Script()
       ---
       ---
       --- - Oil is completely excluded and remains untouched
-      ---   Oil provides adjacency, nice production bonus and strategics, but is unlocky way too late to be taken into account for start balance
+      ---   Oil provides adjacency, nice production bonus and strategics, but is unlocked way too late to be taken into account for start balance
       ------------------------------------------------------------------------
       
 		-- Fix improper reef and ice placement in coastal start
