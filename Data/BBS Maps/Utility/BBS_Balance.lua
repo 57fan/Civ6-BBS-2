@@ -7,6 +7,8 @@ ExposedMembers.LuaEvents = LuaEvents
 
 include "MapEnums"
 include "SupportFunctions"
+include "BBS_AssignStartingPlots"
+include( "MapUtilities" );
 
 local world_age = 2;
 local high_roll = 0.15;
@@ -76,10 +78,450 @@ local PENINSULA_PENALTY = -50;
 local COASTAL_CIVS = {"LEADER_VICTORIA", "LEADER_HOJO", "LEADER_DIDO"};  -- Use a IsCoastalCiv ? Like IsTundraCiv 
 local COASTAL_LEADERS = {"LEADER_VICTORIA", "LEADER_HOJO", "LEADER_DIDO"};
 
+
+------ New Vars ------
+
+local spawnTwoTwo = 0.2
+local spawnHills = 0.5
+
+-------------
+
+-- Returns:
+-- -1 = no
+-- 0  = Fallback (you will need to remove the resource)
+-- 1  = Yes
+
+function isHillAble (x, y)
+
+   if x < 0 or y < 0 then
+      __Debug("Hillable: invalid index", x, y)
+      return -1;
+   end
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   local feature = mapFeatureCode[xIndex][yIndex];
+   local terrain = mapTerrainCode[xIndex][yIndex];
+   local resource = mapResourceCode[xIndex][yIndex];
+   
+   -- anything that is not: forest or rainforest
+   if (feature == 0 or feature > 4) then
+      return -1;
+   end
+   
+   -- We only look at plains/grassland
+   if terrain >= 6 then
+      return -1;
+   end
+   
+   -- Mountain
+   if terrain % 3 == 2 then
+      return -1;
+   end
+   
+   -- Mountain
+   if terrain % 3 == 1 then
+      __Debug("Is already a hill ...", x, y);
+      return -1;
+   end
+   
+   -- Rice, wheat, cattle and Maize: will need to remove if we wanna change
+   if resource == 1 or resource == 6 or resource == 9 or resource == 52 then
+      return 0;
+   end
+   
+   -- resources only found on flat land
+   if (resource == 10 or resource == 12 or resource == 18 or resource == 20 or resource == 22 or resource == 24 or resource == 27 or resource == 28
+        or resource == 30 or resource == 31 or resource == 42 or resource == 44 or resource == 45 or resource == 53) then
+      return -1;
+   end
+   
+   return 1;
+   
+end
+
+function twoTwoScore(x, y)
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   local terrain = mapTerrainCode[xIndex][yIndex];
+   local resource = mapResourceCode[xIndex][yIndex];
+   
+   local food = mapFoodYield[xIndex][yIndex];
+   local prod = mapProdYield[xIndex][yIndex];
+   
+  
+   if resource == 41 then
+      prod = prod - 2;
+   elseif (resource == 42 or resource == 44) then
+      prod = prod - 1;
+      food = food - 1;
+   elseif resource == 45 then
+      prod = prod - 3;
+   elseif resource == 46 then
+      prod = prod - 2; 
+   end
+   
+   if (terrain >= 15) then -- water
+      return 0;
+   
+   elseif (food < 2 or prod < 2) then -- not 2-2
+      return 1;
+      
+   elseif (food == 2 and prod == 2) then -- 2-2
+      return 2;
+   
+   else -- better than 2-2
+      return 3;
+   end
+   
+   return -1;
+
+end
+
+-- Will transform a functionning tile to hill
+function toHill (x, y, cleanResource, cleanFeature)
+   if x < 0 or y < 0 then
+      __Debug("toHill: invalid index", x, y)
+      return -1;
+   end
+   
+   __Debug("Transforming this tile to hill:", x, y);
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   local plot = Map.GetPlot(x, y)
+   local terrain = mapTerrainCode[xIndex][yIndex];
+   
+   if cleanResource then
+      ResourceBuilder.SetResourceType(plot, -1);
+      mapResourceCode[xIndex][yIndex] = -1;
+   end
+   
+   if cleanFeature then
+      TerrainBuilder.SetFeatureType(plot, -1);
+      mapFeatureCode[xIndex][yIndex] = -1;
+   end
+   
+   TerrainBuilder.SetTerrainType(plot, terrain + 1);
+   mapTerrainCode[xIndex][yIndex] = mapTerrainCode[xIndex][yIndex] + 1;
+   
+   local feature = plot:GetFeatureType();
+   local terrain = plot:GetTerrainType();
+   local resource = plot:GetResourceType();
+   --local isCoastal = false;
+   local food = plot:GetYield(g_YIELD_FOOD);
+   local prod = plot:GetYield(g_YIELD_PRODUCTION);
+   local gold = plot:GetYield(g_YIELD_GOLD);
+   local science = plot:GetYield(g_YIELD_SCIENCE);
+   local culture = plot:GetYield(g_YIELD_CULTURE);
+   local faith = plot:GetYield(g_YIELD_FAITH);
+   
+   
+   mapTerrainCode[xIndex][yIndex] = terrain;
+   mapResourceCode[xIndex][yIndex] = resource;
+   mapFeatureCode[xIndex][yIndex] = feature;
+
+   --- strategics are not visible at start, but the game would count their stat anyway
+   if (resource == 40 or resource == 43) then
+      science = science - 1;
+   elseif resource == 41 then
+      prod = prod - 2;
+   elseif (resource == 42 or resource == 44) then
+      prod = prod - 1;
+      food = food - 1;
+   elseif resource == 45 then
+      prod = prod - 3;
+   elseif resource == 46 then
+      prod = prod - 2; 
+   end
+   
+   mapFoodYield[xIndex][yIndex] = food;
+   mapProdYield[xIndex][yIndex] = prod;
+   mapGoldYield[xIndex][yIndex] = gold;
+   mapScienceYield[xIndex][yIndex] = science;
+   mapCultureYield[xIndex][yIndex] = culture;
+   mapFaithYield[xIndex][yIndex] = faith;
+   
+   local twoTwo = twoTwoScore(x, y);
+   
+   mapTwoTwo[xIndex][yIndex] = twoTwo;
+   
+   if (twoTwo >= 2) then
+      return 2;
+   end
+   
+   return 1;
+
+end
+
+function giveHills(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, hillDiff)
+
+   local okToHilIndex = 0;
+   local okToHilBkpIndex = 0;
+   
+   local givenTwoTwo = 0;
+   
+
+   for i = 1, hillDiff do
+      if okToHilIndex < okToHillCount then
+         okToHilIndex = okToHilIndex + 1;
+         
+         local returnValue = toHill(okToHill[okToHilIndex][1], okToHill[okToHilIndex][2], false, false);
+         
+         if (returnValue >= 2) then
+            print("improved true tile, now a TWO TWO", okToHill[okToHilIndex][1], okToHill[okToHilIndex][2]);
+            givenTwoTwo = givenTwoTwo + 1;
+         else
+            print("improved true tile", okToHill[okToHilIndex][1], okToHill[okToHilIndex][2]);
+         end
+
+      elseif okToHilBkpIndex < okToHillBkpCount then
+         okToHilBkpIndex = okToHilBkpIndex + 1;
+         
+         toHill(okToHillBkp[okToHilBkpIndex][1], okToHillBkp[okToHilBkpIndex][2], true, true);
+         
+         print("improved backup tile", okToHillBkp[okToHilBkpIndex][1], okToHillBkp[okToHilBkpIndex][2]);
+      else
+         print("Warning, not enough tiles to improve !!");
+      end
+   end
+   
+   return givenTwoTwo;
+
+end
+
+function changePlot(x, y, targetTerrain, targetResource, targetFeature)
+   
+   if (x < 0 or y < 0) then
+      return -1;
+   end
+   
+   local plot = Map.GetPlot(x, y);
+   
+   if plot == nil then
+      return -1;
+   end
+   
+   if (targetTerrain >= 0) then
+      TerrainBuilder.SetTerrainType(plot, targetTerrain);
+   end
+   
+   if (targetResource >= -1) then
+      ResourceBuilder.SetResourceType(plot, targetResource, 1);
+   end
+   
+   if (targetFeature >= -1) then
+      TerrainBuilder.SetFeatureType(plot, targetFeature, 1);
+   end
+   
+   return 0;
+   
+end
+
+function toTwoTwo(x, y, canStone, canSheep, canBanana)
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+
+--   local plot = Map.GetPlot(x, y);
+   local terrain = mapTerrainCode[xIndex][yIndex];
+   local resource = mapResourceCode[xIndex][yIndex];
+   local feature = mapFeatureCode[xIndex][yIndex];
+   
+   local clearResource = false;
+   local clearFeature = false;
+   
+   --- we'll have clear the resource if it does not belong to the list
+   if (resource ~= 0 and resource ~= 4 and resource ~= 7 and resource ~= 8 and resource ~= 11
+          and resource ~= 14 and resource ~= 15 and resource ~= 16 and resource ~= 4 and resource ~= 19 and resource ~= 25
+           and resource ~= 27 and resource ~= 33) then
+      cleanResource = true;
+   end
+   
+   if (feature ~= 2 and feature ~= 3) then
+      cleanFeature = true;
+   end
+   
+   local rng = TerrainBuilder.GetRandomNumber(100,"test")/100
+   local canRainforest = true;
+   
+   if MapConfiguration.GetValue("MAP_SCRIPT") ~= "Tilted_Axis.lua" then
+      if y > mapYSize * 0.75 or y < mapYSize * 0.25 then -- too close to pole for rainforest
+         canRainforest = false;
+      end
+   end
+   
+   -- if -2, means don't touch the resource
+   local targetResource = -2;
+   local targetTerrain = -2;
+   local targetFeature = -2;
+   
+   if (terrain == 1) then -- grassland Hill, only a few cases here
+   
+      if (resource == 15 or resource == 16 or resource == 25 or resource == 27) then -- resources that can be with forest
+         targetFeature = 3;
+         print("Adding forest to tile", x, y);
+         
+      else -- resource that can't be turned to two-two
+         if (canStone) then
+            if (rng >= 0.5) then -- add stone
+               targetResource = 8;
+               targetFeature = -1;
+               
+               print("Turning to 2-2 hill stone", x, y);
+            else -- add forest
+               targetFeature = 3;
+               targetResource = -1;
+               print("Turning to 2-2 hill forest", x, y);
+               
+            end
+         else -- forest only
+            targetFeature = 3;
+            targetResource = -1;
+            print("Turning to 2-2 hill forest", x, y);
+            
+         end
+      end
+      
+   elseif (terrain == 0) then --grassland
+   
+      targetResource = 4;
+      targetFeature = 3;
+      print("Turning to 2-2 forest - deer", x, y);
+      
+   elseif (terrain == 4) then --plain hill
+      if canRainforest then
+         if (resource == 12 or resource == 14 or resource == 15 or resource == 19 or resource == 25) then -- resources that can be with rainforest
+            targetFeature = 2;
+         else
+            if canSheep then
+               if (rng >= 0.5) then -- add sheep
+                  targetResource = 7;
+                  targetFeature = -1;
+                  print("Turning to 2-2 plain hill sheep", x, y);
+                  
+               else --rainforest
+                  targetResource = -1;
+                  targetFeature = 2;
+                  print("Turning to 2-2 plain hill rainforest", x, y);
+               end
+            else
+               --rainforest
+               targetResource = -1;
+               targetFeature = 2;
+               print("Turning to 2-2 plain hill rainforest", x, y);
+            end
+         end
+         
+      else -- close to pole, can only sheep
+         if canSheep then
+            targetResource = 7;
+            targetFeature = -1;
+            print("Turning to 2-2 plain hill sheep", x, y);
+         else
+            print("I can't either sheep nor rainforest, error", x, y);
+            return -1;
+         end
+      end
+   elseif (terrain == 3) then -- flat plain
+      -- We need to turn the tile to hill to provide a two two
+      if canRainforest then
+         if (resource == 12 or resource == 14 or resource == 15 or resource == 19 or resource == 25) then -- resources that can be with rainforest
+            targetFeature = 2;
+            targetTerrain = 4;
+         else
+            if canSheep then
+               if (rng >= 0.5) then -- add sheep
+                  targetResource = 7;
+                  targetFeature = -1;
+                  targetTerrain = 4;
+                  print("Turning to 2-2 plain hill sheep", x, y);
+                  
+               else --rainforest
+                  targetResource = -1;
+                  targetFeature = 2;
+                  targetTerrain = 4;
+                  print("Turning to 2-2 plain hill rainforest", x, y);
+               end
+            else
+               --rainforest
+               targetResource = -1;
+               targetFeature = 2;
+               targetTerrain = 4;
+               print("Turning to 2-2 plain hill rainforest", x, y);
+            end
+         end
+         
+      else -- close to pole, can only sheep
+         if canSheep then
+            targetResource = 7;
+            targetFeature = -1;
+            targetTerrain = 4;
+            print("Turning to 2-2 plain hill sheep", x, y);
+         else
+            print("I can't either sheep nor rainforest, error", x, y);
+            return -1;
+         end
+      end
+   end
+   
+   return changePlot(x, y, targetTerrain, targetResource, targetFeature);
+   
+
+end
+
+function giveTwoTwos(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, missingTwoTwo)
+
+   local okToHilIndex = 0;
+   local okToHilBkpIndex = 0;
+   
+   local i = 0;
+   
+   while i < missingTwoTwo do
+   
+       if okToHilIndex < okToHillCount then
+         okToHilIndex = okToHilIndex + 1;
+         
+         local x = okToHill[okToHilIndex][1];
+         local y = okToHill[okToHilIndex][2];
+         
+         local xIndex = x + 1;
+         local yIndex = y + 1;
+         
+         
+         if (mapTwoTwo[xIndex][yIndex] < 2) then -- not a two two
+            toTwoTwo(x, y);
+            print("TWO TWO improved tile", x, y);
+            i = i + 1;
+         end
+
+      elseif okToHilBkpIndex < okToHillBkpCount then
+         okToHilBkpIndex = okToHilBkpIndex + 1;
+         i = i + 1;
+         
+         local x = okToHillBkp[okToHilBkpIndex][1];
+         local y = okToHillBkp[okToHilBkpIndex][2];
+         
+         local xIndex = x + 1;
+         local yIndex = y + 1;
+
+         toTwoTwo(x, y);
+         print("TWO TWO improved tile", x, y);
+      else
+         print("Two two: warning, not enough tiles to improve !!");
+         return;
+      end
+   end
+
+end
+
 -----------------------------------------------------------------------------------------------------------------------------------
 
 function BBS_Script()
 	print ("Initialization Balancing Spawn", os.date("%c"))
+   print ("test autre scrip", CS_CS_MIN_DISTANCE);
 	
 	local currentTurn = Game.GetCurrentGameTurn();
 	eContinents	= {};
@@ -133,6 +575,16 @@ function BBS_Script()
 		local sea_level = MapConfiguration.GetValue("sea_level")
 		local rainfall = MapConfiguration.GetValue("rainfall");
 		world_age = MapConfiguration.GetValue("world_age");
+      if (world_age == 1) then -- new
+         spawnHills = 0.5;
+      else
+         spawnHills = 0.35;
+      end
+      
+      if (MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua") then
+         spawnHills = 0.7;
+      end
+      
 		local ridge = MapConfiguration.GetValue("BBSRidge");
 		print ("Init: Map Size: ", mapSize, "2 = Small, 5 = Huge");
 		print ("Context",GameConfiguration.IsAnyMultiplayer())
@@ -313,7 +765,135 @@ function BBS_Script()
 		
 
 		print ("Initialization - Completed", os.date("%c"))
+      
+      
+      ---- REMOVING COASTAL MOUNTAINS -----
+      for i = 1, majorCount do
+         local player = majorAll[i];
+         local spawnX = player.spawnX;
+         local spawnY = player.spawnY;
+         
+         for j = 1, 5 do
+            local list = getRing(spawnX, spawnY, j, mapXSize, mapYSize, mapIsRoundWestEast);
+            
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               
+               local xIndex = x + 1;
+               local yIndex = y + 1;
+               
+               if (mapTerrainCode[xIndex][yIndex] % 3 == 2 and mapNextToWater[xIndex][yIndex]) then
+                  local plot = Map.GetPlot(x, y);
+                  print("Mountain work X: ", x, "Y: ", y, "Removing coastal mountain");
+                  mountainToHill(plot);
+               end
+               
+            end
+            
+         end
 
+      end
+      
+      
+      -------------------------------
+
+       ---- LARGE SPAWN CORRECTION -----
+      ---- Here we will ensure that all player receive a decent amount of hills/two-twos ---
+      ----------------------------
+      
+      -- With 12 distance, we are going to fix up to ring 7
+      local fixedRing = math.floor((Major_Distance_Target / 2) + 1);
+      
+      print("Major count", majorCount);
+      
+      for i = 1, majorCount do
+         local player = majorAll[i];
+         local spawnX = player.spawnX;
+         local spawnY = player.spawnY;
+         print("-----------------");
+         print("Player", player.civName);
+         print("-----------------");
+         
+         local missingHills = 0;
+         local missingTwoTwo = 0;
+         
+         for j = 3, fixedRing do
+         
+            local okToHill = {};
+            local okToHillCount = 0;
+            
+            local okToHillBkp = {}; -- use as failback: will need to remove resource
+            local okToHillBkpCount = 0;
+            
+            local hillCount = 0;
+            local twoTwoCount = 0;
+            local plainGrasslandTile = 0; -- this tile is workable
+            
+            
+            
+            local list = getRing(spawnX, spawnY, j, mapXSize, mapYSize, mapIsRoundWestEast);
+            
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               
+               local xIndex = x + 1;
+               local yIndex = y + 1;
+               
+               if mapTwoTwo[xIndex][yIndex] >= 2 then
+                  twoTwoCount = twoTwoCount + 1;
+               end
+               
+               if (mapTerrainCode[xIndex][yIndex] == 0 or mapTerrainCode[xIndex][yIndex] == 1 or mapTerrainCode[xIndex][yIndex] == 3
+                      or mapTerrainCode[xIndex][yIndex] == 4) then -- we are looking at plain/grassland only
+                  plainGrasslandTile = plainGrasslandTile + 1;
+                  if (mapTerrainCode[xIndex][yIndex] == 4 or mapTerrainCode[xIndex][yIndex] == 1) then
+                     hillCount = hillCount + 1;
+                  end
+               end
+               
+               local hillReturn = isHillAble(x, y);
+               if hillReturn == 1 then
+                  table.insert(okToHill, {x, y});
+                  okToHillCount = okToHillCount + 1;
+               elseif hillReturn == 0 then
+                  table.insert(okToHillBkp, {x, y});
+                  okToHillBkpCount = okToHillBkpCount + 1;
+               end
+            end
+            
+            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo);
+            local aimedHills =  math.floor(plainGrasslandTile * spawnHills);
+            
+            print("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
+            print("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
+            print("Ring ", j, "Workable tiles", plainGrasslandTile);
+            
+            local hillDiff = aimedHills - hillCount;
+            local twotwoDiff = aimedTwoTwo - twoTwoCount;
+            
+            if (hillDiff > 0) then
+               missingHills = missingHills + hillDiff;
+            end
+            
+            if (twotwoDiff > 0) then
+               missingTwoTwo = missingTwoTwo + twotwoDiff;
+            end
+            
+            okToHill = GetShuffledCopyOfTable(okToHill);
+            okToHillBkp = GetShuffledCopyOfTable(okToHillBkp);
+            
+            local givenTwoTwos = giveHills(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, hillDiff)
+            
+            twotwoDiff = twotwoDiff - givenTwoTwos;
+            
+            giveTwoTwos(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, twotwoDiff)
+            
+         end
+         
+         print("Missing", missingTwoTwo, "Two-twos and ", missingHills, "hills");
+      end
 
 		--------------------------------------------------------------------------------------
 		-- Terrain Balancing - Init
@@ -429,6 +1009,11 @@ function BBS_Script()
 
         print("---");
         print("--- End debug information ---");
+        
+     
+      
+      -----------------
+      
 		-- Fix lack of freshwater
 		--[[
 		for i = 1, major_count do
@@ -885,7 +1470,7 @@ function BBS_Script()
       ---
       ---
       --- - Oil is completely excluded and remains untouched
-      ---   Oil provides adjacency, nice production bonus and strategics, but is unlocky way too late to be taken into account for start balance
+      ---   Oil provides adjacency, nice production bonus and strategics, but is unlocked way too late to be taken into account for start balance
       ------------------------------------------------------------------------
       
 		-- Fix improper reef and ice placement in coastal start
@@ -1503,6 +2088,25 @@ function BBS_Script()
 				print ("BBS Script - Completed", os.date("%c"), "Player", i,Locale.Lookup(PlayerConfigurations[major_table[i]]:GetPlayerName()) ,"Food adjustement:", (tempEval[5]-majList[i].food_adjust), "Production adjustement:", (tempEval[6]-majList[i].prod_adjust) );
 				print ("S1-S2-S3:", majList[i].best_tile, majList[i].best_tile_2,majList[i].best_tile_3,"I1-I2:",majList[i].best_tile_inner,majList[i].best_tile_inner_2,"2:2 Base?",majList[i].isBase22)
 			end
+         
+         --- ETHIOPIA HILL FIX
+         
+         if (majList[i] ~= nil and majList[i].leader == "LEADER_MENELIK" ) then
+            local x = majList[i].plotX;
+            local y = majList[i].plotY;
+            
+            local plot = Map.GetPlot(x, y);
+            local terrain = plot:GetTerrainType();
+            local feature = plot:GetFeatureType();
+            
+            if terrain % 3 ~= 1 then -- not a hill
+               TerrainBuilder.SetTerrainType(plot, 1); -- granting grassland hill
+               if feature == 2 then
+                  TerrainBuilder.SetFeatureType(plot, -1);
+               end
+               print("Fixed Ethiopian spawn to hill", x, y);
+            end
+         end
 
 		end
 		
@@ -5342,9 +5946,9 @@ function Cleaning_Coastal(player)
          
          -- We have a coastal mountain
          if (adjacentPlot:IsCoastalLand() and isMountain(adjacentPlot)) then
-            __Debug("Costal Terraforming (Step 3b) X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "found a coastal mountain",i);
+            print("Costal Terraforming (Step 3b) X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "found a coastal mountain",i);
             if (isMountainBypassable(adjacentPlot) == false and adjacentPlot:GetFeatureType() ~= g_FEATURE_VOLCANO and adjacentPlot:GetFeatureType() == -1) then
-               __Debug("Costal Terraforming (Step 3b) X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Removing non-bypassable mountain",i);
+               print("Costal Terraforming (Step 3b) X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Removing non-bypassable mountain",i);
                mountainToHill(adjacentPlot);
             end
             
