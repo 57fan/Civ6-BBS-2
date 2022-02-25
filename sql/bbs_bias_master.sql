@@ -21,12 +21,12 @@ CREATE TABLE 'StartBiasCustom' (
 -- Tier 1 = most impactful, Tier 5 = least impactful
 
 			
-INSERT OR IGNORE INTO StartBiasNegatives
-		(CivilizationType,							FeatureType,						Tier)
-		VALUES		
-		('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS',					5),		
-		('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS_PLAINS',			5),
-		('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS_GRASSLAND',		5);
+--INSERT OR IGNORE INTO StartBiasNegatives
+	--	(CivilizationType,							FeatureType,						Tier)
+	--	VALUES		
+	--	('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS',					5),		
+	--	('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS_PLAINS',			5),
+	--	('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS_GRASSLAND',		5);
 
 INSERT OR IGNORE INTO StartBiasCustom
 		(CivilizationType,							CustomPlacement)

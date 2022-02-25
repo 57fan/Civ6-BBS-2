@@ -373,7 +373,7 @@ end
 --- New vars ---
 
 local CS_PLAYERS_MIN_DISTANCE = 7;
-local CS_CS_MIN_DISTANCE = 5;
+local CS_CS_MIN_DISTANCE = 6;
 
 mapIsRoundWestEast = true;
 local isIslandMap = false;

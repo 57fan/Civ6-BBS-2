@@ -7,13 +7,13 @@
 -- Tier 1 = most impactful, Tier 5 = least impactful
 
 			
-INSERT OR IGNORE INTO StartBiasNegatives
-		(CivilizationType,							FeatureType,						Tier)
-		VALUES	
-		('CIVILIZATION_SWEDEN',						'FEATURE_JUNGLE',					5),	
-		('CIVILIZATION_HUNGARY',					'FEATURE_FLOODPLAINS',				3),		
-		('CIVILIZATION_HUNGARY',					'FEATURE_FLOODPLAINS_PLAINS',		3),
-		('CIVILIZATION_HUNGARY',					'FEATURE_FLOODPLAINS_GRASSLAND',	3);
+--INSERT OR IGNORE INTO StartBiasNegatives
+		--(CivilizationType,							FeatureType,						Tier)
+		--VALUES	
+		--('CIVILIZATION_SWEDEN',						'FEATURE_JUNGLE',					5),	
+		--('CIVILIZATION_HUNGARY',					'FEATURE_FLOODPLAINS',				3),		
+		--('CIVILIZATION_HUNGARY',					'FEATURE_FLOODPLAINS_PLAINS',		3),
+		--('CIVILIZATION_HUNGARY',					'FEATURE_FLOODPLAINS_GRASSLAND',	3);
 
 --INSERT OR IGNORE INTO StartBiasNegatives
 		--(CivilizationType,							TerrainType,						Tier)
