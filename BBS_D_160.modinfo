@@ -13,16 +13,16 @@
 	
 		<LocalizedText>
 		<Text id="LOC_BBS_TITLE">
-			<en_US>Better Balanced Starts 1.7.0</en_US>
-			<fr_FR>Better Balanced Starts 1.7.0</fr_FR>
+			<en_US>Better Balanced Starts 2.0.0 APLHA</en_US>
+			<fr_FR>Better Balanced Starts 2.0.0 ALPHA</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_TEASER">
 			<en_US>Balanced spawn placement for tournaments.</en_US>
             <fr_FR>Mod d'equilibrage de placement de joueurs pour tournois.</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_DESCRIPTION">
-			<en_US>Balance spawn locations for Multiplayer.[NEWLINE][NEWLINE]Players would be placed according to their civilizations biases while considering minimum distances.[NEWLINE][NEWLINE]Yields accross spawn locations are balanced so players can have a leveled playing fields.</en_US>
-            <fr_FR>Mod d'equilibrage de placement de joueurs pour tournois.[NEWLINE][NEWLINE]Les joueurs seront places en fonction des biais de leur civilization et en maintenant des distances minimales entre les joueurs.[NEWLINE][NEWLINE]Les ressources situees sur les spawns seront equilibrees pour permettre aux joueurs d'avoir les meme chances.</fr_FR>
+			<en_US>!!! ALPHA VERSION !!!Balance spawn locations for Multiplayer.[NEWLINE][NEWLINE]Players would be placed according to their civilizations biases while considering minimum distances.[NEWLINE][NEWLINE]Yields accross spawn locations are balanced so players can have a leveled playing fields.</en_US>
+            <fr_FR>!!! VERSION ALPHA, n'utiliser qu'en connaissance de cause !!! Mod d'equilibrage de placement de joueurs pour tournois.[NEWLINE][NEWLINE]Les joueurs seront places en fonction des biais de leur civilization et en maintenant des distances minimales entre les joueurs.[NEWLINE][NEWLINE]Les ressources situees sur les spawns seront equilibrees pour permettre aux joueurs d'avoir les meme chances.</fr_FR>
 		</Text>
 	</LocalizedText>
 	
