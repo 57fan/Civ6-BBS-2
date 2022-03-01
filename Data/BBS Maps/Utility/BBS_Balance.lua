@@ -887,8 +887,8 @@ function BBS_Script()
                end
             end
             
-            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo + 0.5);
-            local aimedHills =  math.floor(plainGrasslandTile * spawnHills + 0.5);
+            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo + 1);
+            local aimedHills =  math.floor(plainGrasslandTile * spawnHills + 1);
             
             print("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
             print("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
