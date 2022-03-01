@@ -386,7 +386,7 @@ local rtsModeActive = false;
 local midLandIndex = 0;
 local RTS_BUFFER_ZONE = 3;
 local RTS_SIM_BUFFER = 15;
-local RTS_WAR_LIMIT = 15;
+local RTS_WAR_LIMIT = 12;
 
 
 -----------------------------
@@ -1484,7 +1484,7 @@ local islandSize = {};
 local MIN_ISLAND_SIZE_STANDARD = 35;
 
 --- Minimal size of an island in case of "naval map" (ex:islands, continent and islands, small continent)
-local MIN_ISLAND_SIZE_WATER = 10;
+local MIN_ISLAND_SIZE_WATER = 20;
 
 function labelIslands(mapXSize, mapYSize, mapIsRoundWestEast)
 
@@ -1524,7 +1524,7 @@ function recursiveLabelIslands(x, y, mapXSize, mapYSize, mapIsRoundWestEast, isl
    local xIndex = x + 1;
    local yIndex = y + 1;
    
-   ___Debug("recursive island", x, y)
+   --___Debug("recursive island", x, y)
    
    if (mapTerrainCode[xIndex][yIndex] < 15 and islandLabels[xIndex][yIndex] == 0) then
       islandLabels[xIndex][yIndex] = islandIndex;
@@ -2312,7 +2312,7 @@ function NewBBS(instance)
    --    - Spawn on Oasis (unsettleable) or mountain or water (except Maori of course)
    --    - Spawn Ring 3 of a natural wonder (any wonder)
    --    - Spawn on an island deemed too small (see MIN_ISLAND_SIZE_STANDARD and MIN_ISLAND_SIZE_WATER)
-   --    - Spawn on a tile with 4 or more "unusable" tiles (water and/or mountains)
+   --    - Spawn on a tile with 3 or more "unusable" tiles (water and/or mountains)
    --    - Too many unusable tiles around the spawn (Ring 3)
    
    
@@ -2496,6 +2496,14 @@ function NewBBS(instance)
             end
             
             list = getRing(i, j, 3, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
+            
+            list = getRing(i, j, 4, mapXSize, mapXSize, mapIsRoundWestEast);
             for _, element in ipairs(list) do
                local x = element[1];
                local y = element[2];
@@ -3519,6 +3527,16 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
    local player = majorAll[currentIndex];
    local triedTiles = 0; -- Amount of valid tiles that were tried by the system
    
+   if (rtsModeActive) then --resetting indexes as some might have been ditched due to RTS parameters
+      deepOceanIndex = 0;
+      midOceanIndex = 0;
+      coastalWaterIndex = 0;
+      standardWaterIndex = 0;
+      standardCoastIndex = 0;
+      standardNoWaterIndex = 0;
+   end
+   
+   ___Debug("Placing player", player.civName, player.teamID);
    
    
    if (player.biasScore == 0) then -- Ocean civ
@@ -3579,6 +3597,9 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
          if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
             return false;
          end
+         
+         local x = midOcean[i][1];
+         local y = midOcean[i][2];
          
          local isrtsCorrect = false;
          
@@ -3693,7 +3714,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -3739,7 +3764,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -3786,7 +3815,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -3834,7 +3867,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -3879,7 +3916,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -3924,7 +3965,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -3970,7 +4015,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -4015,7 +4064,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -4060,7 +4113,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- it will decide where its team spawns
                if eastTeamID == -1 then
                   if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
+                     if (player.teamID == 0) then
+                        eastTeamID = 1;
+                     else
+                        eastTeamID = 0;
+                     end
                   else -- you are East
                      eastTeamID = player.teamID;
                   end
@@ -4110,7 +4167,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   -- it will decide where its team spawns
                   if eastTeamID == -1 then
                      if x < midLandIndex then -- you are west
-                        eastTeamID = 0;
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
                      else -- you are East
                         eastTeamID = player.teamID;
                      end
@@ -4158,7 +4219,11 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   -- it will decide where its team spawns
                   if eastTeamID == -1 then
                      if x < midLandIndex then -- you are west
-                        eastTeamID = 0;
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
                      else -- you are East
                         eastTeamID = player.teamID;
                      end
@@ -4206,11 +4271,18 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   -- it will decide where its team spawns
                   if eastTeamID == -1 then
                      if x < midLandIndex then -- you are west
-                        eastTeamID = 0;
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
                      else -- you are East
                         eastTeamID = player.teamID;
                      end
                   end
+                  
+                  
+                  
                   
                   isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
                end
@@ -5872,10 +5944,10 @@ function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
       local y = element[2];
       
       if (mapTerrainCode[x + 1][y + 1] == 15 and mapLake[x + 1][y + 1] == false) then
-         ___Debug("Ceci n'est pas un lac", x, y);
+         --___Debug("Ceci n'est pas un lac", x, y);
          return true;
       else
-         ___Debug("Ceci est de la terre ou un lac", x, y);
+         --___Debug("Ceci est de la terre ou un lac", x, y);
       end
    end
    

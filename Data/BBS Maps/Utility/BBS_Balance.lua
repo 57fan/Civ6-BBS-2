@@ -81,7 +81,7 @@ local COASTAL_LEADERS = {"LEADER_VICTORIA", "LEADER_HOJO", "LEADER_DIDO"};
 
 ------ New Vars ------
 
-local spawnTwoTwo = 0.2
+local spawnTwoTwo = 0.15
 local spawnHills = 0.5
 
 -------------
@@ -576,13 +576,18 @@ function BBS_Script()
 		local rainfall = MapConfiguration.GetValue("rainfall");
 		world_age = MapConfiguration.GetValue("world_age");
       if (world_age == 1) then -- new
-         spawnHills = 0.5;
+         spawnHills = 0.45;
       else
-         spawnHills = 0.35;
+         spawnHills = 0.30;
       end
       
       if (MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua") then
          spawnHills = 0.7;
+      end
+      
+      if (MapConfiguration.GetValue("MAP_SCRIPT") == "Lakes.lua") then
+         spawnHills = 0.25;
+         spawnTwoTwo = 0.07;
       end
       
 		local ridge = MapConfiguration.GetValue("BBSRidge");
@@ -773,17 +778,30 @@ function BBS_Script()
          local spawnX = player.spawnX;
          local spawnY = player.spawnY;
          
+         --__Debug("player", i, spawnX, spawnY);
+         
+         if spawnX < 0 or spawnY < 0 then
+            print("invalid spawn, won't apply hill removal");
+            break;
+         end
+         
          for j = 1, 5 do
             local list = getRing(spawnX, spawnY, j, mapXSize, mapYSize, mapIsRoundWestEast);
             
+            --__Debug("----list", j);
+            
             for _, element in ipairs(list) do
+               
                local x = element[1];
                local y = element[2];
+               
+               --__Debug("----element", x, y);
                
                local xIndex = x + 1;
                local yIndex = y + 1;
                
                if (mapTerrainCode[xIndex][yIndex] % 3 == 2 and mapNextToWater[xIndex][yIndex]) then
+                  __Debug(x, y)
                   local plot = Map.GetPlot(x, y);
                   print("Mountain work X: ", x, "Y: ", y, "Removing coastal mountain");
                   mountainToHill(plot);
@@ -795,7 +813,7 @@ function BBS_Script()
 
       end
       
-      
+      __Debug("sorti montagnes")
       -------------------------------
 
        ---- LARGE SPAWN CORRECTION -----
@@ -811,6 +829,12 @@ function BBS_Script()
          local player = majorAll[i];
          local spawnX = player.spawnX;
          local spawnY = player.spawnY;
+         
+         if spawnX < 0 or spawnY < 0 then
+            print("invalid spawn, won't apply spawn correction");
+            break;
+         end
+         
          print("-----------------");
          print("Player", player.civName);
          print("-----------------");
@@ -863,8 +887,8 @@ function BBS_Script()
                end
             end
             
-            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo);
-            local aimedHills =  math.floor(plainGrasslandTile * spawnHills);
+            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo + 0.5);
+            local aimedHills =  math.floor(plainGrasslandTile * spawnHills + 0.5);
             
             print("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
             print("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
@@ -9722,5 +9746,5 @@ end
 
 -----------------------------------------------------------------------------
 function __Debug(...)
-    --print (...);
+    print (...);
 end
