@@ -372,8 +372,8 @@ end
 
 --- New vars ---
 
-local CS_PLAYERS_MIN_DISTANCE = 7;
-local CS_CS_MIN_DISTANCE = 6;
+local CS_PLAYERS_MIN_DISTANCE = 8;
+local CS_CS_MIN_DISTANCE = 8;
 
 mapIsRoundWestEast = true;
 local isIslandMap = false;
@@ -3315,18 +3315,31 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
    end
   
    
+   
    for i = 1, 10 do
+   
+      local CSDistance = CS_CS_MIN_DISTANCE;
       
-      print("Place CS: Attempt n°", i, "Distance:", distance);
+      if i >= 8 then
+         CSDistance = CSDistance - 3;
+      elseif i >= 6 then
+         CSDistance = CSDistance - 2;
+      elseif i >= 4 then
+         CSDistance = CSDistance - 1;
+      end
+      
+      print("Place CS: Attempt n°", i, "Distance:", CSDistance);
       
       standardNoWaterIndex = 0;
       standardWaterIndex = 0;
       standardCoastIndex = 0;
       trashTilesIndex = 0;
       
+      
+      
       shuffleListsCS();
       
-      local csPlacement = recursiveCSPlacement(minorAll, minorCount, 1, CSproximityMap, mapXSize, mapYSize, mapIsRoundWestEast)
+      local csPlacement = recursiveCSPlacement(minorAll, minorCount, 1, CSproximityMap, CSDistance, mapXSize, mapYSize, mapIsRoundWestEast)
       
       if (csPlacement) then
          ___Debug("All the CS were placed !");
@@ -3351,7 +3364,7 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
 end
 
 
-function recursiveCSPlacement(minorAll, minorCount, currentIndex, CSProximityMap, mapXSize, mapYSize, mapIsRoundWestEast)
+function recursiveCSPlacement(minorAll, minorCount, currentIndex, CSProximityMap, CSDistance, mapXSize, mapYSize, mapIsRoundWestEast)
 
    local player = minorAll[currentIndex];
    local triedTiles = 0; -- Amount of valid tiles that were tried by the system
@@ -3373,9 +3386,9 @@ function recursiveCSPlacement(minorAll, minorCount, currentIndex, CSProximityMap
          end
          
          triedTiles = triedTiles + 1;
-         local newMap = setPlayerProximity(CSProximityMap, mapXSize, mapYSize, CS_CS_MIN_DISTANCE, x, y, mapIsRoundWestEast);
+         local newMap = setPlayerProximity(CSProximityMap, mapXSize, mapYSize, CSDistance, x, y, mapIsRoundWestEast);
 
-         if (recursiveCSPlacement(minorAll, minorCount, currentIndex + 1, newMap, mapXSize, mapYSize, mapIsRoundWestEast)) then
+         if (recursiveCSPlacement(minorAll, minorCount, currentIndex + 1, newMap, CSDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
             player.spawnX = x;
             player.spawnY = y;
             return true; -- all next players have been placed successfuly !

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="170">
+<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2001">
 	<Properties>
 	    <Name>LOC_BBS_TITLE</Name>
 		<Description>LOC_BBS_DESCRIPTION</Description>
 		<Created>1</Created>
 		<Teaser>LOC_BBS_TEASER</Teaser>
-		<Authors>D. / Jack The Narrator</Authors>
+		<Authors>57F@n, D. / Jack The Narrator</Authors>
 		<SpecialThanks>Civfanatics.com, CPL, CivFR, 57 Fan, Wazabaza , iElden, Deliverator, VonHolio, Braizh, Kilua, Gedemon, Je, EvilVictor, StormingRomans, Ben</SpecialThanks>
 		<CompatibleVersions>1.2,2.0</CompatibleVersions>
-		<Version>168</Version>
+		<Version>2001</Version>
 	</Properties>
 	
 		<LocalizedText>

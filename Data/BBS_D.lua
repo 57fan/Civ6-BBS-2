@@ -321,7 +321,7 @@ include "MapEnums"
 --	Run spawn correction Coastal (failsafe to prevent harbor blocked by reefs) 
 --	Run Choke point analysis (prevent crashes)
 
-g_version = "1.7.0"
+g_version = "2.0.1 Alpha"
 
 -----------------------------------------------------------------------------
 function __Debug(...)
@@ -387,7 +387,7 @@ function Clean()
 							else
 							print("Error: Minor",pStartPlot_i,pStartPlot_j,i,j)
 						end
-						if (distance < 6 or distance == 6  ) or pStartPlot_i == pStartPlot_j then
+						if (distance < 5 or distance == 5  ) or pStartPlot_i == pStartPlot_j then
 							print ("Init: Minimum CPL distance rule breached");
 							-- Let's kill a CS to ensure the game is within CPL rules
 							local playerUnits = {};

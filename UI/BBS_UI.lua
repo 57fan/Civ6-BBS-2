@@ -1,4 +1,4 @@
-local g_version = "1.6"
+local g_version = "2.0.1 ALPHA"
 
 -------------------------------------------------------------------------------
 print("-------------- BBS UI v"..g_version.." -D- Init --------------")
@@ -11,7 +11,7 @@ function OnLocalPlayerTurnBegin()
 	end
 	if Game.GetCurrentGameTurn() == GameConfiguration.GetStartTurn() then
 		print("BBS UI Welcome")
-		local message = "BBS #"..GetLocalModVersion("c88cba8b-8311-4d35-90c3-51a4a5d6654f").." loaded succesfully!"
+		local message = "BBS #"..GetLocalModVersion("c88cba8b-8311-4d35-90c3-51a4a5d66550").." loaded succesfully!"
 		
 
 		if (Game:GetProperty("BBS_RESPAWN") == false) then
