@@ -1,5 +1,5 @@
  ------------------------------------------------------------------------------
---	FILE:	 BBS_Balance.lua 2.0.1 ALPHA
+--	FILE:	 BBS_Balance.lua 2.0.2 BETA
 --	AUTHOR:  D. / Jack The Narrator, 57Fan
 --	PURPOSE: Rebalance the map spawn post placement 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2125,7 +2125,7 @@ function BBS_Script()
             
             if terrain % 3 ~= 1 then -- not a hill
                TerrainBuilder.SetTerrainType(plot, 1); -- granting grassland hill
-               if feature == 2 then
+               if (feature == 2 or feature == 5) then
                   TerrainBuilder.SetFeatureType(plot, -1);
                end
                print("Fixed Ethiopian spawn to hill", x, y);

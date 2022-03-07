@@ -3030,7 +3030,7 @@ function NewBBS(instance)
 end
 
 --]]
-local MAX_SPAWN_TRIES = 10;
+local MAX_SPAWN_TRIES = 4;
 
 
 --]]
@@ -3274,7 +3274,8 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
          
       print("Attempt n°", i, "Distance:", distance);
    
-      if(recursivePlacement(majorShuffled, majorCount, 1, proximityMap, distance, mapXSize, mapYSize, mapIsRoundWestEast, -1)) then
+      if(recursivePlacement(majorShuffled, majorCount, 1, proximityMap, distance, mapXSize, mapYSize, mapIsRoundWestEast, -1, standardWaterIndex, standardCoastIndex,
+          standardNoWaterIndex)) then
          print("Attempt sucessful !");
          settleSuccess = true;
          break;
@@ -3536,7 +3537,8 @@ function rtsCheck(x, y, midLandIndex, eastTeamID, playerTeamID, isTundraCiv, pla
    
 end
 
-function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)      
+function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                              standardWaterIndex, standardCoastIndex, standardNoWaterIndex)      
    local player = majorAll[currentIndex];
    local triedTiles = 0; -- Amount of valid tiles that were tried by the system
    
@@ -3594,7 +3596,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3642,7 +3645,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3691,7 +3695,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3750,7 +3755,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3800,7 +3806,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3851,7 +3858,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3903,7 +3911,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3952,7 +3961,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4001,7 +4011,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4051,7 +4062,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4100,7 +4112,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4149,7 +4162,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4203,7 +4217,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   triedTiles = triedTiles + 1;
                   local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
                      return true; -- all next players have been placed successfuly !
@@ -4255,7 +4270,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   triedTiles = triedTiles + 1;
                   local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
                      return true; -- all next players have been placed successfuly !
@@ -4310,7 +4326,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   triedTiles = triedTiles + 1;
                   local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
                      return true; -- all next players have been placed successfuly !
