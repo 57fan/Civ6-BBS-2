@@ -13,6 +13,8 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
+local bbs_version = "2.0.4"
+
 local bError_major = false;
 local bError_minor = false;
 local bError_proximity = false;
@@ -43,11 +45,83 @@ BBS_AssignStartingPlots = {};
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-    print (...);
+    --print (...);
 end
 
-------------------------------------------------------------------------------
+------------------------------------------------------------- BBS ----------------------------
 function BBS_AssignStartingPlots.Create(args)
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------- BBS", bbs_version, "------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("---------------------------- Game information --------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   print ("Init: Map Size: ", Map.GetMapSize(), "2 = Small, 5 = Huge");
+   print ("Context",GameConfiguration.IsAnyMultiplayer())
+   local gridWidth, gridHeight = Map.GetGridSize();
+   print ("Init: gridWidth:", gridWidth,"gridHeight:", gridHeight)
+   print ("Init: Climate: ", MapConfiguration.GetValue("temperature"), "1 = Hot, 2 = Standard, 3 = Cold");
+   local BBS_temp = false;
+   if (GameConfiguration.GetValue("BBStemp") ~= nil) then 
+      if (GameConfiguration.GetValue("BBStemp") == true) then
+         BBS_temp = true;
+         print ("Init: BBS Temperature: On");
+         else
+         BBS_temp = false;
+         print ("Init: BBS Temperature: Off")
+      end
+      else
+      BBS_temp = false;
+      print ("Init: BBS Temperature: Off")
+   end
+   print ("Init: Rainfall: ", MapConfiguration.GetValue("rainfall"), "1 = Dry, 2 = Standard, 3 = Humid");
+   print ("Init: World Age: ", MapConfiguration.GetValue("world_age"), "1 = New, 2 = Standard 3 = Old");
+   print ("Init: Ridge: ", MapConfiguration.GetValue("BBSRidge"), "0 = Standard, 1 = Classic, 2 = Large Open 4 = Flat Earth");
+   print ("Init: Sea Level: ", MapConfiguration.GetValue("sea_level"), "1 = Low Sea Level, 2 = Standard, 3 = High Sea Level");
+   print ("Init: Strategic Resources:",MapConfiguration.GetValue("BBSStratRes"), "0 = standard")
+   print ("Init: Resources: ", MapConfiguration.GetValue("resources"), "1 = Sparse, 2 = Standard, 3 = Abundant");
+   print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Standard, 2 = Balanced, 3 = Legendary");
+
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("--------------------------------- Players ------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   local tempMajorList = {};
+   local tempMinorList = {};
+   tempMajorList = PlayerManager.GetAliveMajorIDs();
+	tempMinorList = PlayerManager.GetAliveMinorIDs();
+   
+   for i = 1, PlayerManager.GetAliveMajorsCount() do
+      local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
+      local civName = PlayerConfigurations[tempMajorList[i]]:GetCivilizationTypeName();
+      local teamID = Players[tempMajorList[i]]:GetTeam();
+      
+      print("ID", tempMajorList[i] ,"Team:", teamID, "Civ:", civName, "Leader", leaderType);
+   end
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   print("------------------------------- City States ----------------------------------")
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   for i = 1, PlayerManager.GetAliveMinorsCount() do
+      local leaderType = PlayerConfigurations[tempMinorList[i]]:GetLeaderTypeName();
+      local civName = PlayerConfigurations[tempMinorList[i]]:GetCivilizationTypeName();
+      
+      print("ID", tempMinorList[i], "Leader", leaderType);
+      
+   end
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+--[[
 	if (GameConfiguration.GetValue("SpawnRecalculation") == nil) then
 		___Debug("BBS_AssignStartingPlots:",GameConfiguration.GetValue("SpawnRecalculation"))
 		Game:SetProperty("BBS_RESPAWN",false)
@@ -59,11 +133,12 @@ function BBS_AssignStartingPlots.Create(args)
 		Game:SetProperty("BBS_RESPAWN",false)
 		return AssignStartingPlots.Create(args)
 	end
-	
+	--]]
+   
 	if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
 		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
 	end
-	
+   
 	g_negative_bias = {}
 	
 	local info_query = "SELECT * from StartBiasNegatives";
@@ -88,14 +163,14 @@ function BBS_AssignStartingPlots.Create(args)
 	if (MapConfiguration.GetValue("MAP_SCRIPT") == "Pangaea.lua"
 	or MapConfiguration.GetValue("MAP_SCRIPT") == "Continents.lua"
 	or MapConfiguration.GetValue("MAP_SCRIPT") == "Terra.lua") then
-	print("Calculating Island Size: Start", os.date("%c"));
+	--print("Calculating Island Size: Start", os.date("%c"));
 	for iPlotIndex = 0, Map.GetPlotCount()-1, 1 do
 		local pPlot = Map.GetPlotByIndex(iPlotIndex)
 		if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
 			local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
 		end
 	end
-	print("Calculating Island Size: End", os.date("%c"));
+	--print("Calculating Island Size: End", os.date("%c"));
 	end
   -- Setting minimal distance between players
    -- It will be based on the map used and the ratio size/players (more space if map too big, less space if too small)
@@ -1891,10 +1966,11 @@ function NewBBS(instance)
 
 
    
-   print("----------- BBS BETA -------------");
-   print("----------- Starting map parsing -------------");
+   print("------------------------------------------------------------------------------")
+   print("---------------------------- Starting map parsing ----------------------------");
    print(os.date("%c"));
-   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
    
    -------------------------
    ----- PHASE 1 -----------
@@ -1960,8 +2036,8 @@ function NewBBS(instance)
       mapYSize = 78;
    end
    
-   print("size:", Map.GetMapSize());
-   print("X:", mapXSize, "Y:", mapYSize);
+   --print("size:", Map.GetMapSize());
+   --print("X:", mapXSize, "Y:", mapYSize);
    
    -- Amount of land for each column of the map.
    -- will be used to draw the "border" for East-West scenario
@@ -2112,9 +2188,10 @@ function NewBBS(instance)
             
             if(plot:IsRiver()) then
                mapRiver[iIndex][jIndex] = true;
+               mapFreshWater[iIndex][jIndex] = true;
             end
             
-            if(plot:IsFreshWater()) then
+            if(hasFreshWater(i, j, mapXSize, mapYSize, mapIsRoundWestEast)) then
                mapFreshWater[iIndex][jIndex] = true;
             end
             
@@ -2224,7 +2301,6 @@ function NewBBS(instance)
    print("------------------------");
    print(os.date("%c"));
    print("------------------------");
-   print("------------------------");
    --- find islands ---
    labelIslands(mapXSize, mapYSize, mapIsRoundWestEast);
    
@@ -2252,7 +2328,6 @@ function NewBBS(instance)
    print("------------------------");
    print(os.date("%c"));
    print("------------------------");
-   print("------------------------");
    
    ___Debug("---------------");
    ___Debug("---------------");
@@ -2262,6 +2337,23 @@ function NewBBS(instance)
    ___Debug("---------------");
    ___Debug("--- Islands map ---");
    drawMap(islandLabels, mapXSize, mapYSize);
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("--- Fresh water map ---");
+   drawMapBoolean(mapFreshWater, mapXSize, mapYSize);
    
    ___Debug("---------------");
    ___Debug("---------------");
@@ -2569,6 +2661,9 @@ function NewBBS(instance)
       end
    end
    
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------ Map General information -----------------------------")
    
    print("Amount of tiles:", tilesCount);
    print("---------------");
@@ -2598,7 +2693,10 @@ function NewBBS(instance)
    print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
    print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
    print("----------Floodplains:", floodPlainsCount);
-   print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
+   --print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
    
    
    ___Debug("---------------");
@@ -2633,7 +2731,7 @@ function NewBBS(instance)
    ---- Now, we will rate every settleable tile-----
    ----------------------
    
-   print("----------- BBS BETA -------------");
+   --print("----------- BBS BETA -------------");
    print("----------- Starting tiles scoring -------------");
    print(os.date("%c"));
    
@@ -2681,9 +2779,9 @@ function NewBBS(instance)
    tempMajorList = PlayerManager.GetAliveMajorIDs();
 	tempMinorList = PlayerManager.GetAliveMinorIDs();
    
-   print("List of civs:");
-   print("--------------");
-   print("Majors (players):");
+   --print("List of civs:");
+   --print("--------------");
+   --print("Majors (players):");
    
    for i = 1, PlayerManager.GetAliveMajorsCount() do
       local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
@@ -2951,13 +3049,13 @@ function NewBBS(instance)
                           spawnX = -1, spawnY = -1,
                           teamID = teamID, rtsFreeSim = false
                           };
-         print(i, majorAll[majorCount]);
-         print(majorAll[majorCount].index, majorAll[majorCount].civName);
+         --print(i, majorAll[majorCount]);
+         --print(majorAll[majorCount].index, majorAll[majorCount].civName);
          
          
          
       end
-      print("---------Player ", i, "Leader:", leaderType);
+      --print("---------Player ", i, "Leader:", leaderType);
    end
    
    local teamCount = 0;
@@ -2995,9 +3093,9 @@ function NewBBS(instance)
    end
    
    
-   print("--------------");
-   print("Majors (players):");
-   print("--------------");
+   --print("--------------");
+   --print("Majors (players):");
+   --print("--------------");
    
    for i = 1, PlayerManager.GetAliveMinorsCount() do
       local leaderType = PlayerConfigurations[tempMinorList[i]]:GetLeaderTypeName();
@@ -3010,7 +3108,7 @@ function NewBBS(instance)
       
       
       
-      print("---------CS ", i, "", leaderType);
+      --print("---------CS ", i, "", leaderType);
    end
    
    print("--------------");
@@ -3019,12 +3117,12 @@ function NewBBS(instance)
    --table.sort(majorAll, function(a, b) return a.biasScore > b.biasScore; end);
    
 
-   for i = 1, majorCount do
-      print("whole", majorAll[i]) 
-      if (majorAll[i] ~= nil) then
-         print("players2 ici: ", majorAll[i].civName, majorAll[i].biasScore);
-      end
-   end
+   --for i = 1, majorCount do
+      --print("whole", majorAll[i]) 
+     -- if (majorAll[i] ~= nil) then
+         --print("players2 ici: ", majorAll[i].civName, majorAll[i].biasScore);
+      --end
+   --end
    
    
    
@@ -3045,16 +3143,9 @@ function NewBBS(instance)
    print("--------------------------");
    print("--------------------------");
    print("Ended spawn evaluation");
+   print("Starting spawn assignation");
    print("--------------------------");
    print(os.date("%c"));
-   print("--------------------------");
-   print("--------------------------");
-   
-   
-   print("--------------------------");
-   print("--------------------------");
-   print("Now starting spawn assignation");
-   print("--------------------------");
    print("--------------------------");
    print("--------------------------");
    
@@ -4769,9 +4860,11 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                 
                   if (hasMaori) then
                      if (mapTerrainCode[iIndex][jIndex] == 15) then
-                        table.insert(coastalWater, {i, j});
-                        coastalWaterCount = coastalWaterCount + 1;
-                        ___Debug("Tile assigned to: Maori Coastal !");
+                        if (j <= topQuartile and j >= bottomQuartile) then
+                           table.insert(coastalWater, {i, j});
+                           coastalWaterCount = coastalWaterCount + 1;
+                           ___Debug("Tile assigned to: Maori Coastal !");
+                        end
                      else
                         local isDeepWater = true;
                         for k = 1, MAORI_LAND_DISTANCE do
@@ -4795,8 +4888,10 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                            table.insert(deepOcean, {i, j});
                            deepOceanCount = deepOceanCount + 1;
                         else
-                           table.insert(midOcean, {i, j});
-                           midOceanCount = midOceanCount + 1;
+                           if (j <= topQuartile and j >= bottomQuartile) then
+                              table.insert(midOcean, {i, j});
+                              midOceanCount = midOceanCount + 1;
+                           end
                         end
                      end
                   end
@@ -5504,7 +5599,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                            ___Debug("-- Secondary -- Tundra flat score:", score)
                         end
                         
-                        print("score tundra flat:", biasSecondaryScore);
+                        ___Debug("score tundra flat:", biasSecondaryScore);
 
                      end
                      
@@ -6151,9 +6246,21 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
    end
    
    ___Debug("For non bias civs:")
+   
    ___Debug("OK With fresh water:", standardWaterCount);
+   for j = 1, standardWaterCount do
+      ___Debug(standardWater[j][1], standardWater[j][2])
+   end
+   
    ___Debug("OK With Coastal water:", standardCoastCount);
+   for j = 1, standardCoastCount do
+      ___Debug(standardCoast[j][1], standardCoast[j][2])
+   end
+   
    ___Debug("OK With NO fresh water:", standardNoWaterCount);
+   for j = 1, standardNoWaterCount do
+      ___Debug(standardNoWater[j][1], standardNoWater[j][2])
+   end
 end
 
 
@@ -6186,7 +6293,7 @@ function getRingResource (ringStart, ringEnd, tileResource, ringResource, biases
    
    for i = 1, biasesListCount do
       if (biasesList[i] == tileResource) then
-         print("biases:", biasesList[i]);
+         --print("biases:", biasesList[i]);
          count = count + 1;
       end
    end
@@ -6208,7 +6315,7 @@ function getRingFeature (ringStart, ringEnd, tileFeature, ringFeature, biasesLis
    
    for i = 1, biasesListCount do
       if (biasesList[i] == tileFeature) then
-         print("biases:", biasesList[i]);
+         --print("biases:", biasesList[i]);
          count = count + 1;
       end
    end
@@ -6308,10 +6415,39 @@ function isNextToWaterTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
    return false;
 end
 
+-- Recoded because of firaxis issue
+function hasFreshWater (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
+   -- the tile is water, no sense to evaluate
+   if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
+      ___Debug("out direct")
+      return false;
+   end
+   
+   local plot = Map.GetPlot(xStart , yStart);
+   
+   if plot:IsRiver() then
+      return true;
+   end
+   
+   local ring1 = getRing(xStart, yStart, 1, xSize, ySize, mapIsRoundWestEast);
+   for _, element in ipairs(ring1) do
+      local x = element[1];
+      local y = element[2];
+      
+      local tempPlot = Map.GetPlot(x, y);
+      if tempPlot:IsLake() then
+         return true; 
+      end
+      
+   end
+   
+   return false;
+end
+
 
 function BBS_AssignStartingPlots:__InitStartingData()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
-      print("LOLLOL");
+      --print("LOLLOL");
       --temp--
       
    NewBBS(self)
@@ -6404,7 +6540,14 @@ function BBS_AssignStartingPlots:__InitStartingData()
    Game:SetProperty("BBS_MAJOR_DISTANCE",Major_Distance_Target)
    Game:SetProperty("BBS_ITERATION",try)
    
-   print("OUTOUT");
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("-------------------------- Ended spawn Assignation ---------------------------")
+   print("-------------------------- Moving to spawn Balancing -------------------------")
+   print(os.date("%c"));
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
    return;
 end
 
@@ -9461,7 +9604,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 	--	B_debug = true 
 	--end
 	if B_debug == true then
-		print("CHECKING",	plot:GetX(),plot:GetY())
+		--print("CHECKING",	plot:GetX(),plot:GetY())
 	end
 	local orig_X = plot:GetX()
 	local orig_Y = plot:GetY()
@@ -9502,7 +9645,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 				end
 				if b_true_coast == true then
 					if B_debug == true then
-						print("FOUND TRUE OCEAN")
+						--print("FOUND TRUE OCEAN")
 					end
 					coaststart_plot = check_plot
 					break
@@ -9511,7 +9654,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 		end
 		if coaststart_plot == nil or b_true_coast == false then
 			if B_debug == true then
-				print("SCAN FOR NEAREST COAST")
+				--print("SCAN FOR NEAREST COAST")
 			end
 			for x = orig_X, 0, -1 do
 				local check_plot = Map.GetPlot(x,orig_Y)
@@ -10011,7 +10154,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 						ref_plot = plot
 					end
 				end
-				print("ISLAND #",i,"SIZE",size,"ANCHOR",ref_plot:GetX(),ref_plot:GetY())
+				--print("ISLAND #",i,"SIZE",size,"ANCHOR",ref_plot:GetX(),ref_plot:GetY())
 			end		
 			else
 			print("NO LARGE ISLANDS DETECTED")

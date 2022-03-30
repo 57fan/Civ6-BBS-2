@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2003">
+<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d6654b" version="2004">
 	<Properties>
 	    <Name>LOC_BBS_TITLE</Name>
 		<Description>LOC_BBS_DESCRIPTION</Description>
 		<Created>1</Created>
 		<Teaser>LOC_BBS_TEASER</Teaser>
 		<Authors>57F@n, D. / Jack The Narrator</Authors>
-		<SpecialThanks>Civfanatics.com, CPL, CivFR, 57 Fan, Wazabaza , iElden, Deliverator, VonHolio, Braizh, Kilua, Gedemon, Je, EvilVictor, StormingRomans, Ben</SpecialThanks>
+		<SpecialThanks>Civfanatics.com, CPL, CivFR, Wazabaza , iElden, Deliverator, VonHolio, Braizh, Kilua, Gedemon, Je, EvilVictor, StormingRomans, Ben</SpecialThanks>
 		<CompatibleVersions>1.2,2.0</CompatibleVersions>
-		<Version>2003</Version>
+		<Version>2004</Version>
 	</Properties>
 	
 		<LocalizedText>
 		<Text id="LOC_BBS_TITLE">
-			<en_US>Better Balanced Starts 2.0.3 BETA</en_US>
-			<fr_FR>Better Balanced Starts 2.0.3 BETA</fr_FR>
+			<en_US>Better Balanced Starts 2.0.4</en_US>
+			<fr_FR>Better Balanced Starts 2.0.4</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_TEASER">
 			<en_US>Balanced spawn placement for tournaments.</en_US>
             <fr_FR>Mod d'equilibrage de placement de joueurs pour tournois.</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_DESCRIPTION">
-			<en_US>!!! ALPHA VERSION !!!Balance spawn locations for Multiplayer.[NEWLINE][NEWLINE]Players would be placed according to their civilizations biases while considering minimum distances.[NEWLINE][NEWLINE]Yields accross spawn locations are balanced so players can have a leveled playing fields.</en_US>
-            <fr_FR>!!! VERSION ALPHA, n'utiliser qu'en connaissance de cause !!! Mod d'equilibrage de placement de joueurs pour tournois.[NEWLINE][NEWLINE]Les joueurs seront places en fonction des biais de leur civilization et en maintenant des distances minimales entre les joueurs.[NEWLINE][NEWLINE]Les ressources situees sur les spawns seront equilibrees pour permettre aux joueurs d'avoir les meme chances.</fr_FR>
+			<en_US>!Balance spawn locations for Multiplayer.[NEWLINE][NEWLINE]Players would be placed according to their civilizations biases while considering minimum distances.[NEWLINE][NEWLINE]Yields accross spawn locations are balanced so players can have a leveled playing fields.</en_US>
+            <fr_FR> Mod d'equilibrage de placement de joueurs pour tournois.[NEWLINE][NEWLINE]Les joueurs seront places en fonction des biais de leur civilization et en maintenant des distances minimales entre les joueurs.[NEWLINE][NEWLINE]Les ressources situees sur les spawns seront equilibrees pour permettre aux joueurs d'avoir les meme chances.</fr_FR>
 		</Text>
 	</LocalizedText>
 	

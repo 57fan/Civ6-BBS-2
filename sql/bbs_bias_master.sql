@@ -28,9 +28,9 @@ CREATE TABLE 'StartBiasCustom' (
 	--	('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS_PLAINS',			5),
 	--	('CIVILIZATION_FRANCE',						'FEATURE_FLOODPLAINS_GRASSLAND',		5);
 
-INSERT OR IGNORE INTO StartBiasCustom
-		(CivilizationType,							CustomPlacement)
-		VALUES	
-		('CIVILIZATION_AZTEC',						'CUSTOM_CONTINENT_SPLIT'),
-      ('CIVILIZATION_SPAIN',						'CUSTOM_CONTINENT_SPLIT');
+--INSERT OR IGNORE INTO StartBiasCustom
+	--	(CivilizationType,							CustomPlacement)
+		--VALUES	
+		--('CIVILIZATION_AZTEC',						'CUSTOM_CONTINENT_SPLIT'),
+      --('CIVILIZATION_SPAIN',						'CUSTOM_CONTINENT_SPLIT');
       
