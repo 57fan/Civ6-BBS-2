@@ -1,0 +1,5 @@
+<GameInfo>
+	<Parameters>
+		<Row ParameterId="BBG_Team_Spawn" Name="LOC_BBS_Team_Spawn_NAME" Description="LOC_BBS_Team_Spawn_DESC" Domain="bool" DefaultValue="1" ConfigurationGroup="Map" ConfigurationId="BBG_Team_Spawn" GroupId="MapOptions" Visible="0" SortIndex="233"/>
+	</Parameters>
+</GameInfo>	

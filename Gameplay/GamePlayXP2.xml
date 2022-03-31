@@ -1,0 +1,9 @@
+<GameInfo>
+	
+	<Maps_XP2>	
+
+		<Replace MapSizeType="MAPSIZE_ENORMOUS" 	CO2For1DegreeTempRise="3500000"	DesertPlotCountToLabel="5"	MountainPlotCountToLabel="3"	/>
+
+	</Maps_XP2>
+
+</GameInfo>

@@ -1,0 +1,16 @@
+<GameInfo>
+
+	
+	<Types> <!-- Map Sizes -->
+		<Replace Type="MAPSIZE_ENORMOUS" 	Kind="KIND_MAPSIZE"/>
+	</Types>
+	
+	<Maps>	
+		<Replace MapSizeType="MAPSIZE_ENORMOUS" 	Name="LOC_MAPSIZE_ENORMOUS_NAME" 	Description="LOC_MAPSIZE_ENORMOUS_DESCRIPTION" 		DefaultPlayers="19" GridWidth="128" GridHeight="80" NumNaturalWonders="8" PlateValue="5" Continents="6"/>
+	</Maps>
+	<Map_GreatPersonClasses>
+		<Replace MapSizeType="MAPSIZE_ENORMOUS" GreatPersonClassType="GREAT_PERSON_CLASS_PROPHET" MaxWorldInstances="7"/>
+	</Map_GreatPersonClasses>
+	
+	
+</GameInfo>
