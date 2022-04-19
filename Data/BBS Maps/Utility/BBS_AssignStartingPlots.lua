@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 1.6.9
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.0.5
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.0.4"
+local bbs_version = "2.0.5"
 
 local bError_major = false;
 local bError_minor = false;
@@ -50,6 +50,11 @@ end
 
 ------------------------------------------------------------- BBS ----------------------------
 function BBS_AssignStartingPlots.Create(args)
+
+   if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
+		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
+	end
+
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
    print("------------------------------- BBS", bbs_version, "------------------------------------")
@@ -58,6 +63,8 @@ function BBS_AssignStartingPlots.Create(args)
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
    
+   print ("Init: Game Seed", GameConfiguration.GetValue("GAME_SYNC_RANDOM_SEED")); 
+   print ("Init: Map Seed", MapConfiguration.GetValue("RANDOM_SEED"));
    print ("Init: Map Size: ", Map.GetMapSize(), "2 = Small, 5 = Huge");
    print ("Context",GameConfiguration.IsAnyMultiplayer())
    local gridWidth, gridHeight = Map.GetGridSize();
@@ -83,6 +90,7 @@ function BBS_AssignStartingPlots.Create(args)
    print ("Init: Strategic Resources:",MapConfiguration.GetValue("BBSStratRes"), "0 = standard")
    print ("Init: Resources: ", MapConfiguration.GetValue("resources"), "1 = Sparse, 2 = Standard, 3 = Abundant");
    print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Standard, 2 = Balanced, 3 = Legendary");
+   print ("Init: Team Placement ", Teamers_Config, "0 = Standard, 1 = East-West (RTS Mode)");
 
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
@@ -135,9 +143,7 @@ function BBS_AssignStartingPlots.Create(args)
 	end
 	--]]
    
-	if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
-		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
-	end
+	
    
 	g_negative_bias = {}
 	
@@ -222,60 +228,76 @@ function BBS_AssignStartingPlots.Create(args)
       ___Debug("continent map");
    end
    
+   local realPlayersCount = 0;
+   
+   for i = 1, PlayerManager.GetAliveMajorsCount() do
+      if ( PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName() ~= "LEADER_SPECTATOR" and
+            PlayerConfigurations[tempMajorList[i]]:GetHandicapTypeID() ~= 2021024770) then
+         realPlayersCount = realPlayersCount + 1;
+      end
+   end
+   
+   print("REAL COUNT", realPlayersCount);
+   
    
    --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
    
    -- Enormous ?
-   if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() > 17 then
+   if Map.GetMapSize() == 7 and  realPlayersCount > 17 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() < 15 then
+	if Map.GetMapSize() == 7 and  realPlayersCount < 15 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
    
    -- Huge
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() > 13 then
+	if Map.GetMapSize() == 5 and  realPlayersCount > 13 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() < 11 then
+	if Map.GetMapSize() == 5 and  realPlayersCount < 11 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	-- Large
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() > 11 then
+	if Map.GetMapSize() == 4 and  realPlayersCount > 11 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() < 9 then
+	if Map.GetMapSize() == 4 and  realPlayersCount < 9 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	-- Standard
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() > 9 then
+	if Map.GetMapSize() == 3 and  realPlayersCount > 9 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() < 7 then
+	if Map.GetMapSize() == 3 and  realPlayersCount < 7 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	-- Small
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() > 7 then
+	if Map.GetMapSize() == 2 and  realPlayersCount > 7 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() < 5 then
+	if Map.GetMapSize() == 2 and  realPlayersCount < 5 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	
    -- Tiny
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() > 5 then
+	if Map.GetMapSize() == 1 and  realPlayersCount > 5 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() < 3 then
+	if Map.GetMapSize() == 1 and  realPlayersCount < 3 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	
    -- Duel
-	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() > 2  then
+	if Map.GetMapSize() == 0 and  realPlayersCount > 2  then
 		Major_Distance_Target = Major_Distance_Target - 2
-	end	
+	end
+
+   print("Min distance between players:", Major_Distance_Target);
    
    Base_Major_Distance_Target = Major_Distance_Target;
+   
+   
+   ___Debug("ALIVE", PlayerManager.GetAliveMajorsCount());
    
    --[[
    
@@ -552,6 +574,11 @@ local midOceanIndex = 0;
 local coastalWater = {};
 local coastalWaterCount = 0;
 local coastalWaterIndex = 0;
+
+--- Lake tiles, used as backup for maori ---
+local lakeWater = {};
+local lakeWaterCount = 0;
+local lakeWaterIndex = 0;
 
 -- All biases respected
 --local majorPrimaryOKSecondaryOKWaterOK = {};
@@ -3846,6 +3873,56 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
          end
       end
       
+      ___Debug("Going to lake tiles, starting at", lakeWaterIndex);
+      
+      for i = lakeWaterIndex + 1, lakeWaterCount do
+         
+         lakeWaterIndex = lakeWaterIndex + 1;
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;
+         end
+         
+         local x = lakeWater[i][1];
+         local y = lakeWater[i][2];
+         
+         local isrtsCorrect = false;
+         
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if rtsModeActive then
+
+               -- First civ placed in RTS mode.
+               -- it will decide where its team spawns
+               if eastTeamID == -1 then
+                  if x < midLandIndex then -- you are west
+                     eastTeamID = 0;
+                  else -- you are East
+                     eastTeamID = player.teamID;
+                  end
+               end
+               
+               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+            end
+               
+            if ((not rtsModeActive) or isrtsCorrect) then
+               if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true;
+               end
+               
+               triedTiles = triedTiles + 1;
+               local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true; -- all next players have been placed successfuly !
+               end
+            end
+         end
+      end
+      
       ___Debug("Warning: going to place Maori on Land tiles !!!");
       
    end
@@ -4857,13 +4934,35 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                if (mapFeatureCode[iIndex][jIndex] == -1 and mapResourceCode[iIndex][jIndex] == -1) then
                   --If no maori, we can expedite things and not analyse water tiles
                   -- Maori code --
-                
-                  if (hasMaori) then
+                  
+                  local isNearIce = false;
+                  
+                  local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
+                  for _, element in ipairs(list) do
+                     local x = element[1];
+                     local y = element[2];
+                     
+                     if mapFeatureCode[x + 1][y + 1] == 1 then
+                        isNearIce = true;
+                        ___Debug("Has ice", x, y);
+                        break;
+                     end
+                  end
+
+                  if (hasMaori and isNearIce == false) then
+                  
+                     -- coast or lake
                      if (mapTerrainCode[iIndex][jIndex] == 15) then
                         if (j <= topQuartile and j >= bottomQuartile) then
-                           table.insert(coastalWater, {i, j});
-                           coastalWaterCount = coastalWaterCount + 1;
-                           ___Debug("Tile assigned to: Maori Coastal !");
+                           if (mapLake[iIndex][jIndex]) then
+                              table.insert(lakeWater, {i, j});
+                              lakeWaterCount = lakeWaterCount + 1;
+                              ___Debug("Tile assigned to: Maori Lake !");
+                           else
+                              table.insert(coastalWater, {i, j});
+                              coastalWaterCount = coastalWaterCount + 1;
+                              ___Debug("Tile assigned to: Maori Coastal !");
+                           end
                         end
                      else
                         local isDeepWater = true;
@@ -6261,6 +6360,29 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
    for j = 1, standardNoWaterCount do
       ___Debug(standardNoWater[j][1], standardNoWater[j][2])
    end
+   
+   ___Debug("For Maori")
+   
+   ___Debug("Deep Ocean", deepOceanCount);
+   for j = 1, deepOceanCount do
+      ___Debug(deepOcean[j][1], deepOcean[j][2])
+   end
+   
+   ___Debug("Mid Ocean", midOceanCount);
+   for j = 1, midOceanCount do
+      ___Debug(midOcean[j][1], midOcean[j][2])
+   end
+   
+   ___Debug("Coastal Water", coastalWaterCount);
+   for j = 1, coastalWaterCount do
+      ___Debug(coastalWater[j][1], coastalWater[j][2])
+   end
+   
+   ___Debug("Lake Water", lakeWaterCount);
+   for j = 1, lakeWaterCount do
+      ___Debug(lakeWater[j][1], lakeWater[j][2])
+   end
+   
 end
 
 
@@ -6554,7 +6676,7 @@ end
 ------------------------------------------------------------------------------
 function BBS_AssignStartingPlots:__InitStartingDataBis()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
-      print("LOLLOL");
+      --print("LOLLOL");
       --temp--
       
    NewBBS()
@@ -8487,6 +8609,8 @@ function BBS_AssignStartingPlots:__GetFeatureIndex(featureType)
         return g_FEATURE_JUNGLE;
     elseif (featureType == "FEATURE_FOREST") then
         return g_FEATURE_FOREST;
+    elseif (featureType == "FEATURE_MARSH") then
+        return 5;
     elseif (featureType == "FEATURE_FLOODPLAINS") then
         return g_FEATURE_FLOODPLAINS;
     elseif (featureType == "FEATURE_FLOODPLAINS_PLAINS") then
