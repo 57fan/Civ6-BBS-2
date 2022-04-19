@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< Updated upstream
-<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66540" version="2004">
-=======
 <Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2005">
->>>>>>> Stashed changes
 	<Properties>
 	    <Name>LOC_BBS_TITLE</Name>
 		<Description>LOC_BBS_DESCRIPTION</Description>
