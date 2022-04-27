@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.0.5"
+local bbs_version = "2.0.6"
 
 local bError_major = false;
 local bError_minor = false;
@@ -2791,7 +2791,7 @@ function NewBBS(instance)
    -- Will calculate the amount of player per team --
    local playerPerTeam = {};
    local assignedPlayers = {}; -- Will be used later to assign players as freesim or not
-   for i = 1, 15 do
+   for i = 1, 40 do
       playerPerTeam[i] = 0;
       assignedPlayers[i] = 0;
    end
@@ -3436,8 +3436,11 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       islandOneTeamID = -1;
       islandTwoTeamID = -1;
       
-         
+      print("-------------");
+      print("-------------");
       print("Attempt n°", i, "Distance:", distance);
+      print("-------------");
+      print("-------------");
    
       if(recursivePlacement(majorShuffled, majorCount, 1, proximityMap, distance, mapXSize, mapYSize, mapIsRoundWestEast, -1, standardWaterIndex, standardCoastIndex,
           standardNoWaterIndex)) then
@@ -3743,7 +3746,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3792,7 +3795,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3842,7 +3845,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3892,7 +3895,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3949,7 +3952,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4026,7 +4029,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4101,7 +4104,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4177,7 +4180,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4252,7 +4255,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4325,7 +4328,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4399,7 +4402,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4472,7 +4475,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4545,7 +4548,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
                if not isContinentMap then -- pangea
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4622,7 +4625,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                   -- First civ placed in RTS mode.
                   -- it will decide where its team spawns
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
                         if (player.teamID == 0) then
                            eastTeamID = 1;
@@ -4677,7 +4680,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   -- First civ placed in RTS mode.
                   -- it will decide where its team spawns
                   if not isContinentMap then -- pangea
-                     if eastTeamID == -1 then
+                     if eastTeamID == -1 or currentIndex == 1 then -- first player
                         if x < midLandIndex then -- you are west
                            if (player.teamID == 0) then
                               eastTeamID = 1;
@@ -4751,7 +4754,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   -- First civ placed in RTS mode.
                   -- it will decide where its team spawns
                   if not isContinentMap then -- pangea
-                     if eastTeamID == -1 then
+                     if eastTeamID == -1 or currentIndex == 1 then -- first player
                         if x < midLandIndex then -- you are west
                            if (player.teamID == 0) then
                               eastTeamID = 1;
@@ -4911,6 +4914,9 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
       resourceBiases[i] = {};
       resourceBiasesCount[i] = 0;
    end
+   
+   local topThird = mapYSize * 0.66;
+   local bottomThird = mapYSize * 0.33;
    
    local topQuartile = mapYSize * 0.75;
    local bottomQuartile = mapYSize * 0.25;
@@ -6163,7 +6169,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                               biasMandatoryScore = biasMandatoryScore - 1600;
                            end
                         else
-                           if j < bottomQuartile or j > topQuartile then
+                           if j < bottomThird or j > topThird then
                               ___Debug("Tile is Northen/Southern enough");
                               biasMandatoryScore = biasMandatoryScore + 800;
                            else
