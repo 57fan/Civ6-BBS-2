@@ -2019,7 +2019,7 @@ function NewBBS(instance)
    end
    
    -- Size = max index
-   
+   --[[
    -- duel (1v1)
    if Map.GetMapSize() == 0 then
       mapXSize = 44;
@@ -2062,9 +2062,12 @@ function NewBBS(instance)
       mapXSize = 128;
       mapYSize = 78;
    end
+   --]]
+   mapXSize, mapYSize = Map.GetGridSize();
    
-   --print("size:", Map.GetMapSize());
-   --print("X:", mapXSize, "Y:", mapYSize);
+   
+   print("size:", Map.GetMapSize());
+   print("X:", mapXSize, "Y:", mapYSize);
    
    -- Amount of land for each column of the map.
    -- will be used to draw the "border" for East-West scenario
