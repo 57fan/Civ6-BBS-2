@@ -89,7 +89,7 @@ function BBS_AssignStartingPlots.Create(args)
    print ("Init: Sea Level: ", MapConfiguration.GetValue("sea_level"), "1 = Low Sea Level, 2 = Standard, 3 = High Sea Level");
    print ("Init: Strategic Resources:",MapConfiguration.GetValue("BBSStratRes"), "0 = standard")
    print ("Init: Resources: ", MapConfiguration.GetValue("resources"), "1 = Sparse, 2 = Standard, 3 = Abundant");
-   print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Standard, 2 = Balanced, 3 = Legendary");
+   print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Balanced, 2 = Standard, 3 = Legendary");
    print ("Init: Team Placement ", Teamers_Config, "0 = Standard, 1 = East-West (RTS Mode)");
 
    print("------------------------------------------------------------------------------")
@@ -10300,4 +10300,3 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 	end
 	
 end
-	
