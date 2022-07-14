@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 1.6.9
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.0.5
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -12,6 +12,8 @@ include( "TerrainGenerator" );
 include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
+
+local bbs_version = "2.0.6"
 
 local bError_major = false;
 local bError_minor = false;
@@ -32,6 +34,9 @@ local Minor_Distance_Target = 0
 local bMinDistance = false
 local civs = {};
 
+local mapScript = nil;
+local isContinentMap = false;
+
 local bbsFailed = false;
 
 ------------------------------------------------------------------------------
@@ -43,8 +48,88 @@ function ___Debug(...)
     print (...);
 end
 
-------------------------------------------------------------------------------
+------------------------------------------------------------- BBS ----------------------------
 function BBS_AssignStartingPlots.Create(args)
+
+   if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
+		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
+	end
+
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------- BBS", bbs_version, "------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("---------------------------- Game information --------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   print ("Init: Game Seed", GameConfiguration.GetValue("GAME_SYNC_RANDOM_SEED")); 
+   print ("Init: Map Seed", MapConfiguration.GetValue("RANDOM_SEED"));
+   print ("Init: Map Size: ", Map.GetMapSize(), "2 = Small, 5 = Huge");
+   print ("Context",GameConfiguration.IsAnyMultiplayer())
+   local gridWidth, gridHeight = Map.GetGridSize();
+   print ("Init: gridWidth:", gridWidth,"gridHeight:", gridHeight)
+   print ("Init: Climate: ", MapConfiguration.GetValue("temperature"), "1 = Hot, 2 = Standard, 3 = Cold");
+   local BBS_temp = false;
+   if (GameConfiguration.GetValue("BBStemp") ~= nil) then 
+      if (GameConfiguration.GetValue("BBStemp") == true) then
+         BBS_temp = true;
+         print ("Init: BBS Temperature: On");
+         else
+         BBS_temp = false;
+         print ("Init: BBS Temperature: Off")
+      end
+      else
+      BBS_temp = false;
+      print ("Init: BBS Temperature: Off")
+   end
+   print ("Init: Rainfall: ", MapConfiguration.GetValue("rainfall"), "1 = Dry, 2 = Standard, 3 = Humid");
+   print ("Init: World Age: ", MapConfiguration.GetValue("world_age"), "1 = New, 2 = Standard 3 = Old");
+   print ("Init: Ridge: ", MapConfiguration.GetValue("BBSRidge"), "0 = Standard, 1 = Classic, 2 = Large Open 4 = Flat Earth");
+   print ("Init: Sea Level: ", MapConfiguration.GetValue("sea_level"), "1 = Low Sea Level, 2 = Standard, 3 = High Sea Level");
+   print ("Init: Strategic Resources:",MapConfiguration.GetValue("BBSStratRes"), "0 = standard")
+   print ("Init: Resources: ", MapConfiguration.GetValue("resources"), "1 = Sparse, 2 = Standard, 3 = Abundant");
+   print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Standard, 2 = Balanced, 3 = Legendary");
+   print ("Init: Team Placement ", Teamers_Config, "0 = Standard, 1 = East-West (RTS Mode)");
+
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("--------------------------------- Players ------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   local tempMajorList = {};
+   local tempMinorList = {};
+   tempMajorList = PlayerManager.GetAliveMajorIDs();
+	tempMinorList = PlayerManager.GetAliveMinorIDs();
+   
+   for i = 1, PlayerManager.GetAliveMajorsCount() do
+      local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
+      local civName = PlayerConfigurations[tempMajorList[i]]:GetCivilizationTypeName();
+      local teamID = Players[tempMajorList[i]]:GetTeam();
+      
+      print("ID", tempMajorList[i] ,"Team:", teamID, "Civ:", civName, "Leader", leaderType);
+   end
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   print("------------------------------- City States ----------------------------------")
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   for i = 1, PlayerManager.GetAliveMinorsCount() do
+      local leaderType = PlayerConfigurations[tempMinorList[i]]:GetLeaderTypeName();
+      local civName = PlayerConfigurations[tempMinorList[i]]:GetCivilizationTypeName();
+      
+      print("ID", tempMinorList[i], "Leader", leaderType);
+      
+   end
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+--[[
 	if (GameConfiguration.GetValue("SpawnRecalculation") == nil) then
 		___Debug("BBS_AssignStartingPlots:",GameConfiguration.GetValue("SpawnRecalculation"))
 		Game:SetProperty("BBS_RESPAWN",false)
@@ -56,11 +141,10 @@ function BBS_AssignStartingPlots.Create(args)
 		Game:SetProperty("BBS_RESPAWN",false)
 		return AssignStartingPlots.Create(args)
 	end
+	--]]
+   
 	
-	if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
-		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
-	end
-	
+   
 	g_negative_bias = {}
 	
 	local info_query = "SELECT * from StartBiasNegatives";
@@ -85,14 +169,14 @@ function BBS_AssignStartingPlots.Create(args)
 	if (MapConfiguration.GetValue("MAP_SCRIPT") == "Pangaea.lua"
 	or MapConfiguration.GetValue("MAP_SCRIPT") == "Continents.lua"
 	or MapConfiguration.GetValue("MAP_SCRIPT") == "Terra.lua") then
-	print("Calculating Island Size: Start", os.date("%c"));
+	--print("Calculating Island Size: Start", os.date("%c"));
 	for iPlotIndex = 0, Map.GetPlotCount()-1, 1 do
 		local pPlot = Map.GetPlotByIndex(iPlotIndex)
 		if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
 			local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
 		end
 	end
-	print("Calculating Island Size: End", os.date("%c"));
+	--print("Calculating Island Size: End", os.date("%c"));
 	end
   -- Setting minimal distance between players
    -- It will be based on the map used and the ratio size/players (more space if map too big, less space if too small)
@@ -105,7 +189,7 @@ function BBS_AssignStartingPlots.Create(args)
    -- Large maps, with low amount of water (ex: highlands, lakes, ...) will see players spawn with a higher distance from each other.
    -- Smaller maps, with high amount of water (ex: Terra, Fractal, ...) will see player spawn closer to each other.
    
-   local mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
+   mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
    
    if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" then
 		Major_Distance_Target = 15
@@ -139,60 +223,81 @@ function BBS_AssignStartingPlots.Create(args)
 		Major_Distance_Target = 8
 	end
    
+   if mapScript == "Continents_Islands.lua" or mapScript == "Continents.lua" then
+      isContinentMap = true;
+      ___Debug("continent map");
+   end
+   
+   local realPlayersCount = 0;
+   
+   for i = 1, PlayerManager.GetAliveMajorsCount() do
+      if ( PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName() ~= "LEADER_SPECTATOR" and
+            PlayerConfigurations[tempMajorList[i]]:GetHandicapTypeID() ~= 2021024770) then
+         realPlayersCount = realPlayersCount + 1;
+      end
+   end
+   
+   print("REAL COUNT", realPlayersCount);
+   
    
    --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
    
    -- Enormous ?
-   if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() > 17 then
+   if Map.GetMapSize() == 7 and  realPlayersCount > 17 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 7 and  PlayerManager.GetAliveMajorsCount() < 15 then
+	if Map.GetMapSize() == 7 and  realPlayersCount < 15 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
    
    -- Huge
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() > 13 then
+	if Map.GetMapSize() == 5 and  realPlayersCount > 13 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 5 and  PlayerManager.GetAliveMajorsCount() < 11 then
+	if Map.GetMapSize() == 5 and  realPlayersCount < 11 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	-- Large
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() > 11 then
+	if Map.GetMapSize() == 4 and  realPlayersCount > 11 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 4 and  PlayerManager.GetAliveMajorsCount() < 9 then
+	if Map.GetMapSize() == 4 and  realPlayersCount < 9 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	-- Standard
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() > 9 then
+	if Map.GetMapSize() == 3 and  realPlayersCount > 9 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 3 and  PlayerManager.GetAliveMajorsCount() < 7 then
+	if Map.GetMapSize() == 3 and  realPlayersCount < 7 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	-- Small
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() > 7 then
+	if Map.GetMapSize() == 2 and  realPlayersCount > 7 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 2 and  PlayerManager.GetAliveMajorsCount() < 5 then
+	if Map.GetMapSize() == 2 and  realPlayersCount < 5 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	
    -- Tiny
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() > 5 then
+	if Map.GetMapSize() == 1 and  realPlayersCount > 5 then
 		Major_Distance_Target = Major_Distance_Target - 2
 	end
-	if Map.GetMapSize() == 1 and  PlayerManager.GetAliveMajorsCount() < 3 then
+	if Map.GetMapSize() == 1 and  realPlayersCount < 3 then
 		Major_Distance_Target = Major_Distance_Target + 2
 	end	
 	
    -- Duel
-	if Map.GetMapSize() == 0 and  PlayerManager.GetAliveMajorsCount() > 2  then
+	if Map.GetMapSize() == 0 and  realPlayersCount > 2  then
 		Major_Distance_Target = Major_Distance_Target - 2
-	end	
+	end
+
+   print("Min distance between players:", Major_Distance_Target);
    
    Base_Major_Distance_Target = Major_Distance_Target;
+   
+   
+   ___Debug("ALIVE", PlayerManager.GetAliveMajorsCount());
    
    --[[
    
@@ -372,8 +477,8 @@ end
 
 --- New vars ---
 
-local CS_PLAYERS_MIN_DISTANCE = 7;
-local CS_CS_MIN_DISTANCE = 5;
+local CS_PLAYERS_MIN_DISTANCE = 8;
+local CS_CS_MIN_DISTANCE = 8;
 
 mapIsRoundWestEast = true;
 local isIslandMap = false;
@@ -386,7 +491,7 @@ local rtsModeActive = false;
 local midLandIndex = 0;
 local RTS_BUFFER_ZONE = 3;
 local RTS_SIM_BUFFER = 15;
-local RTS_WAR_LIMIT = 15;
+local RTS_WAR_LIMIT = 12;
 
 
 -----------------------------
@@ -470,6 +575,11 @@ local coastalWater = {};
 local coastalWaterCount = 0;
 local coastalWaterIndex = 0;
 
+--- Lake tiles, used as backup for maori ---
+local lakeWater = {};
+local lakeWaterCount = 0;
+local lakeWaterIndex = 0;
+
 -- All biases respected
 --local majorPrimaryOKSecondaryOKWaterOK = {};
 --local majorPrimaryOKSecondaryOKWaterNOK = {};
@@ -543,8 +653,8 @@ local SNOW_PERCENTAGE_R5 = 0.10;
 local DESERT_PERCENTAGE_R3 = 0.03;
 local DESERT_PERCENTAGE_R5 = 0.10;
 
-local SHIT_PERCENTAGE_R3 = 0.30;
-local SHIT_PERCENTAGE_R5 = 0.25;
+local SHIT_PERCENTAGE_R3 = 0.15;
+local SHIT_PERCENTAGE_R5 = 0.15;
 
 local SEA_PERCANTEGE_R3 = 0.50;
 
@@ -1218,8 +1328,8 @@ function biasMountainScore(bias, percentageR3, percentageR5)
    local MOUNTAIN_PERCENTAGE_B2_R3 = 0.30;
    local MOUNTAIN_PERCENTAGE_B2_R5 = 0.25;
 
-   local MOUNTAIN_PERCENTAGE_B3_R3 = 0.25;
-   local MOUNTAIN_PERCENTAGE_B3_R5 = 0.20;
+   local MOUNTAIN_PERCENTAGE_B3_R3 = 0.40;
+   local MOUNTAIN_PERCENTAGE_B3_R5 = 0.30;
 
    local MOUNTAIN_PERCENTAGE_B4_R3 = 0.20;
    local MOUNTAIN_PERCENTAGE_B4_R5 = 0.15;
@@ -1480,11 +1590,28 @@ local islandCount = 0;
 local islandLabels = {};
 local islandSize = {};
 
+for i = 1, 500 do
+   islandSize[i] = -1;
+end
+
+-- These two vars will handle the island IDs of the biggest and second biggest massland in the map.
+-- These will be used for Terra spawn and Continent RTS Mode
+local islandOneID = -1;
+local islandOneSize = -1;
+local islandTwoID = -1;
+local islandTwoSize = -1;
+
+-- will be used for RTS Mode on continents
+local islandOneTeamID = -1;
+local islandTwoTeamID = -1;
+
+
+
 --- Minimal size of an island in case of "standard map"
 local MIN_ISLAND_SIZE_STANDARD = 35;
 
 --- Minimal size of an island in case of "naval map" (ex:islands, continent and islands, small continent)
-local MIN_ISLAND_SIZE_WATER = 10;
+local MIN_ISLAND_SIZE_WATER = 20;
 
 function labelIslands(mapXSize, mapYSize, mapIsRoundWestEast)
 
@@ -1524,7 +1651,7 @@ function recursiveLabelIslands(x, y, mapXSize, mapYSize, mapIsRoundWestEast, isl
    local xIndex = x + 1;
    local yIndex = y + 1;
    
-   ___Debug("recursive island", x, y)
+   --___Debug("recursive island", x, y)
    
    if (mapTerrainCode[xIndex][yIndex] < 15 and islandLabels[xIndex][yIndex] == 0) then
       islandLabels[xIndex][yIndex] = islandIndex;
@@ -1866,10 +1993,11 @@ function NewBBS(instance)
 
 
    
-   print("----------- BBS BETA -------------");
-   print("----------- Starting map parsing -------------");
+   print("------------------------------------------------------------------------------")
+   print("---------------------------- Starting map parsing ----------------------------");
    print(os.date("%c"));
-   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
    
    -------------------------
    ----- PHASE 1 -----------
@@ -1935,8 +2063,8 @@ function NewBBS(instance)
       mapYSize = 78;
    end
    
-   print("size:", Map.GetMapSize());
-   print("X:", mapXSize, "Y:", mapYSize);
+   --print("size:", Map.GetMapSize());
+   --print("X:", mapXSize, "Y:", mapYSize);
    
    -- Amount of land for each column of the map.
    -- will be used to draw the "border" for East-West scenario
@@ -2087,9 +2215,10 @@ function NewBBS(instance)
             
             if(plot:IsRiver()) then
                mapRiver[iIndex][jIndex] = true;
+               mapFreshWater[iIndex][jIndex] = true;
             end
             
-            if(plot:IsFreshWater()) then
+            if(hasFreshWater(i, j, mapXSize, mapYSize, mapIsRoundWestEast)) then
                mapFreshWater[iIndex][jIndex] = true;
             end
             
@@ -2199,14 +2328,32 @@ function NewBBS(instance)
    print("------------------------");
    print(os.date("%c"));
    print("------------------------");
-   print("------------------------");
    --- find islands ---
    labelIslands(mapXSize, mapYSize, mapIsRoundWestEast);
+   
+   for i = 1, islandCount do
+      ___Debug("Island", i, "Size", islandSize[i])
+   end
+   
+   local biggestIsland = 0;
+   
+   for i = 1, islandCount do
+      if islandSize[i] > islandOneSize then
+         islandOneSize = islandSize[i]
+         islandTwoID = islandOneID;
+         islandOneID = i;
+      elseif islandSize[i] > islandTwoSize then
+         islandTwoSize = islandSize[i]
+         islandTwoID = i;
+      end
+   end
+   
+   ___Debug("Island one:", islandOneID, islandOneSize);
+   ___Debug("Island two:", islandTwoID, islandTwoSize);
    
    print("----------- END islands analysis -------------");
    print("------------------------");
    print(os.date("%c"));
-   print("------------------------");
    print("------------------------");
    
    ___Debug("---------------");
@@ -2217,6 +2364,23 @@ function NewBBS(instance)
    ___Debug("---------------");
    ___Debug("--- Islands map ---");
    drawMap(islandLabels, mapXSize, mapYSize);
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("--- Fresh water map ---");
+   drawMapBoolean(mapFreshWater, mapXSize, mapYSize);
    
    ___Debug("---------------");
    ___Debug("---------------");
@@ -2312,7 +2476,7 @@ function NewBBS(instance)
    --    - Spawn on Oasis (unsettleable) or mountain or water (except Maori of course)
    --    - Spawn Ring 3 of a natural wonder (any wonder)
    --    - Spawn on an island deemed too small (see MIN_ISLAND_SIZE_STANDARD and MIN_ISLAND_SIZE_WATER)
-   --    - Spawn on a tile with 4 or more "unusable" tiles (water and/or mountains)
+   --    - Spawn on a tile with 3 or more "unusable" tiles (water and/or mountains)
    --    - Too many unusable tiles around the spawn (Ring 3)
    
    
@@ -2502,6 +2666,14 @@ function NewBBS(instance)
                mapSpawnable[x + 1][y + 1] = false;
                ___Debug("---- Banning X:", x, "Y:", y);
             end
+            
+            list = getRing(i, j, 4, mapXSize, mapXSize, mapIsRoundWestEast);
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               mapSpawnable[x + 1][y + 1] = false;
+               ___Debug("---- Banning X:", x, "Y:", y);
+            end
          end
       end
    end
@@ -2516,6 +2688,9 @@ function NewBBS(instance)
       end
    end
    
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------ Map General information -----------------------------")
    
    print("Amount of tiles:", tilesCount);
    print("---------------");
@@ -2545,7 +2720,10 @@ function NewBBS(instance)
    print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
    print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
    print("----------Floodplains:", floodPlainsCount);
-   print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
+   --print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
    
    
    ___Debug("---------------");
@@ -2580,7 +2758,7 @@ function NewBBS(instance)
    ---- Now, we will rate every settleable tile-----
    ----------------------
    
-   print("----------- BBS BETA -------------");
+   --print("----------- BBS BETA -------------");
    print("----------- Starting tiles scoring -------------");
    print(os.date("%c"));
    
@@ -2613,7 +2791,7 @@ function NewBBS(instance)
    -- Will calculate the amount of player per team --
    local playerPerTeam = {};
    local assignedPlayers = {}; -- Will be used later to assign players as freesim or not
-   for i = 1, 15 do
+   for i = 1, 40 do
       playerPerTeam[i] = 0;
       assignedPlayers[i] = 0;
    end
@@ -2628,9 +2806,9 @@ function NewBBS(instance)
    tempMajorList = PlayerManager.GetAliveMajorIDs();
 	tempMinorList = PlayerManager.GetAliveMinorIDs();
    
-   print("List of civs:");
-   print("--------------");
-   print("Majors (players):");
+   --print("List of civs:");
+   --print("--------------");
+   --print("Majors (players):");
    
    for i = 1, PlayerManager.GetAliveMajorsCount() do
       local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
@@ -2898,13 +3076,13 @@ function NewBBS(instance)
                           spawnX = -1, spawnY = -1,
                           teamID = teamID, rtsFreeSim = false
                           };
-         print(i, majorAll[majorCount]);
-         print(majorAll[majorCount].index, majorAll[majorCount].civName);
+         --print(i, majorAll[majorCount]);
+         --print(majorAll[majorCount].index, majorAll[majorCount].civName);
          
          
          
       end
-      print("---------Player ", i, "Leader:", leaderType);
+      --print("---------Player ", i, "Leader:", leaderType);
    end
    
    local teamCount = 0;
@@ -2918,7 +3096,7 @@ function NewBBS(instance)
    ___Debug("Team Count:", teamCount);
    
    
-   if instance.iTeamPlacement == 1 and mapScript == "Pangaea.lua" and teamCount == 2 then
+   if instance.iTeamPlacement == 1 and (mapScript == "Pangaea.lua" or mapScript == "Continents_Islands.lua" or mapScript == "Continents.lua") and teamCount == 2 then
    --if mapScript == "Pangaea.lua" and teamCount == 2 then
       rtsModeActive = true;
       print("RTS MODE ACTIVE !")
@@ -2942,9 +3120,9 @@ function NewBBS(instance)
    end
    
    
-   print("--------------");
-   print("Majors (players):");
-   print("--------------");
+   --print("--------------");
+   --print("Majors (players):");
+   --print("--------------");
    
    for i = 1, PlayerManager.GetAliveMinorsCount() do
       local leaderType = PlayerConfigurations[tempMinorList[i]]:GetLeaderTypeName();
@@ -2957,7 +3135,7 @@ function NewBBS(instance)
       
       
       
-      print("---------CS ", i, "", leaderType);
+      --print("---------CS ", i, "", leaderType);
    end
    
    print("--------------");
@@ -2966,12 +3144,12 @@ function NewBBS(instance)
    --table.sort(majorAll, function(a, b) return a.biasScore > b.biasScore; end);
    
 
-   for i = 1, majorCount do
-      print("whole", majorAll[i]) 
-      if (majorAll[i] ~= nil) then
-         print("players2 ici: ", majorAll[i].civName, majorAll[i].biasScore);
-      end
-   end
+   --for i = 1, majorCount do
+      --print("whole", majorAll[i]) 
+     -- if (majorAll[i] ~= nil) then
+         --print("players2 ici: ", majorAll[i].civName, majorAll[i].biasScore);
+      --end
+   --end
    
    
    
@@ -2992,16 +3170,9 @@ function NewBBS(instance)
    print("--------------------------");
    print("--------------------------");
    print("Ended spawn evaluation");
+   print("Starting spawn assignation");
    print("--------------------------");
    print(os.date("%c"));
-   print("--------------------------");
-   print("--------------------------");
-   
-   
-   print("--------------------------");
-   print("--------------------------");
-   print("Now starting spawn assignation");
-   print("--------------------------");
    print("--------------------------");
    print("--------------------------");
    
@@ -3022,7 +3193,7 @@ function NewBBS(instance)
 end
 
 --]]
-local MAX_SPAWN_TRIES = 10;
+local MAX_SPAWN_TRIES = 4;
 
 
 --]]
@@ -3262,11 +3433,17 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       standardNoWaterIndex = 0;
       standardWaterIndex = 0;
       standardCoastIndex = 0;
+      islandOneTeamID = -1;
+      islandTwoTeamID = -1;
       
-         
+      print("-------------");
+      print("-------------");
       print("Attempt n°", i, "Distance:", distance);
+      print("-------------");
+      print("-------------");
    
-      if(recursivePlacement(majorShuffled, majorCount, 1, proximityMap, distance, mapXSize, mapYSize, mapIsRoundWestEast, -1)) then
+      if(recursivePlacement(majorShuffled, majorCount, 1, proximityMap, distance, mapXSize, mapYSize, mapIsRoundWestEast, -1, standardWaterIndex, standardCoastIndex,
+          standardNoWaterIndex)) then
          print("Attempt sucessful !");
          settleSuccess = true;
          break;
@@ -3307,18 +3484,31 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
    end
   
    
+   
    for i = 1, 10 do
+   
+      local CSDistance = CS_CS_MIN_DISTANCE;
       
-      print("Place CS: Attempt n°", i, "Distance:", distance);
+      if i >= 8 then
+         CSDistance = CSDistance - 3;
+      elseif i >= 6 then
+         CSDistance = CSDistance - 2;
+      elseif i >= 4 then
+         CSDistance = CSDistance - 1;
+      end
+      
+      print("Place CS: Attempt n°", i, "Distance:", CSDistance);
       
       standardNoWaterIndex = 0;
       standardWaterIndex = 0;
       standardCoastIndex = 0;
       trashTilesIndex = 0;
       
+      
+      
       shuffleListsCS();
       
-      local csPlacement = recursiveCSPlacement(minorAll, minorCount, 1, CSproximityMap, mapXSize, mapYSize, mapIsRoundWestEast)
+      local csPlacement = recursiveCSPlacement(minorAll, minorCount, 1, CSproximityMap, CSDistance, mapXSize, mapYSize, mapIsRoundWestEast)
       
       if (csPlacement) then
          ___Debug("All the CS were placed !");
@@ -3343,7 +3533,7 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
 end
 
 
-function recursiveCSPlacement(minorAll, minorCount, currentIndex, CSProximityMap, mapXSize, mapYSize, mapIsRoundWestEast)
+function recursiveCSPlacement(minorAll, minorCount, currentIndex, CSProximityMap, CSDistance, mapXSize, mapYSize, mapIsRoundWestEast)
 
    local player = minorAll[currentIndex];
    local triedTiles = 0; -- Amount of valid tiles that were tried by the system
@@ -3358,19 +3548,22 @@ function recursiveCSPlacement(minorAll, minorCount, currentIndex, CSProximityMap
       local y = allTiles[i][2];
       
       if (not CSProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
-         if (currentIndex == minorCount) then -- this was the last player to settle, and he is there !
-            player.spawnX = x;
-            player.spawnY = y;
-            return true;
-         end
+         if (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] ~= islandOneID) then
          
-         triedTiles = triedTiles + 1;
-         local newMap = setPlayerProximity(CSProximityMap, mapXSize, mapYSize, CS_CS_MIN_DISTANCE, x, y, mapIsRoundWestEast);
+            if (currentIndex == minorCount) then -- this was the last player to settle, and he is there !
+               player.spawnX = x;
+               player.spawnY = y;
+               return true;
+            end
+            
+            triedTiles = triedTiles + 1;
+            local newMap = setPlayerProximity(CSProximityMap, mapXSize, mapYSize, CSDistance, x, y, mapIsRoundWestEast);
 
-         if (recursiveCSPlacement(minorAll, minorCount, currentIndex + 1, newMap, mapXSize, mapYSize, mapIsRoundWestEast)) then
-            player.spawnX = x;
-            player.spawnY = y;
-            return true; -- all next players have been placed successfuly !
+            if (recursiveCSPlacement(minorAll, minorCount, currentIndex + 1, newMap, CSDistance, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               player.spawnX = x;
+               player.spawnY = y;
+               return true; -- all next players have been placed successfuly !
+            end
          end
       end
    end
@@ -3515,10 +3708,21 @@ function rtsCheck(x, y, midLandIndex, eastTeamID, playerTeamID, isTundraCiv, pla
    
 end
 
-function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)      
+function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                              standardWaterIndex, standardCoastIndex, standardNoWaterIndex)      
    local player = majorAll[currentIndex];
    local triedTiles = 0; -- Amount of valid tiles that were tried by the system
    
+   if (rtsModeActive) then --resetting indexes as some might have been ditched due to RTS parameters
+      deepOceanIndex = 0;
+      midOceanIndex = 0;
+      coastalWaterIndex = 0;
+      standardWaterIndex = 0;
+      standardCoastIndex = 0;
+      standardNoWaterIndex = 0;
+   end
+   
+   ___Debug("Placing player", player.civName, player.teamID);
    
    
    if (player.biasScore == 0) then -- Ocean civ
@@ -3542,7 +3746,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3563,7 +3767,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3580,6 +3785,9 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
             return false;
          end
          
+         local x = midOcean[i][1];
+         local y = midOcean[i][2];
+         
          local isrtsCorrect = false;
          
          if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
@@ -3587,7 +3795,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3608,7 +3816,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3636,7 +3845,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
                   if x < midLandIndex then -- you are west
                      eastTeamID = 0;
                   else -- you are East
@@ -3657,7 +3866,58 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true; -- all next players have been placed successfuly !
+               end
+            end
+         end
+      end
+      
+      ___Debug("Going to lake tiles, starting at", lakeWaterIndex);
+      
+      for i = lakeWaterIndex + 1, lakeWaterCount do
+         
+         lakeWaterIndex = lakeWaterIndex + 1;
+         if (triedTiles >= MAX_SPAWN_TRIES) then -- we tried enough with configuration, it didn't work
+            return false;
+         end
+         
+         local x = lakeWater[i][1];
+         local y = lakeWater[i][2];
+         
+         local isrtsCorrect = false;
+         
+         if (not playerProximityMap[x + 1][y + 1]) then -- means that no player is in range, we can use the spawn
+            if rtsModeActive then
+
+               -- First civ placed in RTS mode.
+               -- it will decide where its team spawns
+               if eastTeamID == -1 or currentIndex == 1 then -- first player
+                  if x < midLandIndex then -- you are west
+                     eastTeamID = 0;
+                  else -- you are East
+                     eastTeamID = player.teamID;
+                  end
+               end
+               
+               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+            end
+               
+            if ((not rtsModeActive) or isrtsCorrect) then
+               if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
+                  player.spawnX = x;
+                  player.spawnY = y;
+                  return true;
+               end
+               
+               triedTiles = triedTiles + 1;
+               local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
+
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3691,18 +3951,48 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  ___Debug("Continent map");
+                  ___Debug(islandLabels[x + 1][y + 1], islandOneID, islandTwoID);
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandTwoID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
+               
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3712,7 +4002,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3737,18 +4028,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3758,7 +4076,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3784,18 +4103,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3805,7 +4151,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3832,18 +4179,47 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  ___Debug("Continent map");
+                  ___Debug(islandLabels[x + 1][y + 1], islandOneID, islandTwoID);
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandTwoID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3853,7 +4229,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3877,18 +4254,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3898,7 +4302,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3922,18 +4327,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3943,7 +4375,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -3968,18 +4401,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -3989,7 +4449,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4013,18 +4474,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -4034,7 +4522,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4058,18 +4547,45 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                -- First civ placed in RTS mode.
                -- it will decide where its team spawns
-               if eastTeamID == -1 then
-                  if x < midLandIndex then -- you are west
-                     eastTeamID = 0;
-                  else -- you are East
-                     eastTeamID = player.teamID;
+               if not isContinentMap then -- pangea
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
+                     if x < midLandIndex then -- you are west
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
+                     else -- you are East
+                        eastTeamID = player.teamID;
+                     end
+                  end
+               else -- continent map
+                  if islandOneID == islandLabels[x + 1][y + 1] then
+                     if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandOneTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                     if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                        islandTwoTeamID = player.teamID;
+                        ___Debug("Assign island", islandOneID, "to team", player.teamID);
+                     end
                   end
                end
                
-               isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               if not isContinentMap then -- pangea
+                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+               else
+                  if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                     isrtsCorrect = true;
+                  elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                     isrtsCorrect = true;
+                  end
+               end
             end
                
-            if ((not rtsModeActive) or isrtsCorrect) then
+            if ((not rtsModeActive) or isrtsCorrect) and
+               (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
@@ -4079,7 +4595,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                triedTiles = triedTiles + 1;
                local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+               if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
                   return true; -- all next players have been placed successfuly !
@@ -4088,7 +4605,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
          end
       end
       
-      if (player.name == "CIVILIZATION_MALI") then
+      if (player.civName == "CIVILIZATION_MALI") then
          ___Debug("We have a mali, we'll try standard tiles as the civ had no proper tile !");
          for i = standardWaterIndex + 1, standardWaterCount do
          
@@ -4108,9 +4625,13 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                   -- First civ placed in RTS mode.
                   -- it will decide where its team spawns
-                  if eastTeamID == -1 then
+                  if eastTeamID == -1 or currentIndex == 1 then -- first player
                      if x < midLandIndex then -- you are west
-                        eastTeamID = 0;
+                        if (player.teamID == 0) then
+                           eastTeamID = 1;
+                        else
+                           eastTeamID = 0;
+                        end
                      else -- you are East
                         eastTeamID = player.teamID;
                      end
@@ -4119,7 +4640,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
                end
                   
-               if ((not rtsModeActive) or isrtsCorrect) then
+               if ((not rtsModeActive) or isrtsCorrect) and
+                  (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                   if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                      player.spawnX = x;
                      player.spawnY = y;
@@ -4129,7 +4651,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   triedTiles = triedTiles + 1;
                   local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
                      return true; -- all next players have been placed successfuly !
@@ -4156,18 +4679,43 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                   -- First civ placed in RTS mode.
                   -- it will decide where its team spawns
-                  if eastTeamID == -1 then
-                     if x < midLandIndex then -- you are west
-                        eastTeamID = 0;
-                     else -- you are East
-                        eastTeamID = player.teamID;
+                  if not isContinentMap then -- pangea
+                     if eastTeamID == -1 or currentIndex == 1 then -- first player
+                        if x < midLandIndex then -- you are west
+                           if (player.teamID == 0) then
+                              eastTeamID = 1;
+                           else
+                              eastTeamID = 0;
+                           end
+                        else -- you are East
+                           eastTeamID = player.teamID;
+                        end
+                     end
+                  else -- continent map
+                     if islandOneID == islandLabels[x + 1][y + 1] then
+                        if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                           islandOneTeamID = player.teamID;
+                        end
+                     elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                        if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                           islandTwoTeamID = player.teamID;
+                        end
                      end
                   end
                   
-                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+                  if not isContinentMap then -- pangea
+                     isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+                  else
+                     if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                        isrtsCorrect = true;
+                     elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                        isrtsCorrect = true;
+                     end
+                  end
                end
                   
-               if ((not rtsModeActive) or isrtsCorrect) then
+               if ((not rtsModeActive) or isrtsCorrect) and
+                  (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                   if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                      player.spawnX = x;
                      player.spawnY = y;
@@ -4177,7 +4725,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   triedTiles = triedTiles + 1;
                   local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
                      return true; -- all next players have been placed successfuly !
@@ -4204,18 +4753,43 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
 
                   -- First civ placed in RTS mode.
                   -- it will decide where its team spawns
-                  if eastTeamID == -1 then
-                     if x < midLandIndex then -- you are west
-                        eastTeamID = 0;
-                     else -- you are East
-                        eastTeamID = player.teamID;
+                  if not isContinentMap then -- pangea
+                     if eastTeamID == -1 or currentIndex == 1 then -- first player
+                        if x < midLandIndex then -- you are west
+                           if (player.teamID == 0) then
+                              eastTeamID = 1;
+                           else
+                              eastTeamID = 0;
+                           end
+                        else -- you are East
+                           eastTeamID = player.teamID;
+                        end
+                     end
+                  else -- continent map
+                     if islandOneID == islandLabels[x + 1][y + 1] then
+                        if islandOneTeamID == -1 and islandTwoTeamID ~= player.teamID then -- this team has no island ID yet
+                           islandOneTeamID = player.teamID;
+                        end
+                     elseif islandTwoID == islandLabels[x + 1][y + 1] then
+                        if islandTwoTeamID == -1 and islandOneTeamID ~= player.teamID then -- this team has no island ID yet
+                           islandTwoTeamID = player.teamID;
+                        end
                      end
                   end
                   
-                  isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+                  if not isContinentMap then -- pangea
+                     isrtsCorrect = rtsCheck(x, y, midLandIndex, eastTeamID, player.teamID, player.tundraCiv, player.rtsFreeSim);
+                  else
+                     if islandOneID == islandLabels[x + 1][y + 1] and islandOneTeamID == player.teamID then -- we are good
+                        isrtsCorrect = true;
+                     elseif islandTwoID == islandLabels[x + 1][y + 1] and islandTwoTeamID == player.teamID then
+                        isrtsCorrect = true;
+                     end
+                  end
                end
                   
-               if ((not rtsModeActive) or isrtsCorrect) then
+               if ((not rtsModeActive) or isrtsCorrect) and
+                  (mapScript ~= "Terra.lua" or islandLabels[x + 1][y + 1] == islandOneID) then
                   if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                      player.spawnX = x;
                      player.spawnY = y;
@@ -4225,7 +4799,8 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   triedTiles = triedTiles + 1;
                   local newMap = setPlayerProximity(playerProximityMap, mapXSize, mapYSize, playerDistance, x, y, mapIsRoundWestEast);
 
-                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID)) then
+                  if (recursivePlacement(majorAll, majorCount, currentIndex + 1, newMap, playerDistance, mapXSize, mapYSize, mapIsRoundWestEast, eastTeamID,
+                    standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
                      return true; -- all next players have been placed successfuly !
@@ -4340,6 +4915,9 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
       resourceBiasesCount[i] = 0;
    end
    
+   local topThird = mapYSize * 0.66;
+   local bottomThird = mapYSize * 0.33;
+   
    local topQuartile = mapYSize * 0.75;
    local bottomQuartile = mapYSize * 0.25;
    
@@ -4362,12 +4940,36 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                if (mapFeatureCode[iIndex][jIndex] == -1 and mapResourceCode[iIndex][jIndex] == -1) then
                   --If no maori, we can expedite things and not analyse water tiles
                   -- Maori code --
-                
-                  if (hasMaori) then
+                  
+                  local isNearIce = false;
+                  
+                  local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
+                  for _, element in ipairs(list) do
+                     local x = element[1];
+                     local y = element[2];
+                     
+                     if mapFeatureCode[x + 1][y + 1] == 1 then
+                        isNearIce = true;
+                        ___Debug("Has ice", x, y);
+                        break;
+                     end
+                  end
+
+                  if (hasMaori and isNearIce == false) then
+                  
+                     -- coast or lake
                      if (mapTerrainCode[iIndex][jIndex] == 15) then
-                        table.insert(coastalWater, {i, j});
-                        coastalWaterCount = coastalWaterCount + 1;
-                        ___Debug("Tile assigned to: Maori Coastal !");
+                        if (j <= topQuartile and j >= bottomQuartile) then
+                           if (mapLake[iIndex][jIndex]) then
+                              table.insert(lakeWater, {i, j});
+                              lakeWaterCount = lakeWaterCount + 1;
+                              ___Debug("Tile assigned to: Maori Lake !");
+                           else
+                              table.insert(coastalWater, {i, j});
+                              coastalWaterCount = coastalWaterCount + 1;
+                              ___Debug("Tile assigned to: Maori Coastal !");
+                           end
+                        end
                      else
                         local isDeepWater = true;
                         for k = 1, MAORI_LAND_DISTANCE do
@@ -4391,8 +4993,10 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                            table.insert(deepOcean, {i, j});
                            deepOceanCount = deepOceanCount + 1;
                         else
-                           table.insert(midOcean, {i, j});
-                           midOceanCount = midOceanCount + 1;
+                           if (j <= topQuartile and j >= bottomQuartile) then
+                              table.insert(midOcean, {i, j});
+                              midOceanCount = midOceanCount + 1;
+                           end
                         end
                      end
                   end
@@ -5100,7 +5704,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                            ___Debug("-- Secondary -- Tundra flat score:", score)
                         end
                         
-                        print("score tundra flat:", biasSecondaryScore);
+                        ___Debug("score tundra flat:", biasSecondaryScore);
 
                      end
                      
@@ -5565,7 +6169,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                               biasMandatoryScore = biasMandatoryScore - 1600;
                            end
                         else
-                           if j < bottomQuartile or j > topQuartile then
+                           if j < bottomThird or j > topThird then
                               ___Debug("Tile is Northen/Southern enough");
                               biasMandatoryScore = biasMandatoryScore + 800;
                            else
@@ -5747,9 +6351,44 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
    end
    
    ___Debug("For non bias civs:")
+   
    ___Debug("OK With fresh water:", standardWaterCount);
+   for j = 1, standardWaterCount do
+      ___Debug(standardWater[j][1], standardWater[j][2])
+   end
+   
    ___Debug("OK With Coastal water:", standardCoastCount);
+   for j = 1, standardCoastCount do
+      ___Debug(standardCoast[j][1], standardCoast[j][2])
+   end
+   
    ___Debug("OK With NO fresh water:", standardNoWaterCount);
+   for j = 1, standardNoWaterCount do
+      ___Debug(standardNoWater[j][1], standardNoWater[j][2])
+   end
+   
+   ___Debug("For Maori")
+   
+   ___Debug("Deep Ocean", deepOceanCount);
+   for j = 1, deepOceanCount do
+      ___Debug(deepOcean[j][1], deepOcean[j][2])
+   end
+   
+   ___Debug("Mid Ocean", midOceanCount);
+   for j = 1, midOceanCount do
+      ___Debug(midOcean[j][1], midOcean[j][2])
+   end
+   
+   ___Debug("Coastal Water", coastalWaterCount);
+   for j = 1, coastalWaterCount do
+      ___Debug(coastalWater[j][1], coastalWater[j][2])
+   end
+   
+   ___Debug("Lake Water", lakeWaterCount);
+   for j = 1, lakeWaterCount do
+      ___Debug(lakeWater[j][1], lakeWater[j][2])
+   end
+   
 end
 
 
@@ -5782,7 +6421,7 @@ function getRingResource (ringStart, ringEnd, tileResource, ringResource, biases
    
    for i = 1, biasesListCount do
       if (biasesList[i] == tileResource) then
-         print("biases:", biasesList[i]);
+         --print("biases:", biasesList[i]);
          count = count + 1;
       end
    end
@@ -5804,7 +6443,7 @@ function getRingFeature (ringStart, ringEnd, tileFeature, ringFeature, biasesLis
    
    for i = 1, biasesListCount do
       if (biasesList[i] == tileFeature) then
-         print("biases:", biasesList[i]);
+         --print("biases:", biasesList[i]);
          count = count + 1;
       end
    end
@@ -5872,10 +6511,10 @@ function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
       local y = element[2];
       
       if (mapTerrainCode[x + 1][y + 1] == 15 and mapLake[x + 1][y + 1] == false) then
-         ___Debug("Ceci n'est pas un lac", x, y);
+         --___Debug("Ceci n'est pas un lac", x, y);
          return true;
       else
-         ___Debug("Ceci est de la terre ou un lac", x, y);
+         --___Debug("Ceci est de la terre ou un lac", x, y);
       end
    end
    
@@ -5904,10 +6543,39 @@ function isNextToWaterTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
    return false;
 end
 
+-- Recoded because of firaxis issue
+function hasFreshWater (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
+   -- the tile is water, no sense to evaluate
+   if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
+      ___Debug("out direct")
+      return false;
+   end
+   
+   local plot = Map.GetPlot(xStart , yStart);
+   
+   if plot:IsRiver() then
+      return true;
+   end
+   
+   local ring1 = getRing(xStart, yStart, 1, xSize, ySize, mapIsRoundWestEast);
+   for _, element in ipairs(ring1) do
+      local x = element[1];
+      local y = element[2];
+      
+      local tempPlot = Map.GetPlot(x, y);
+      if tempPlot:IsLake() then
+         return true; 
+      end
+      
+   end
+   
+   return false;
+end
+
 
 function BBS_AssignStartingPlots:__InitStartingData()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
-      print("LOLLOL");
+      --print("LOLLOL");
       --temp--
       
    NewBBS(self)
@@ -6000,14 +6668,21 @@ function BBS_AssignStartingPlots:__InitStartingData()
    Game:SetProperty("BBS_MAJOR_DISTANCE",Major_Distance_Target)
    Game:SetProperty("BBS_ITERATION",try)
    
-   print("OUTOUT");
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("-------------------------- Ended spawn Assignation ---------------------------")
+   print("-------------------------- Moving to spawn Balancing -------------------------")
+   print(os.date("%c"));
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
    return;
 end
 
 ------------------------------------------------------------------------------
 function BBS_AssignStartingPlots:__InitStartingDataBis()
    	___Debug("BBS_AssignStartingPlots: Start:", os.date("%c"));
-      print("LOLLOL");
+      --print("LOLLOL");
       --temp--
       
    NewBBS()
@@ -7940,6 +8615,8 @@ function BBS_AssignStartingPlots:__GetFeatureIndex(featureType)
         return g_FEATURE_JUNGLE;
     elseif (featureType == "FEATURE_FOREST") then
         return g_FEATURE_FOREST;
+    elseif (featureType == "FEATURE_MARSH") then
+        return 5;
     elseif (featureType == "FEATURE_FLOODPLAINS") then
         return g_FEATURE_FLOODPLAINS;
     elseif (featureType == "FEATURE_FLOODPLAINS_PLAINS") then
@@ -9057,7 +9734,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 	--	B_debug = true 
 	--end
 	if B_debug == true then
-		print("CHECKING",	plot:GetX(),plot:GetY())
+		--print("CHECKING",	plot:GetX(),plot:GetY())
 	end
 	local orig_X = plot:GetX()
 	local orig_Y = plot:GetY()
@@ -9098,7 +9775,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 				end
 				if b_true_coast == true then
 					if B_debug == true then
-						print("FOUND TRUE OCEAN")
+						--print("FOUND TRUE OCEAN")
 					end
 					coaststart_plot = check_plot
 					break
@@ -9107,7 +9784,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 		end
 		if coaststart_plot == nil or b_true_coast == false then
 			if B_debug == true then
-				print("SCAN FOR NEAREST COAST")
+				--print("SCAN FOR NEAREST COAST")
 			end
 			for x = orig_X, 0, -1 do
 				local check_plot = Map.GetPlot(x,orig_Y)
@@ -9607,7 +10284,7 @@ function GetIslandPerimeter(plot,B_debug,B_first_layer,B_report)
 						ref_plot = plot
 					end
 				end
-				print("ISLAND #",i,"SIZE",size,"ANCHOR",ref_plot:GetX(),ref_plot:GetY())
+				--print("ISLAND #",i,"SIZE",size,"ANCHOR",ref_plot:GetX(),ref_plot:GetY())
 			end		
 			else
 			print("NO LARGE ISLANDS DETECTED")

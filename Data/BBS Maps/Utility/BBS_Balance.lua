@@ -1,5 +1,5 @@
  ------------------------------------------------------------------------------
---	FILE:	 BBS_Balance.lua 1.6.7
+--	FILE:	 BBS_Balance.lua 2.0.2 BETA
 --	AUTHOR:  D. / Jack The Narrator, 57Fan
 --	PURPOSE: Rebalance the map spawn post placement 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ local COASTAL_LEADERS = {"LEADER_VICTORIA", "LEADER_HOJO", "LEADER_DIDO"};
 
 ------ New Vars ------
 
-local spawnTwoTwo = 0.2
+local spawnTwoTwo = 0.15
 local spawnHills = 0.5
 
 -------------
@@ -272,10 +272,10 @@ function giveHills(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, hillD
          local returnValue = toHill(okToHill[okToHilIndex][1], okToHill[okToHilIndex][2], false, false);
          
          if (returnValue >= 2) then
-            print("improved true tile, now a TWO TWO", okToHill[okToHilIndex][1], okToHill[okToHilIndex][2]);
+            __Debug("improved true tile, now a TWO TWO", okToHill[okToHilIndex][1], okToHill[okToHilIndex][2]);
             givenTwoTwo = givenTwoTwo + 1;
          else
-            print("improved true tile", okToHill[okToHilIndex][1], okToHill[okToHilIndex][2]);
+            __Debug("improved true tile", okToHill[okToHilIndex][1], okToHill[okToHilIndex][2]);
          end
 
       elseif okToHilBkpIndex < okToHillBkpCount then
@@ -283,9 +283,9 @@ function giveHills(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, hillD
          
          toHill(okToHillBkp[okToHilBkpIndex][1], okToHillBkp[okToHilBkpIndex][2], true, true);
          
-         print("improved backup tile", okToHillBkp[okToHilBkpIndex][1], okToHillBkp[okToHilBkpIndex][2]);
+         __Debug("improved backup tile", okToHillBkp[okToHilBkpIndex][1], okToHillBkp[okToHilBkpIndex][2]);
       else
-         print("Warning, not enough tiles to improve !!");
+         __Debug("Warning, not enough tiles to improve !!");
       end
    end
    
@@ -362,7 +362,7 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
    
       if (resource == 15 or resource == 16 or resource == 25 or resource == 27) then -- resources that can be with forest
          targetFeature = 3;
-         print("Adding forest to tile", x, y);
+         __Debug("Adding forest to tile", x, y);
          
       else -- resource that can't be turned to two-two
          if (canStone) then
@@ -370,17 +370,17 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
                targetResource = 8;
                targetFeature = -1;
                
-               print("Turning to 2-2 hill stone", x, y);
+               __Debug("Turning to 2-2 hill stone", x, y);
             else -- add forest
                targetFeature = 3;
                targetResource = -1;
-               print("Turning to 2-2 hill forest", x, y);
+               __Debug("Turning to 2-2 hill forest", x, y);
                
             end
          else -- forest only
             targetFeature = 3;
             targetResource = -1;
-            print("Turning to 2-2 hill forest", x, y);
+            __Debug("Turning to 2-2 hill forest", x, y);
             
          end
       end
@@ -389,7 +389,7 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
    
       targetResource = 4;
       targetFeature = 3;
-      print("Turning to 2-2 forest - deer", x, y);
+      __Debug("Turning to 2-2 forest - deer", x, y);
       
    elseif (terrain == 4) then --plain hill
       if canRainforest then
@@ -400,18 +400,18 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
                if (rng >= 0.5) then -- add sheep
                   targetResource = 7;
                   targetFeature = -1;
-                  print("Turning to 2-2 plain hill sheep", x, y);
+                  __Debug("Turning to 2-2 plain hill sheep", x, y);
                   
                else --rainforest
                   targetResource = -1;
                   targetFeature = 2;
-                  print("Turning to 2-2 plain hill rainforest", x, y);
+                  __Debug("Turning to 2-2 plain hill rainforest", x, y);
                end
             else
                --rainforest
                targetResource = -1;
                targetFeature = 2;
-               print("Turning to 2-2 plain hill rainforest", x, y);
+               __Debug("Turning to 2-2 plain hill rainforest", x, y);
             end
          end
          
@@ -419,9 +419,9 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
          if canSheep then
             targetResource = 7;
             targetFeature = -1;
-            print("Turning to 2-2 plain hill sheep", x, y);
+            __Debug("Turning to 2-2 plain hill sheep", x, y);
          else
-            print("I can't either sheep nor rainforest, error", x, y);
+            __Debug("I can't either sheep nor rainforest, error", x, y);
             return -1;
          end
       end
@@ -437,20 +437,20 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
                   targetResource = 7;
                   targetFeature = -1;
                   targetTerrain = 4;
-                  print("Turning to 2-2 plain hill sheep", x, y);
+                  __Debug("Turning to 2-2 plain hill sheep", x, y);
                   
                else --rainforest
                   targetResource = -1;
                   targetFeature = 2;
                   targetTerrain = 4;
-                  print("Turning to 2-2 plain hill rainforest", x, y);
+                  __Debug("Turning to 2-2 plain hill rainforest", x, y);
                end
             else
                --rainforest
                targetResource = -1;
                targetFeature = 2;
                targetTerrain = 4;
-               print("Turning to 2-2 plain hill rainforest", x, y);
+               __Debug("Turning to 2-2 plain hill rainforest", x, y);
             end
          end
          
@@ -459,9 +459,9 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
             targetResource = 7;
             targetFeature = -1;
             targetTerrain = 4;
-            print("Turning to 2-2 plain hill sheep", x, y);
+            __Debug("Turning to 2-2 plain hill sheep", x, y);
          else
-            print("I can't either sheep nor rainforest, error", x, y);
+            __Debug("I can't either sheep nor rainforest, error", x, y);
             return -1;
          end
       end
@@ -493,7 +493,7 @@ function giveTwoTwos(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, mis
          
          if (mapTwoTwo[xIndex][yIndex] < 2) then -- not a two two
             toTwoTwo(x, y);
-            print("TWO TWO improved tile", x, y);
+            __Debug("TWO TWO improved tile", x, y);
             i = i + 1;
          end
 
@@ -508,9 +508,9 @@ function giveTwoTwos(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, mis
          local yIndex = y + 1;
 
          toTwoTwo(x, y);
-         print("TWO TWO improved tile", x, y);
+         __Debug("TWO TWO improved tile", x, y);
       else
-         print("Two two: warning, not enough tiles to improve !!");
+         __Debug("Two two: warning, not enough tiles to improve !!");
          return;
       end
    end
@@ -576,13 +576,18 @@ function BBS_Script()
 		local rainfall = MapConfiguration.GetValue("rainfall");
 		world_age = MapConfiguration.GetValue("world_age");
       if (world_age == 1) then -- new
-         spawnHills = 0.5;
+         spawnHills = 0.45;
       else
-         spawnHills = 0.35;
+         spawnHills = 0.30;
       end
       
       if (MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua") then
          spawnHills = 0.7;
+      end
+      
+      if (MapConfiguration.GetValue("MAP_SCRIPT") == "Lakes.lua") then
+         spawnHills = 0.25;
+         spawnTwoTwo = 0.07;
       end
       
 		local ridge = MapConfiguration.GetValue("BBSRidge");
@@ -773,17 +778,30 @@ function BBS_Script()
          local spawnX = player.spawnX;
          local spawnY = player.spawnY;
          
+         --__Debug("player", i, spawnX, spawnY);
+         
+         if spawnX < 0 or spawnY < 0 then
+            print("invalid spawn, won't apply hill removal");
+            break;
+         end
+         
          for j = 1, 5 do
             local list = getRing(spawnX, spawnY, j, mapXSize, mapYSize, mapIsRoundWestEast);
             
+            --__Debug("----list", j);
+            
             for _, element in ipairs(list) do
+               
                local x = element[1];
                local y = element[2];
+               
+               --__Debug("----element", x, y);
                
                local xIndex = x + 1;
                local yIndex = y + 1;
                
                if (mapTerrainCode[xIndex][yIndex] % 3 == 2 and mapNextToWater[xIndex][yIndex]) then
+                  __Debug(x, y)
                   local plot = Map.GetPlot(x, y);
                   print("Mountain work X: ", x, "Y: ", y, "Removing coastal mountain");
                   mountainToHill(plot);
@@ -795,7 +813,7 @@ function BBS_Script()
 
       end
       
-      
+      __Debug("sorti montagnes")
       -------------------------------
 
        ---- LARGE SPAWN CORRECTION -----
@@ -805,15 +823,21 @@ function BBS_Script()
       -- With 12 distance, we are going to fix up to ring 7
       local fixedRing = math.floor((Major_Distance_Target / 2) + 1);
       
-      print("Major count", majorCount);
+      __Debug("Major count", majorCount);
       
       for i = 1, majorCount do
          local player = majorAll[i];
          local spawnX = player.spawnX;
          local spawnY = player.spawnY;
-         print("-----------------");
-         print("Player", player.civName);
-         print("-----------------");
+         
+         if spawnX < 0 or spawnY < 0 then
+            print("invalid spawn, won't apply spawn correction");
+            break;
+         end
+         
+         __Debug("-----------------");
+         __Debug("Player", player.civName);
+         __Debug("-----------------");
          
          local missingHills = 0;
          local missingTwoTwo = 0;
@@ -863,12 +887,12 @@ function BBS_Script()
                end
             end
             
-            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo);
-            local aimedHills =  math.floor(plainGrasslandTile * spawnHills);
+            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo + 1);
+            local aimedHills =  math.floor(plainGrasslandTile * spawnHills + 1);
             
-            print("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
-            print("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
-            print("Ring ", j, "Workable tiles", plainGrasslandTile);
+            __Debug("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
+            __Debug("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
+            __Debug("Ring ", j, "Workable tiles", plainGrasslandTile);
             
             local hillDiff = aimedHills - hillCount;
             local twotwoDiff = aimedTwoTwo - twoTwoCount;
@@ -892,7 +916,7 @@ function BBS_Script()
             
          end
          
-         print("Missing", missingTwoTwo, "Two-twos and ", missingHills, "hills");
+         __Debug("Missing", missingTwoTwo, "Two-twos and ", missingHills, "hills");
       end
 
 		--------------------------------------------------------------------------------------
@@ -2101,7 +2125,7 @@ function BBS_Script()
             
             if terrain % 3 ~= 1 then -- not a hill
                TerrainBuilder.SetTerrainType(plot, 1); -- granting grassland hill
-               if feature == 2 then
+               if (feature == 2 or feature == 5) then
                   TerrainBuilder.SetFeatureType(plot, -1);
                end
                print("Fixed Ethiopian spawn to hill", x, y);
@@ -2136,6 +2160,7 @@ function BBS_Script()
 		__Debug("D TURN STARTING: Any other turn");
 
 	end
+   
 end
 
 ------------------------------------------------------------------------------------------------------------------------------
