@@ -1253,7 +1253,7 @@ function BBS_Script()
 			if (majList[i] ~= nil) then
 				if(majList[i].leader ~= "LEADER_SPECTATOR"  ) then
                if (Map.GetPlot(majList[i].plotX,majList[i].plotY):IsWater() == false) then
-                  print("Will ensure that all strategics resources are present");
+                  --print("Will ensure that all strategics resources are present");
                   BalanceStrategic(Map.GetPlot(majList[i].plotX,majList[i].plotY))
                end
 				end
