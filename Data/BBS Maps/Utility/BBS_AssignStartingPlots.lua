@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.0.6"
+local bbs_version = "2.1.0"
 
 local bError_major = false;
 local bError_minor = false;
@@ -54,6 +54,8 @@ function BBS_AssignStartingPlots.Create(args)
    if MapConfiguration.GetValue("BBS_Team_Spawn") ~= nil then
 		Teamers_Config = MapConfiguration.GetValue("BBS_Team_Spawn")
 	end
+   
+   mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
 
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
@@ -63,6 +65,7 @@ function BBS_AssignStartingPlots.Create(args)
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
    
+   print("Map Name:", mapScript);
    print ("Init: Game Seed", GameConfiguration.GetValue("GAME_SYNC_RANDOM_SEED")); 
    print ("Init: Map Seed", MapConfiguration.GetValue("RANDOM_SEED"));
    print ("Init: Map Size: ", Map.GetMapSize(), "2 = Small, 5 = Huge");
@@ -87,10 +90,12 @@ function BBS_AssignStartingPlots.Create(args)
    print ("Init: World Age: ", MapConfiguration.GetValue("world_age"), "1 = New, 2 = Standard 3 = Old");
    print ("Init: Ridge: ", MapConfiguration.GetValue("BBSRidge"), "0 = Standard, 1 = Classic, 2 = Large Open 4 = Flat Earth");
    print ("Init: Sea Level: ", MapConfiguration.GetValue("sea_level"), "1 = Low Sea Level, 2 = Standard, 3 = High Sea Level");
-   print ("Init: Strategic Resources:",MapConfiguration.GetValue("BBSStratRes"), "0 = standard")
+   print ("Init: Strategic Resources:",MapConfiguration.GetValue("BBSStratRes"), "0 = standard", "3 = Spawn Guaranteed")
    print ("Init: Resources: ", MapConfiguration.GetValue("resources"), "1 = Sparse, 2 = Standard, 3 = Abundant");
-   print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Standard, 2 = Balanced, 3 = Legendary");
+   print ("Init: Spawntype: ", MapConfiguration.GetValue("start"), "1 = Balanced, 2 = standard, 3 = Legendary");
    print ("Init: Team Placement ", Teamers_Config, "0 = Standard, 1 = East-West (RTS Mode)");
+   local minDistance = MapConfiguration.GetValue("BBSMinDistance");
+   print ("Init: Minimal distance setting:", minDistance);
 
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
@@ -189,112 +194,120 @@ function BBS_AssignStartingPlots.Create(args)
    -- Large maps, with low amount of water (ex: highlands, lakes, ...) will see players spawn with a higher distance from each other.
    -- Smaller maps, with high amount of water (ex: Terra, Fractal, ...) will see player spawn closer to each other.
    
-   mapScript = MapConfiguration.GetValue("MAP_SCRIPT");
    
-   if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" then
-		Major_Distance_Target = 15
-	end
-   
-   if mapScript == "InlandSea.lua" then
-		Major_Distance_Target = 14
-	end
+   -- Min distance manually set by player
+   if minDistance ~= nil and minDistance ~= 0 then
+      Major_Distance_Target = minDistance;
+      
+      
+   else -- using automatic setting
+      if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" then
+         Major_Distance_Target = 15
+      end
+      
+      if mapScript == "InlandSea.lua" then
+         Major_Distance_Target = 14
+      end
 
-   
-   if mapScript == "Seven_Seas.lua" or mapScript == "Primordial.lua" then
-		Major_Distance_Target = 13
-	end
-   
-	if mapScript == "Pangaea.lua" or mapScript == "DWPangaea.lua" or mapScript == "Shuffle.lua" or mapScript == "Tilted_Axis.lua" then
-		Major_Distance_Target = 12
-	end
+      
+      if mapScript == "Seven_Seas.lua" or mapScript == "Primordial.lua" then
+         Major_Distance_Target = 13
+      end
+      
+      if mapScript == "Pangaea.lua" or mapScript == "DWPangaea.lua" or mapScript == "Shuffle.lua" or mapScript == "Tilted_Axis.lua" then
+         Major_Distance_Target = 12
+      end
 
 
-   if mapScript == "Fractal.lua" or mapScript == "Island_Plates.lua" or mapScript == "Small_Continents.lua"
-      or mapScript == "Archipelago_XP2.lua"  or mapScript == "Continents.lua" or mapScript == "Wetlands_XP2.lua"
-      or mapScript == "Continents_Islands.lua" or mapScript == "Splintered_Fractal.lua"
-      or mapScript == "DWArchipelago.lua" or mapScript == "DWFractal.lua" or mapScript == "DWMixedLand.lua"
-      or mapScript == "DWSmallContinents.lua" or mapScript == "DWMixedIslands.lua" then
-		Major_Distance_Target = 10
-	end
+      if mapScript == "Fractal.lua" or mapScript == "Island_Plates.lua" or mapScript == "Small_Continents.lua"
+         or mapScript == "Archipelago_XP2.lua"  or mapScript == "Continents.lua" or mapScript == "Wetlands_XP2.lua"
+         or mapScript == "Continents_Islands.lua" or mapScript == "Splintered_Fractal.lua"
+         or mapScript == "DWArchipelago.lua" or mapScript == "DWFractal.lua" or mapScript == "DWMixedLand.lua"
+         or mapScript == "DWSmallContinents.lua" or mapScript == "DWMixedIslands.lua" then
+         Major_Distance_Target = 10
+      end
 
+      
+      
+      if mapScript == "Terra.lua" then
+         Major_Distance_Target = 8
+      end
    
-	
-	if mapScript == "Terra.lua" then
-		Major_Distance_Target = 8
-	end
+   
+      local realPlayersCount = 0;
+   
+      for i = 1, PlayerManager.GetAliveMajorsCount() do
+         if ( PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName() ~= "LEADER_SPECTATOR" and
+               PlayerConfigurations[tempMajorList[i]]:GetHandicapTypeID() ~= 2021024770) then
+            realPlayersCount = realPlayersCount + 1;
+         end
+      end
+      
+   
+      print("REAL COUNT", realPlayersCount);
+      
+      
+      --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
+      
+      -- Enormous ?
+      if Map.GetMapSize() == 7 and  realPlayersCount > 17 then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+      if Map.GetMapSize() == 7 and  realPlayersCount < 15 then
+         Major_Distance_Target = Major_Distance_Target + 2
+      end	
+      
+      -- Huge
+      if Map.GetMapSize() == 5 and  realPlayersCount > 13 then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+      if Map.GetMapSize() == 5 and  realPlayersCount < 11 then
+         Major_Distance_Target = Major_Distance_Target + 2
+      end	
+      -- Large
+      if Map.GetMapSize() == 4 and  realPlayersCount > 11 then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+      if Map.GetMapSize() == 4 and  realPlayersCount < 9 then
+         Major_Distance_Target = Major_Distance_Target + 2
+      end	
+      -- Standard
+      if Map.GetMapSize() == 3 and  realPlayersCount > 9 then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+      if Map.GetMapSize() == 3 and  realPlayersCount < 7 then
+         Major_Distance_Target = Major_Distance_Target + 2
+      end	
+      -- Small
+      if Map.GetMapSize() == 2 and  realPlayersCount > 7 then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+      if Map.GetMapSize() == 2 and  realPlayersCount < 5 then
+         Major_Distance_Target = Major_Distance_Target + 2
+      end	
+      
+      -- Tiny
+      if Map.GetMapSize() == 1 and  realPlayersCount > 5 then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+      if Map.GetMapSize() == 1 and  realPlayersCount < 3 then
+         Major_Distance_Target = Major_Distance_Target + 2
+      end	
+      
+      -- Duel
+      if Map.GetMapSize() == 0 and  realPlayersCount > 2  then
+         Major_Distance_Target = Major_Distance_Target - 2
+      end
+   end
+
+   print("Min distance between players:", Major_Distance_Target);
+   
+   Base_Major_Distance_Target = Major_Distance_Target;
    
    if mapScript == "Continents_Islands.lua" or mapScript == "Continents.lua" then
       isContinentMap = true;
       ___Debug("continent map");
    end
-   
-   local realPlayersCount = 0;
-   
-   for i = 1, PlayerManager.GetAliveMajorsCount() do
-      if ( PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName() ~= "LEADER_SPECTATOR" and
-            PlayerConfigurations[tempMajorList[i]]:GetHandicapTypeID() ~= 2021024770) then
-         realPlayersCount = realPlayersCount + 1;
-      end
-   end
-   
-   print("REAL COUNT", realPlayersCount);
-   
-   
-   --Phase 2 : Adapt distance if there are too many/not enough players on for the map size
-   
-   -- Enormous ?
-   if Map.GetMapSize() == 7 and  realPlayersCount > 17 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 7 and  realPlayersCount < 15 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-   
-   -- Huge
-	if Map.GetMapSize() == 5 and  realPlayersCount > 13 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 5 and  realPlayersCount < 11 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Large
-	if Map.GetMapSize() == 4 and  realPlayersCount > 11 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 4 and  realPlayersCount < 9 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Standard
-	if Map.GetMapSize() == 3 and  realPlayersCount > 9 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 3 and  realPlayersCount < 7 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	-- Small
-	if Map.GetMapSize() == 2 and  realPlayersCount > 7 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 2 and  realPlayersCount < 5 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	
-   -- Tiny
-	if Map.GetMapSize() == 1 and  realPlayersCount > 5 then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-	if Map.GetMapSize() == 1 and  realPlayersCount < 3 then
-		Major_Distance_Target = Major_Distance_Target + 2
-	end	
-	
-   -- Duel
-	if Map.GetMapSize() == 0 and  realPlayersCount > 2  then
-		Major_Distance_Target = Major_Distance_Target - 2
-	end
-
-   print("Min distance between players:", Major_Distance_Target);
-   
-   Base_Major_Distance_Target = Major_Distance_Target;
    
    
    ___Debug("ALIVE", PlayerManager.GetAliveMajorsCount());
@@ -514,6 +527,9 @@ mapIsContinentSplit = {};
 mapWonder = {};
 mapDesert = {};
 
+-- If there are too many floodplains/water around a tile, will be positive
+mapTooWet = {};
+
 
 mapFoodYield = {};
 mapProdYield = {};
@@ -674,6 +690,90 @@ function biasFeatureScore(bias, percentageR3, percentageR5)
 
    local FEATURE_PERCENTAGE_B5_R3 = 0.03;
    local FEATURE_PERCENTAGE_B5_R5 = 0.03;
+
+   local score = 0;
+   
+   if bias == 1 then
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B1_R3 and percentageR5 >= FEATURE_PERCENTAGE_B1_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B1_R3 - 0.03 and percentageR5 >= FEATURE_PERCENTAGE_B1_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+      
+   elseif bias == 2 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B2_R3 and percentageR5 >= FEATURE_PERCENTAGE_B2_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B2_R3 - 0.03 and percentageR5 >= FEATURE_PERCENTAGE_B2_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 3 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B3_R3 and percentageR5 >= FEATURE_PERCENTAGE_B3_R5 then
+         score = score + 1000;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B3_R3 - 0.03 and percentageR5 >= FEATURE_PERCENTAGE_B3_R5 - 0.03 then
+         score = score + 100;
+      -- bias not respected
+      else
+         score = score - 2000;
+      end
+   
+   elseif bias == 4 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B4_R3 and percentageR5 >= FEATURE_PERCENTAGE_B4_R5 then
+         score = score + 500;
+      -- bias somewhat respected
+      elseif percentageR3 >= FEATURE_PERCENTAGE_B4_R3 - 0.02 and percentageR5 >= FEATURE_PERCENTAGE_B4_R5 - 0.02 then
+         score = score + 50;
+      -- bias not respected
+      else
+         score = score - 1000;
+      end
+   
+   elseif bias == 5 then 
+      -- bias respected
+      if percentageR3 >= FEATURE_PERCENTAGE_B5_R3 and percentageR5 >= FEATURE_PERCENTAGE_B5_R5 then
+         score = score + 200;
+      -- bias not respected
+      else
+         score = score - 400;
+      end
+   else
+      print("Warning, tried to evaluate a bugged Feature bias !");
+   end
+   
+   return score;
+   
+end
+
+
+function biasFloodPlainsScore(bias, percentageR3, percentageR5)
+
+   local FEATURE_PERCENTAGE_B1_R3 = 0.25;
+   local FEATURE_PERCENTAGE_B1_R5 = 0.20;
+
+   local FEATURE_PERCENTAGE_B2_R3 = 0.20;
+   local FEATURE_PERCENTAGE_B2_R5 = 0.15;
+
+   local FEATURE_PERCENTAGE_B3_R3 = 0.20;
+   local FEATURE_PERCENTAGE_B3_R5 = 0.10;
+
+   local FEATURE_PERCENTAGE_B4_R3 = 0.20;
+   local FEATURE_PERCENTAGE_B4_R5 = 0.10;
+
+   local FEATURE_PERCENTAGE_B5_R3 = 0.10;
+   local FEATURE_PERCENTAGE_B5_R5 = 0.05;
 
    local score = 0;
    
@@ -2011,7 +2111,7 @@ function NewBBS(instance)
    
    
    -- Considering whether the tile is islandish or not
-   if (mapScript == "Island_Plates.lua" or mapScript == "Small_Continents.lua" or mapScript == "Archipelago_XP2.lua" or mapScript == "Continents_Islands.lua"
+   if (mapScript == "Island_Plates.lua" or mapScript == "Small_Continents.lua" or mapScript == "Archipelago_XP2.lua"
          or mapScript == "DWArchipelago.lua" or mapScript == "DWSmallContinents.lua" or mapScript == "DWMixedIslands.lua") then
       isIslandMap = true;
    else
@@ -2019,6 +2119,8 @@ function NewBBS(instance)
    end
    
    -- Size = max index
+   
+   --[[
    
    -- duel (1v1)
    if Map.GetMapSize() == 0 then
@@ -2063,8 +2165,12 @@ function NewBBS(instance)
       mapYSize = 78;
    end
    
+   --]]
+   
+   mapXSize, mapYSize = Map.GetGridSize();
+   
    --print("size:", Map.GetMapSize());
-   --print("X:", mapXSize, "Y:", mapYSize);
+   print("Map size: X:", mapXSize, "Y:", mapYSize);
    
    -- Amount of land for each column of the map.
    -- will be used to draw the "border" for East-West scenario
@@ -2088,6 +2194,7 @@ function NewBBS(instance)
       mapSpawnable[i] = {};
       mapWonder[i] = {};
       mapNextToWater[i] = {};
+      mapTooWet[i] = {};
       
       mapTwoTwo[i] = {};
       mapFoodYield[i] = {};
@@ -2113,6 +2220,7 @@ function NewBBS(instance)
          mapContinent[i][j] = 9;
          mapIsContinentSplit[i][j] = false;
          mapNextToWater[i][j] = false;
+         mapTooWet[i][j] = false;
          
          mapFoodYield[i][j] = 0;
          mapProdYield[i][j] = 0;
@@ -2134,7 +2242,7 @@ function NewBBS(instance)
       terrainCount[i] = 0;
    end
    
-   for i = 1, 100 do
+   for i = 1, 1000 do
       resourceCount[i] = 0;
       featureCount[i] = 0;
       majorBiases[i] = {};
@@ -2319,6 +2427,28 @@ function NewBBS(instance)
             end
             if mapIsContinentSplit[iIndex][jIndex] then
                break;
+            end
+         end
+         
+         if mapTerrainCode[iIndex][jIndex] < 15 then -- only land tiles
+         
+            local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
+            local wetCount = 0;
+            for _, element in ipairs(list) do
+               local x = element[1];
+               local y = element[2];
+               
+               if (mapTerrainCode[x + 1][y + 1] >= 15 or mapFeatureCode[x + 1][y + 1] == 0 or
+                   mapFeatureCode[x + 1][y + 1] == 31 or mapFeatureCode[x + 1][y + 1] == 32) then
+                  wetCount = wetCount + 1;
+               end
+            end
+            
+            
+            -- the tile is too wet, going to ban it for everyone except floodcivs
+            if wetCount > 3 then
+               mapTooWet[iIndex][jIndex] = true;
+               ___Debug("Tile is too wet:", i, j);
             end
          end
       end
@@ -2544,7 +2674,7 @@ function NewBBS(instance)
          end
          
          if (mapIsRoundWestEast == false) then
-            if (i <= 2 or ((mapXSize - i) <= 2)) then
+            if (i <= 3 or ((mapXSize - i) <= 3)) then
             mapSpawnable[iIndex][jIndex] = false;
             
             ___Debug("---- Banning border of the map X:", i, "Y:", j);
@@ -2817,7 +2947,7 @@ function NewBBS(instance)
       local biasFeature = {};
       local biasResource = {};
       
-      for k = 1, 100 do
+      for k = 1, 200 do
          biasTerrain[k] = 0;
          biasFeature[k] = 0;
          biasResource[k] = 0;
@@ -3004,7 +3134,7 @@ function NewBBS(instance)
             featuresNegativeBiasListCount[k] = 0;
          end
          
-         for k = 1, 100 do
+         for k = 1, 200 do
          
             -- value of the bias (ex: Tier 1)
             local resourceBiasValue = biasResource[k];
@@ -3055,6 +3185,13 @@ function NewBBS(instance)
          
          end
          
+         local floodPlainsCiv = false;
+         if (biasFeature[0 + 1] > 0 or biasFeature[31 + 1] > 0 or biasFeature[32 + 1] > 0) then
+            ___Debug("Floodplains Civ: TRUE");
+            floodPlainsCiv = true;
+         end
+         
+         
          ----------
          
          majorBiases[majorCount] = tempBias;
@@ -3064,7 +3201,7 @@ function NewBBS(instance)
          -- Main object --
          -- This will contain all the player information (leader, civ, biases, ...)
          majorAll[majorCount] = {index = i, civName = civName, civID = tempMajorList[i], major = PlayerConfigurations[tempMajorList[i]], biases = majorBiases[i],
-                          biasScore = biasScore, biasCount = biasCount, tundraCiv = tundraCiv,
+                          biasScore = biasScore, biasCount = biasCount, tundraCiv = tundraCiv, floodPlainsCiv = floodPlainsCiv,
                           biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource, bestBias = bestBias,
                           resourcesBiasList = resourcesBiasList, resourcesBiasListCount = resourcesBiasListCount, featuresBiasList = featuresBiasList, featuresBiasListCount = featuresBiasListCount, 
                           resourcesNegativeBiasList = resourcesNegativeBiasList, resourcesNegativeBiasListCount = resourcesNegativeBiasListCount, featuresNegativeBiasList = featuresNegativeBiasList, featuresNegativeBiasListCount = featuresNegativeBiasListCount, 
@@ -4605,7 +4742,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
          end
       end
       
-      if (player.name == "CIVILIZATION_MALI") then
+      if (player.civName == "CIVILIZATION_MALI") then
          ___Debug("We have a mali, we'll try standard tiles as the civ had no proper tile !");
          for i = standardWaterIndex + 1, standardWaterCount do
          
@@ -5192,6 +5329,9 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   floodsScore = floodsScore + 500;
                end
                
+               ___Debug("flood Ring 3:", ring3Floods);
+               ___Debug("flood Ring 5:", ring5Floods);
+               
                -- tundra score
                   
                local tundraScore = 0
@@ -5291,10 +5431,10 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                
                
                -- test only
-               local ring3Shit = ring3Desert + ring3Snow + ring3Tundra + ring3Floods * 0.75;
+               local ring3Shit = ring3Desert + ring3Snow + ring3Tundra + ring3Floods * 0.65;
                local percentageR3Shit = ring3Shit / ring3LandCount;
                
-               local ring5Shit = ring5Desert + ring5Snow + ring5Tundra + ring5Floods * 0.75;
+               local ring5Shit = ring5Desert + ring5Snow + ring5Tundra + ring5Floods * 0.65;
                local percentageR5Shit = ring5Shit / ring5LandCount;
                
                ___Debug("Shits ring 3 count:", ring3Shit, "percentage:", percentageR3Shit)
@@ -5330,6 +5470,11 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                if ((ring3Sea / 36) > SEA_PERCANTEGE_R3) then
                   standardScore = standardScore - 2000;
                   ___Debug("Too much sea around the spawn -> -2000", ring3Sea);
+               end
+               
+               if (mapTooWet[iIndex][jIndex]) then
+                  standardScore = standardScore - 5000;
+                  ___Debug("Map is too wet, tile is dismissed")
                end
                
                ___Debug("Regular Tile Score:", standardScore);
@@ -5995,8 +6140,14 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                            local percentageR5 = ringFiveFeature / ring5LandCount;
                      
                            ___Debug("pourcentage de features:", percentageR3, percentageR5);
+                           local score = 0;
                      
-                           local score = biasFeatureScore(k, percentageR3, percentageR5);
+                           if player.floodPlainsCiv then
+                              ___Debug("Evaluating a floodplains civ")
+                              score = biasFloodPlainsScore(k, percentageR3, percentageR5);
+                           else
+                              score = biasFeatureScore(k, percentageR3, percentageR5);
+                           end
                      
                            ___Debug("Feature score:", score);
                            
@@ -6189,27 +6340,27 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      ring5Shit = 0;
                      
                      -- desert
-                     if (player.biasTerrain[6 + 1] == 0 and player.biasTerrain[7 + 1] == 0) then
+                     if (player.biasTerrain[6 + 1] <= 0 and player.biasTerrain[7 + 1] <= 0) then
                         ring3Shit = ring3Shit + ring3Desert;
                         ring5Shit = ring5Shit + ring5Desert;
                      end
                      
                      -- tundra
-                     if (player.biasTerrain[9 + 1] == 0 and player.biasTerrain[10 + 1] == 0) then
+                     if (player.biasTerrain[9 + 1] <= 0 and player.biasTerrain[10 + 1] <= 0) then
                         ring3Shit = ring3Shit + ring3Tundra;
                         ring5Shit = ring5Shit + ring5Tundra;
                      end
                      
                      -- snow
-                     if (player.biasTerrain[12 + 1] == 0 and player.biasTerrain[13 + 1] == 0) then
+                     if (player.biasTerrain[12 + 1] <= 0 and player.biasTerrain[13 + 1] <= 0) then
                         ring3Shit = ring3Shit + ring3Snow;
                         ring5Shit = ring5Shit + ring3Snow;
                      end
                      
-                     --if (player.biasFeature[0 + 1] <= 0 and player.biasFeature[31 + 1] <= 0 and player.biasFeature[32 + 1] <= 0) then
-                       -- ring3Shit = ring3Shit + ring3Floods;
-                       -- ring5Shit = ring5Shit + ring5Floods;
-                     --end
+                     if (player.biasFeature[0 + 1] <= 0 and player.biasFeature[31 + 1] <= 0 and player.biasFeature[32 + 1] <= 0) then
+                        ring3Shit = ring3Shit + ring3Floods * 0.65;
+                        ring5Shit = ring5Shit + ring5Floods * 0.65;
+                     end
                      
                      percentageR3Shit = ring3Shit / ring3LandCount;
                      percentageR5Shit = ring5Shit / ring5LandCount;
@@ -6244,6 +6395,22 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                            standardScore = standardScore - 2000;
                            ___Debug("Too much sea around the spawn -> -2000");
                         end
+                     end
+                     
+                     if (mapTooWet[iIndex][jIndex]) then
+                        if (player.floodPlainsCiv) then
+                           ___Debug("Tile is too wet, but civ has a biast towards it");
+                        else
+                           standardScore = standardScore - 5000;
+                           ___Debug("Map is too wet, tile is dismissed")
+                        end
+                     end
+                     
+                     local featureTile = mapFeatureCode[iIndex][jIndex];
+                     -- checking whether the civ is spawning on a floodplain or not
+                     if (player.floodPlainsCiv and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32) then
+                        ___Debug("We have a floodplain civ not starting on floodplains");
+                        standardScore = standardScore - 5000;
                      end
                      
                      ___Debug("Regular Tile Score:", standardScore);

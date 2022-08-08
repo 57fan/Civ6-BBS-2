@@ -20,6 +20,7 @@
 		<Row ParameterId="Resources" Name="LOC_MAP_RESOURCES_NAME" Description="LOC_MAP_RESOURCES_DESCRIPTION" Domain="Resources" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="resources" GroupId="MapOptions" Hash="0" SupportsSinglePlayer="0" SortIndex="225"/>
 		<Row ParameterId="BBS_RIDGES" Name="LOC_GAME_BBS_RIDGE_NAME" Description="LOC_GAME_BBS_RIDGE_DESC" Domain="RidgeDomain" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBSRidge" GroupId="MapOptions" SortIndex="231" />
 		<Row ParameterId="BBS_SRESOURCES" Name="LOC_GAME_BBS_SRESOURCES_NAME" Description="LOC_GAME_BBS_SRESOURCES_DESC" Domain="StratResDomain" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBSStratRes" GroupId="MapOptions" SupportsSinglePlayer="1" SortIndex="226" />
+      <Row ParameterId="BBS_MIN_DISTANCE" Name="LOC_GAME_BBS_MIN_DISTANCE_NAME" Description="LOC_GAME_BBS_MIN_DISTANCE_DESC" Domain="MinDistance" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBSMinDistance" GroupId="MapOptions" SupportsSinglePlayer="1" SortIndex="234" />
 		<Row ParameterId="BBS_Team_Spawn" Name="LOC_BBS_Team_Spawn_NAME" Description="LOC_BBS_Team_Spawn_DESC" Domain="TeamersDomain" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBS_Team_Spawn" GroupId="MapOptions" Visible="1" SupportsSinglePlayer="0" SortIndex="233"/>
 		<Row ParameterId="BBS_NATURAL" Name="LOC_GAME_BBS_NATURAL_NAME" Description="LOC_GAME_BBS_NATURAL_DESC" Domain="NaturalDomain" DefaultValue="1" ConfigurationGroup="Map" ConfigurationId="BBSNatural" GroupId="MapOptions" SortIndex="229" />
 		<!--  Mutually Exclusive -->
@@ -242,6 +243,29 @@
 		<Row Domain="StratResDomain" Value="1" Name="BBS_SRESOURCES_MORE_NAME" Description="BBS_SRESOURCES_MORE_DESC" SortIndex="20"/>
 		<Row Domain="StratResDomain" Value="2" Name="BBS_SRESOURCES_MUCHMORE_NAME" Description="BBS_SRESOURCES_MUCHMORE_DESC" SortIndex="30"/>
 		<Row Domain="StratResDomain" Value="3" Name="BBS_SRESOURCES_GARANTEED_NAME" Description="BBS_SRESOURCES_GARANTEED_DESC" SortIndex="40"/>
+      
+      
+      <Row Domain="MinDistance" Value="0" Name="BBS_MIN_DISTANCE_AUTO_NAME" Description="BBS_MIN_DISTANCE_AUTO_DESC" SortIndex="10"/>
+      <Row Domain="MinDistance" Value="6" Name="BBS_MIN_DISTANCE_SIX_NAME" Description="BBS_MIN_DISTANCE_SIX_DESC" SortIndex="60"/>
+      <Row Domain="MinDistance" Value="7" Name="BBS_MIN_DISTANCE_SEVEN_NAME" Description="BBS_MIN_DISTANCE_SEVEN_DESC" SortIndex="70"/>
+      <Row Domain="MinDistance" Value="8" Name="BBS_MIN_DISTANCE_EIGHT_NAME" Description="BBS_MIN_DISTANCE_EIGHT_DESC" SortIndex="80"/>
+      <Row Domain="MinDistance" Value="9" Name="BBS_MIN_DISTANCE_NINE_NAME" Description="BBS_MIN_DISTANCE_NINE_DESC" SortIndex="90"/>
+      <Row Domain="MinDistance" Value="10" Name="BBS_MIN_DISTANCE_TEN_NAME" Description="BBS_MIN_DISTANCE_TEN_DESC" SortIndex="100"/>
+      <Row Domain="MinDistance" Value="11" Name="BBS_MIN_DISTANCE_ELEVEN_NAME" Description="BBS_MIN_DISTANCE_ELEVEN_DESC" SortIndex="110"/>
+      <Row Domain="MinDistance" Value="12" Name="BBS_MIN_DISTANCE_TWELVE_NAME" Description="BBS_MIN_DISTANCE_TWELVE_DESC" SortIndex="120"/>
+      <Row Domain="MinDistance" Value="13" Name="BBS_MIN_DISTANCE_THIRTEEN_NAME" Description="BBS_MIN_DISTANCE_THIRTEEN_DESC" SortIndex="130"/>
+      <Row Domain="MinDistance" Value="14" Name="BBS_MIN_DISTANCE_FOURTEEN_NAME" Description="BBS_MIN_DISTANCE_FOURTEEN_DESC" SortIndex="140"/>
+      <Row Domain="MinDistance" Value="15" Name="BBS_MIN_DISTANCE_FIFTEEN_NAME" Description="BBS_MIN_DISTANCE_FIFTEEN_DESC" SortIndex="150"/>
+      <Row Domain="MinDistance" Value="16" Name="BBS_MIN_DISTANCE_SIXTEEN_NAME" Description="BBS_MIN_DISTANCE_SIXTEEN_DESC" SortIndex="160"/>
+      <Row Domain="MinDistance" Value="17" Name="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Description="BBS_MIN_DISTANCE_SEVENTEEN_DESC" SortIndex="170"/>
+      <Row Domain="MinDistance" Value="18" Name="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Description="BBS_MIN_DISTANCE_EIGHTEEN_DESC" SortIndex="180"/>
+      <Row Domain="MinDistance" Value="19" Name="BBS_MIN_DISTANCE_NINETEEN_NAME" Description="BBS_MIN_DISTANCE_NINETEEN_DESC" SortIndex="190"/>
+      <Row Domain="MinDistance" Value="20" Name="BBS_MIN_DISTANCE_TWENTY_NAME" Description="BBS_MIN_DISTANCE_TWENTY_DESC" SortIndex="200"/>
+      <Row Domain="MinDistance" Value="21" Name="BBS_MIN_DISTANCE_TWENTYONE_NAME" Description="BBS_MIN_DISTANCE_TWENTYONE_DESC" SortIndex="210"/>
+      <Row Domain="MinDistance" Value="22" Name="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Description="BBS_MIN_DISTANCE_TWENTYTWO_DESC" SortIndex="220"/>
+      <Row Domain="MinDistance" Value="23" Name="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Description="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" SortIndex="230"/>
+      <Row Domain="MinDistance" Value="24" Name="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Description="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" SortIndex="240"/>
+      <Row Domain="MinDistance" Value="25" Name="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Description="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" SortIndex="250"/>
 
 		<Row Domain="NaturalDomain" Value="1" Name="BBS_NATURAL_NORMAL_NAME" Description="BBS_NATURAL_NORMAL_DESC" SortIndex="20"/>
 		<Row Domain="NaturalDomain" Value="0" Name="BBS_NATURAL_LESS_NAME" Description="BBS_NATURAL_LESS_DESC" SortIndex="10"/>
