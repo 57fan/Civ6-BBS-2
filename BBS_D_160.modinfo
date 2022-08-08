@@ -8,13 +8,13 @@
 		<Authors>57F@n, D. / Jack The Narrator</Authors>
 		<SpecialThanks>Civfanatics.com, CPL, CivFR, Wazabaza , iElden, Deliverator, VonHolio, Braizh, Kilua, Gedemon, Je, EvilVictor, StormingRomans, Ben</SpecialThanks>
 		<CompatibleVersions>1.2,2.0</CompatibleVersions>
-		<Version>2006</Version>
+		<Version>2010</Version>
 	</Properties>
 	
 		<LocalizedText>
 		<Text id="LOC_BBS_TITLE">
-			<en_US>Better Balanced Starts 2.1.0</en_US>
-			<fr_FR>Better Balanced Starts 2.1.0</fr_FR>
+			<en_US>do not install 2.1.0</en_US>
+			<fr_FR>do not install 2.1.0</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_TEASER">
 			<en_US>Balanced spawn placement for tournaments.</en_US>

@@ -125,10 +125,16 @@
 		  <Text>50% more strategics</Text>
 	</Replace>
 	<Replace Tag="BBS_SRESOURCES_GARANTEED_NAME" Language="en_US">
-		  <Text>Spawn Garanteed</Text>
+		  <Text>Spawn Guaranteed</Text>
 	</Replace>
 	<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="en_US">
-		  <Text>95% chances to have all resources within 5 tiles of your spawning location</Text>
+		  <Text>Almost certain you will have all strategic resources within 5 tiles of your spawn</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="en_US">
+		  <Text>Standard</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="en_US">
+		  <Text>Standard distance, depending on map type</Text>
 	</Replace>
 
   </LocalizedText>

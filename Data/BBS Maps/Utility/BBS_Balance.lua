@@ -1252,9 +1252,10 @@ function BBS_Script()
 		-- Added Spectator mod handling if a major player isn't detected
 			if (majList[i] ~= nil) then
 				if(majList[i].leader ~= "LEADER_SPECTATOR"  ) then
-				if (Map.GetPlot(majList[i].plotX,majList[i].plotY):IsWater() == false) then
-					BalanceStrategic(Map.GetPlot(majList[i].plotX,majList[i].plotY))
-				end
+               if (Map.GetPlot(majList[i].plotX,majList[i].plotY):IsWater() == false) then
+                  print("Will ensure that all strategics resources are present");
+                  BalanceStrategic(Map.GetPlot(majList[i].plotX,majList[i].plotY))
+               end
 				end
 			end
 		end
@@ -8782,6 +8783,9 @@ function BalanceStrategic(plot)
 	if iStartEra ~= nil then
 		iStartIndex = iStartEra.ChronologyIndex;
 	end
+   
+   local i = plot:GetX()
+   local j = plot:GetY()
 
 -- 40 Aluminium
 -- 41 Coal
@@ -8790,6 +8794,585 @@ function BalanceStrategic(plot)
 -- 44 Niter
 -- 45 Oil
 -- 46 Uranium
+
+   if MapConfiguration.GetValue("BBSStratRes") == 3 then
+      local ring1 = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
+      local ring2 = getRing(i, j, 2, mapXSize, mapYSize, mapIsRoundWestEast);
+      local ring3 = getRing(i, j, 3, mapXSize, mapYSize, mapIsRoundWestEast);
+      local ring4 = getRing(i, j, 4, mapXSize, mapYSize, mapIsRoundWestEast);
+      local ring5 = getRing(i, j, 5, mapXSize, mapYSize, mapIsRoundWestEast);
+      
+      local ring13 = {};
+      local count13 = 0;
+      local ring15 = {};
+      local count15 = 0;
+      
+      for _, element in ipairs(ring1) do
+         local x = element[1];
+         local y = element[2];
+         table.insert(ring13, {x, y});
+         table.insert(ring15, {x, y});
+         count13 = count13 + 1;
+         count15 = count15 + 1;
+      end
+      
+      for _, element in ipairs(ring2) do
+         local x = element[1];
+         local y = element[2];
+         table.insert(ring13, {x, y});
+         table.insert(ring15, {x, y});
+         count13 = count13 + 1;
+         count15 = count15 + 1;
+      end
+      
+      for _, element in ipairs(ring3) do
+         local x = element[1];
+         local y = element[2];
+         table.insert(ring13, {x, y});
+         table.insert(ring15, {x, y});
+         count13 = count13 + 1;
+         count15 = count15 + 1;
+      end
+      
+      for _, element in ipairs(ring4) do
+         local x = element[1];
+         local y = element[2];
+         table.insert(ring15, {x, y});
+         count15 = count15 + 1;
+      end
+      
+      for _, element in ipairs(ring5) do
+         local x = element[1];
+         local y = element[2];
+         table.insert(ring15, {x, y});
+         count15 = count15 + 1;
+      end
+      
+      ring13 = GetShuffledCopyOfTable(ring13);
+      ring15 = GetShuffledCopyOfTable(ring15);
+      
+      -- Checking is strats are there
+      
+      local isIron = false;
+      local isHorse = false;
+      local isAluminium = false;
+      local isCoal = false;
+      local isNiter = false;
+      local isOil = false;
+      local isUranium = false;
+      
+      for _, element in ipairs(ring13) do
+         local x = element[1];
+         local y = element[2];
+         
+         if (mapResourceCode[x + 1][y + 1] == 42) then
+            isHorse = true;
+            __Debug("Found horse R3:", x, y);
+         end
+         
+         if (mapResourceCode[x + 1][y + 1] == 43) then
+            isIron = true;
+            __Debug("Found Iron R3:", x, y);
+         end
+      end
+      
+      for _, element in ipairs(ring15) do
+         local x = element[1];
+         local y = element[2];
+         
+         if (mapResourceCode[x + 1][y + 1] == 40) then
+            isAluminium = true;
+            __Debug("Found Aluminium R5:", x, y);
+         end
+         
+         if (mapResourceCode[x + 1][y + 1] == 41) then
+            isCoal = true;
+            __Debug("Found Coal R5:", x, y);
+         end
+         
+         if (mapResourceCode[x + 1][y + 1] == 44) then
+            isNiter = true;
+            __Debug("Found Niter R5:", x, y);
+         end
+         
+         if (mapResourceCode[x + 1][y + 1] == 45) then
+            isOil = true;
+            __Debug("Found Oil R5:", x, y);
+         end
+         
+         if (mapResourceCode[x + 1][y + 1] == 46) then
+            isUranium = true;
+            __Debug("Found Uranium R5:", x, y);
+         end
+      end
+      
+      if (isIron == false) then
+         for _, element in ipairs(ring13) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put an Iron here (not water, not floodplain, not a mountain, not a resource
+            if (terrainTile < 15 and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               TerrainBuilder.SetFeatureType(localPlot, -1);
+               mapFeatureCode[xIndex][yIndex] = -1;
+               
+               
+               if (terrainTile % 3 == 0) then -- flat tile -> to hill
+                  TerrainBuilder.SetTerrainType(localPlot, terrainTile + 1);
+                  mapTerrainCode[xIndex][yIndex] = terrainTile + 1
+               end
+               
+               ResourceBuilder.SetResourceType(localPlot, 43, 1);
+               mapResourceCode[xIndex][yIndex] = 43;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 1) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 4) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 2;
+               elseif (terrainTile == 11) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               else --snow, desert
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 1;
+               end
+               
+               isIron = true;
+               __Debug("Iron placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isIron == false) then
+         __Debug("Warning, could not add an iron !");
+      end
+      
+      if (isHorse == false) then
+         for _, element in ipairs(ring13) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put an Iron here (not water, plain or grassland, not floodplain, not a mountain, not a resource
+            if (terrainTile < 5 and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               -- cleaning feature
+               TerrainBuilder.SetFeatureType(localPlot, -1);
+               mapFeatureCode[xIndex][yIndex] = -1;
+               
+               if (terrainTile % 3 == 1) then -- hill tile -> to flat
+                  TerrainBuilder.SetTerrainType(localPlot, terrainTile - 1);
+                  mapTerrainCode[xIndex][yIndex] = terrainTile - 1
+               end
+               
+               ResourceBuilder.SetResourceType(localPlot, 42, 1);
+               mapResourceCode[xIndex][yIndex] = 42;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 0) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 0;
+               else
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               end
+               
+               isHorse = true;
+               __Debug("Horse placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isHorse == false) then
+         __Debug("Warning, could not add a horse !");
+      end
+      
+      if (isNiter == false) then
+         for _, element in ipairs(ring15) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put a Niter here (not water, not snow, not a mountain, not a resource
+            if (terrainTile < 11 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               -- cleaning feature
+               if (featureTile ~= -1 and featureTile ~= 0) then
+                  TerrainBuilder.SetFeatureType(localPlot, -1);
+                  mapFeatureCode[xIndex][yIndex] = -1;
+               end
+               
+               if (terrainTile % 3 == 1) then -- hill tile -> to flat
+                  TerrainBuilder.SetTerrainType(localPlot, terrainTile - 1);
+                  mapTerrainCode[xIndex][yIndex] = terrainTile - 1
+               end
+               
+               ResourceBuilder.SetResourceType(localPlot, 44, 1);
+               mapResourceCode[xIndex][yIndex] = 44;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 0) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 3) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 6) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 9) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 0;
+               end
+               
+               isNiter = true;
+               __Debug("Niter placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isNiter == false) then
+         __Debug("Warning, could not add a Niter !");
+      end
+      
+      
+      if (isCoal == false) then
+         for _, element in ipairs(ring15) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put an Iron here (not water, plain or grassland, not floodplain, not a mountain, not a resource
+            if (terrainTile < 5 and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               -- cleaning feature
+               if (featureTile ~= -1 and featureTile ~= 3) then
+                  TerrainBuilder.SetFeatureType(localPlot, -1);
+                  mapFeatureCode[xIndex][yIndex] = -1;
+               end
+               
+               if (terrainTile % 3 == 0) then -- flat tile -> to hill
+                  TerrainBuilder.SetTerrainType(localPlot, terrainTile + 1);
+                  mapTerrainCode[xIndex][yIndex] = terrainTile + 1
+               end
+               
+               ResourceBuilder.SetResourceType(localPlot, 41, 1);
+               mapResourceCode[xIndex][yIndex] = 41;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 1) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 1;
+               else
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 2;
+               end
+               
+               isCoal = true;
+               __Debug("Coal placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isCoal == false) then
+         __Debug("Warning, could not add a Coal !");
+      end
+      
+      if (isAluminium == false) then
+         for _, element in ipairs(ring15) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put an alumnium here (not water, plain or desert, not floodplain, not a mountain, not a resource
+            if ((terrainTile > 2 and terrainTile < 9) and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               -- cleaning feature
+               if (featureTile ~= -1 and featureTile ~= 2) then
+                  TerrainBuilder.SetFeatureType(localPlot, -1);
+                  mapFeatureCode[xIndex][yIndex] = -1;
+               end
+               
+               if (terrainTile == 4) then -- hill tile -> to flat
+                  TerrainBuilder.SetTerrainType(localPlot, terrainTile - 1);
+                  mapTerrainCode[xIndex][yIndex] = terrainTile - 1
+               end
+               
+               ResourceBuilder.SetResourceType(localPlot, 40, 1);
+               mapResourceCode[xIndex][yIndex] = 40;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 3) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 7) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 1;
+               else
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 0;
+               end
+               
+               if (featureTile == 2) then
+                  mapFoodYield[xIndex][yIndex] = mapFoodYield[xIndex][yIndex] + 1;
+               end
+               
+               isAluminium = true;
+               __Debug("Aluminium placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isAluminium == false) then
+         __Debug("Warning, could not add a Coal !");
+      end
+
+      if (isUranium == false) then
+         for _, element in ipairs(ring15) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put an Uranium here (not water, plain or grassland, not floodplain, not a mountain, not a resource
+            if (terrainTile < 15 and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               -- cleaning feature
+               if (featureTile ~= -1 and featureTile ~= 2 and featureTile ~= 3) then
+                  TerrainBuilder.SetFeatureType(localPlot, -1);
+                  mapFeatureCode[xIndex][yIndex] = -1;
+               end
+               
+               ResourceBuilder.SetResourceType(localPlot, 46, 1);
+               mapResourceCode[xIndex][yIndex] = 46;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 0) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 1) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 3) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 4) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 2;
+               elseif (terrainTile == 6) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 7) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 9) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 10) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 12) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 13) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 1;
+               end
+               
+               if (featureTile == 2) then
+                  mapFoodYield[xIndex][yIndex] = mapFoodYield[xIndex][yIndex] + 1;
+               end
+               
+               if (featureTile == 3) then
+                  mapProdYield[xIndex][yIndex] = mapProdYield[xIndex][yIndex] + 1;
+               end
+               
+               isUranium = true;
+               __Debug("Uranium placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isUranium == false) then
+         __Debug("Warning, could not add a Uranium !");
+      end
+      
+      if (isOil == false) then
+         for _, element in ipairs(ring15) do
+            local x = element[1];
+            local y = element[2];
+            
+            local xIndex = x + 1;
+            local yIndex = y + 1;
+            
+            local featureTile = mapFeatureCode[xIndex][yIndex];
+            local terrainTile = mapTerrainCode[xIndex][yIndex];
+            local resourceTile = mapResourceCode[xIndex][yIndex];
+            
+            -- we can put a oil here (not water, not snow, not a mountain, not a resource
+            if (terrainTile < 15 and terrainTile % 3 ~= 2 and resourceTile == -1) then
+               
+               local localPlot = Map.GetPlot(x, y)
+               
+               -- cleaning feature
+               if (featureTile ~= -1 and featureTile ~= 0 and featureTile ~= 31 and featureTile ~= 32 and featureTile ~= 5) then
+                  TerrainBuilder.SetFeatureType(localPlot, -1);
+                  mapFeatureCode[xIndex][yIndex] = -1;
+               end
+               
+               if (terrainTile % 3 == 1) then -- hill tile -> to flat
+                  TerrainBuilder.SetTerrainType(localPlot, terrainTile - 1);
+                  mapTerrainCode[xIndex][yIndex] = terrainTile - 1
+                  terrainTile = terrainTile - 1;
+               end
+               
+               if (terrainTile == 0 and featureTile ~= 31) then
+                  TerrainBuilder.SetFeatureType(localPlot, 5, 1);
+                  featureTile = 5;
+                  mapFeatureCode[xIndex][yIndex] = 5;
+               end
+               
+               
+               ResourceBuilder.SetResourceType(localPlot, 45, 1);
+               mapResourceCode[xIndex][yIndex] = 45;
+               
+               mapGoldYield[xIndex][yIndex] = 0;
+               mapScienceYield[xIndex][yIndex] = 0;
+               mapCultureYield[xIndex][yIndex] = 0;
+               mapFaithYield[xIndex][yIndex] = 0;
+               
+               if (terrainTile == 0) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 1) then
+                  mapFoodYield[xIndex][yIndex] = 2;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 3) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 4) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 2;
+               elseif (terrainTile == 6) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 7) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 9) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 10) then
+                  mapFoodYield[xIndex][yIndex] = 1;
+                  mapProdYield[xIndex][yIndex] = 1;
+               elseif (terrainTile == 12) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 0;
+               elseif (terrainTile == 13) then
+                  mapFoodYield[xIndex][yIndex] = 0;
+                  mapProdYield[xIndex][yIndex] = 1;
+               end
+               
+               if (featureTile == 5) then
+                  mapFoodYield[xIndex][yIndex] = mapFoodYield[xIndex][yIndex] + 1;
+               end
+               
+               isOil = true;
+               __Debug("Oil placed in", x, y);
+               break;
+            end
+         end
+      end
+      
+      if (isOil == false) then
+         __Debug("Warning, could not add a Oil !");
+      end
+      
+   end
+
+--[[
 	if MapConfiguration.GetValue("BBSStratRes") == 3 then
 
 		for k =0, 6 do
@@ -8960,6 +9543,8 @@ function BalanceStrategic(plot)
 		end
 		end
 	end
+   
+   --]]
 end
 
 ------------------------------------------------------------------------------

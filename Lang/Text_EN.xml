@@ -86,8 +86,157 @@
 		  <Text>Spawn Garanteed</Text>
 	</Replace>
 	<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="en_US">
-		  <Text>95% chances to have all resources within 5 tiles of your spawning location</Text>
+		  <Text>Almost certain you will have all strategic resources within 5 tiles of your spawn</Text>
 	</Replace>
+   
+   <Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="en_US">
+		  <Text>Min Tiles between Players</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="en_US">
+		  <Text>Standard</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="en_US">
+		  <Text>Standard distance, depending on map type</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="en_US">
+		  <Text>6</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="en_US">
+		  <Text>6 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="en_US">
+		  <Text>7</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="en_US">
+		  <Text>7 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="en_US">
+		  <Text>8</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="en_US">
+		  <Text>8 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="en_US">
+		  <Text>9</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="en_US">
+		  <Text>9 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="en_US">
+		  <Text>10</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="en_US">
+		  <Text>10 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="en_US">
+		  <Text>11</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="en_US">
+		  <Text>11 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="en_US">
+		  <Text>12</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="en_US">
+		  <Text>12 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="en_US">
+		  <Text>13</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="en_US">
+		  <Text>13 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="en_US">
+		  <Text>14</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="en_US">
+		  <Text>14 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="en_US">
+		  <Text>15</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="en_US">
+		  <Text>15 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="en_US">
+		  <Text>16</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="en_US">
+		  <Text>16 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="en_US">
+		  <Text>17</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="en_US">
+		  <Text>17 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="en_US">
+		  <Text>18</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="en_US">
+		  <Text>18 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="en_US">
+		  <Text>19</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="en_US">
+		  <Text>19 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="en_US">
+		  <Text>20</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="en_US">
+		  <Text>20 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="en_US">
+		  <Text>21</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="en_US">
+		  <Text>21 tiles</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="en_US">
+		  <Text>22</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="en_US">
+		  <Text>22 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="en_US">
+		  <Text>23</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="en_US">
+		  <Text>23 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="en_US">
+		  <Text>24</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="en_US">
+		  <Text>24 tiles</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="en_US">
+		  <Text>25</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="en_US">
+		  <Text>25 tiles</Text>
+	</Replace>
+   
 	<Replace Tag="BBS_NATURAL_NORMAL_NAME" Language="en_US">
 		  <Text>Standard</Text>
 	</Replace>
