@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.1.0"
+local bbs_version = "2.1.1"
 
 local bError_major = false;
 local bError_minor = false;

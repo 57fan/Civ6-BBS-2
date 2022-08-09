@@ -9370,7 +9370,7 @@ function BalanceStrategic(plot)
          __Debug("Warning, could not add a Oil !");
       end
       
-   end
+   
 
 --[[
 	if MapConfiguration.GetValue("BBSStratRes") == 3 then
@@ -9388,163 +9388,163 @@ function BalanceStrategic(plot)
 				PlaceResource(40+k, plot);
 			end
 		end
-		
-		else
+	--]]	
+   else
 	
 		if (iStartIndex == 1) then
-		local bHasResource = false;
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Horse");
-		bHasResource = FindResource(42, plot,30);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Horses");
-			PlaceResource(42, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Iron");
-		bHasResource = FindResource(43, plot,30);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Iron");
-			PlaceResource(43, plot);
-		end
-		-- Broader Check Oil & Niter & Aluminium + Coal
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
-		bHasResource = ContinentResource(45, plot);	
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Iron");
-			PlaceResource(45, plot);
-		end		
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Niter");
-		bHasResource = FindResource(44, plot, 100);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Niter");
-			PlaceResource(44, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
-		bHasResource = ContinentResource(40, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Aluminium");
-			PlaceResource(40, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
-		bHasResource = ContinentResource(41, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Coal");
-			PlaceResource(41, plot);
+         local bHasResource = false;
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Horse");
+         bHasResource = FindResource(42, plot,30);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Horses");
+            PlaceResource(42, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Iron");
+         bHasResource = FindResource(43, plot,30);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Iron");
+            PlaceResource(43, plot);
+         end
+         -- Broader Check Oil & Niter & Aluminium + Coal
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
+         bHasResource = ContinentResource(45, plot);	
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Iron");
+            PlaceResource(45, plot);
+         end		
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Niter");
+         bHasResource = FindResource(44, plot, 100);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Niter");
+            PlaceResource(44, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
+         bHasResource = ContinentResource(40, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Aluminium");
+            PlaceResource(40, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
+         bHasResource = ContinentResource(41, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Coal");
+            PlaceResource(41, plot);
 		end
 		
 	-- Classical or Medieval
 		elseif (iStartIndex == 2 or iStartIndex == 3) then
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Horse");
-		bHasResource = FindResource(42, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Horses");
-			PlaceResource(42, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Iron");
-		bHasResource = FindResource(43, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Iron");
-			PlaceResource(43, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Niter");
-		bHasResource = FindResource(44, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Niter");
-			PlaceResource(44, plot);
-		end
-		-- Broader Check Oil & Aluminium + Coal
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
-		bHasResource = ContinentResource(45, plot);	
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Iron");
-			PlaceResource(45, plot);
-		end		
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
-		bHasResource = ContinentResource(40, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Aluminium");
-			PlaceResource(40, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
-		bHasResource = ContinentResource(41, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Coal");
-			PlaceResource(41, plot);
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Horse");
+         bHasResource = FindResource(42, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Horses");
+            PlaceResource(42, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Iron");
+         bHasResource = FindResource(43, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Iron");
+            PlaceResource(43, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Niter");
+         bHasResource = FindResource(44, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Niter");
+            PlaceResource(44, plot);
+         end
+         -- Broader Check Oil & Aluminium + Coal
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
+         bHasResource = ContinentResource(45, plot);	
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Iron");
+            PlaceResource(45, plot);
+         end		
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
+         bHasResource = ContinentResource(40, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Aluminium");
+            PlaceResource(40, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
+         bHasResource = ContinentResource(41, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Coal");
+            PlaceResource(41, plot);
 		end
 
 	-- 
 		elseif (iStartIndex == 4 or iStartIndex == 5) then
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
-		bHasResource = FindResource(41, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Coal");
-			PlaceResource(41, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Iron");
-		bHasResource = FindResource(43, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Iron");
-			PlaceResource(43, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Niter");
-		bHasResource = FindResource(44, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Niter");
-			PlaceResource(44, plot);
-		end
-		-- Broader Check Oil & Aluminium
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
-		bHasResource = ContinentResource(45, plot);	
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Iron");
-			PlaceResource(45, plot);
-		end		
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
-		bHasResource = ContinentResource(40, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Aluminium");
-			PlaceResource(40, plot);
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
+         bHasResource = FindResource(41, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Coal");
+            PlaceResource(41, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Iron");
+         bHasResource = FindResource(43, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Iron");
+            PlaceResource(43, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Niter");
+         bHasResource = FindResource(44, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Niter");
+            PlaceResource(44, plot);
+         end
+         -- Broader Check Oil & Aluminium
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
+         bHasResource = ContinentResource(45, plot);	
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Iron");
+            PlaceResource(45, plot);
+         end		
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
+         bHasResource = ContinentResource(40, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Aluminium");
+            PlaceResource(40, plot);
 		end
 
 	--
 
 		elseif (iStartIndex == 6) then
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
-		bHasResource = FindResource(41, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Coal");
-			PlaceResource(41, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
-		bHasResource = FindResource(45, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Niter");
-			PlaceResource(45, plot);
-		end
-		-- Broader Aluminium
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
-		bHasResource = ContinentResource(40, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Aluminium");
-			PlaceResource(40, plot);
-		end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Coal");
+         bHasResource = FindResource(41, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Coal");
+            PlaceResource(41, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
+         bHasResource = FindResource(45, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Niter");
+            PlaceResource(45, plot);
+         end
+         -- Broader Aluminium
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
+         bHasResource = ContinentResource(40, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Aluminium");
+            PlaceResource(40, plot);
+         end
 
-		elseif (iStartIndex > 6) then
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
-		bHasResource = FindResource(40, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Aluminium");
-			PlaceResource(40, plot);
-		end
-		__Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
-		bHasResource = FindResource(45, plot);
-		if(bHasResource == false) then
-			__Debug("Balance Resources: Need to add Oil");
-			PlaceResource(45, plot);
-		end
+         elseif (iStartIndex > 6) then
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Aluminium");
+         bHasResource = FindResource(40, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Aluminium");
+            PlaceResource(40, plot);
+         end
+         __Debug("Evaluate Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Check Oil");
+         bHasResource = FindResource(45, plot);
+         if(bHasResource == false) then
+            __Debug("Balance Resources: Need to add Oil");
+            PlaceResource(45, plot);
+         end
 		end
 	end
    
-   --]]
+
 end
 
 ------------------------------------------------------------------------------
