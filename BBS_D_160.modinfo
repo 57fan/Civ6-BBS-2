@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2011">
+<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2012">
 	<Properties>
 	    <Name>LOC_BBS_TITLE</Name>
 		<Description>LOC_BBS_DESCRIPTION</Description>
@@ -8,13 +8,13 @@
 		<Authors>57F@n, D. / Jack The Narrator</Authors>
 		<SpecialThanks>Civfanatics.com, CPL, CivFR, Wazabaza , iElden, Deliverator, VonHolio, Braizh, Kilua, Gedemon, Je, EvilVictor, StormingRomans, Ben</SpecialThanks>
 		<CompatibleVersions>1.2,2.0</CompatibleVersions>
-		<Version>2011</Version>
+		<Version>2012</Version>
 	</Properties>
 	
 		<LocalizedText>
 		<Text id="LOC_BBS_TITLE">
-			<en_US>Better Balanced Starts 2.1.1</en_US>
-			<fr_FR>Better Balanced Starts 2.1.1</fr_FR>
+			<en_US>Better Balanced Starts 2.1.2</en_US>
+			<fr_FR>Better Balanced Starts 2.1.2</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_TEASER">
 			<en_US>Balanced spawn placement for tournaments.</en_US>
