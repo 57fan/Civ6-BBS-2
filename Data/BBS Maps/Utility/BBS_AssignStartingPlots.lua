@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 2.0.5
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.1.3
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.1.2"
+local bbs_version = "2.1.3"
 
 local bError_major = false;
 local bError_minor = false;
