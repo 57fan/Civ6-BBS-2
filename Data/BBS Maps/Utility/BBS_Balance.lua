@@ -467,7 +467,8 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
       end
    end
    
-   return changePlot(x, y, targetTerrain, targetResource, targetFeature);
+   --return changePlot(x, y, targetTerrain, targetResource, targetFeature);
+   return terraformBBS(x, y, targetTerrain, targetResource, targetFeature);
    
 
 end
@@ -1022,10 +1023,10 @@ function BBS_Script()
 			if major_table[i] ~= nil then
 				if Players[major_table[i]] ~= nil and Players[major_table[i]]:GetTeam() ~= nil and majList[i] ~= nil then
 					print("Player ID:", major_table[i], " Team:", Players[major_table[i]]:GetTeam(), majList[i].civ, majList[i].leader);
-					else
+            else
 					print("Error:",i,major_table[i],"Missing Player")
 				end
-				else
+         else
 				print("Error:",i,major_table[i],"Missing Player")
 			end
 	   end
@@ -1081,12 +1082,13 @@ function BBS_Script()
 					local start_plot = Map.GetPlot(majList[i].plotX,majList[i].plotY);
 					if (start_plot ~= nil) then
 						if (start_plot:GetResourceCount() > 0) then
-							ResourceBuilder.SetResourceType(start_plot, -1);	
+							--ResourceBuilder.SetResourceType(start_plot, -1);
+                     terraformBBSPlot(start_plot, -2, -1, -2)                     
 						end
-						if (startConfig ~= 3) then
-							__Debug("Luxury balancing: Check for Banned Luxury on Spawn");
-							Terraforming_BanLux(start_plot);
-						end
+						--if (startConfig ~= 3) then
+							--__Debug("Luxury balancing: Check for Banned Luxury on Spawn");
+							--Terraforming_BanLux(start_plot);
+						--end
 					end
 				end
 			end
@@ -1213,7 +1215,8 @@ function BBS_Script()
 				if rng < 0.55 then
 				if pPlot:IsImpassable() == false and pPlot:IsWater() == false and pPlot:GetResourceType() == -1 and pPlot:GetFeatureType() == -1 and pPlot:GetTerrainType() ~= 7 and pPlot:GetTerrainType() ~= 6 and pPlot:GetTerrainType() ~= 7 and pPlot:GetTerrainType() ~= 12 and pPlot:GetTerrainType() ~= 13 then
 					if rng < 0.15 or  (rng < 0.33 and pPlot:GetTerrainType() == 3) then
-						TerrainBuilder.SetFeatureType(pPlot,3)
+						--TerrainBuilder.SetFeatureType(pPlot,3)
+                  terraformBBSPlot(pPlot, -2, -2, 3);
 					end
 				end
 				end
@@ -2726,7 +2729,8 @@ function Terraforming_Cap_Yield(plot,cap_yield,start_i,end_i)
 					end
 					if (temp_tile > cap_yield) then
 						__Debug("Terraforming_Cap_Yield Start X: ", plot:GetX(), "Evaluate Start Y: ", plot:GetY(), "Total Score:",temp_tile,"Exceeded Cap will remove resource",adjacentPlot:GetResourceType())
-						ResourceBuilder.SetResourceType(adjacentPlot,-1)
+						--ResourceBuilder.SetResourceType(adjacentPlot,-1)
+                  terraformBBSPlot(adjacentPlot, -2, -1, -2)
 					end
 		end
 	end
@@ -3419,7 +3423,8 @@ function Terraforming_Nuke_Mountain(plot)
 				if ( rng > limit ) then
 					__Debug("Nuked Mountain X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Replaced a Mountain by a Hill");
 					local tmp_terrain = adjacentPlot:GetTerrainType()
-					TerrainBuilder.SetTerrainType(adjacentPlot,tmp_terrain-1);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,tmp_terrain-1);
+               terraformBBSPlot(adjacentPlot, tmp_terrain - 1, -2, -2);
 				end
 			end
 		end
@@ -3471,11 +3476,14 @@ function Terraforming_Mountain(plot,flag)
 					and count < 6) then
 					
 					if adjacentPlot:GetTerrainType() == 0 or adjacentPlot:GetTerrainType() == 1 then
-						TerrainBuilder.SetTerrainType(adjacentPlot,2)
-						elseif adjacentPlot:GetTerrainType() == 3 or adjacentPlot:GetTerrainType() == 4 then
-						TerrainBuilder.SetTerrainType(adjacentPlot,5)
+						--TerrainBuilder.SetTerrainType(adjacentPlot,2)
+                  terraformBBSPlot(adjacentPlot, 2, -2, -2);
+               elseif adjacentPlot:GetTerrainType() == 3 or adjacentPlot:GetTerrainType() == 4 then
+						--TerrainBuilder.SetTerrainType(adjacentPlot,5)
+                  terraformBBSPlot(adjacentPlot, 5, -2, -2);
 					end
-					TerrainBuilder.SetFeatureType(adjacentPlot,-1)
+					--TerrainBuilder.SetFeatureType(adjacentPlot,-1)
+               terraformBBSPlot(adjacentPlot, -2, -2, -1);
 					count = count + 1
 					__Debug("Terraforming_Mountain X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Place a Mountain (Inca)");
 				end
@@ -3686,50 +3694,67 @@ function Terraforming_Mountain(plot,flag)
 			adjacentPlot3 = GetAdjacentTiles(plot, 3*minimal_effort_i+18);
 			adjacentPlot4 = GetAdjacentTiles(plot, 4*minimal_effort_i+36);
 			if (adjacentPlot:IsImpassable() == true and adjacentPlot:GetFeatureType() ~= g_FEATURE_VOLCANO) then
-				TerrainBuilder.SetTerrainType(adjacentPlot,adjacentPlot:GetTerrainType()-1)
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1)
+            terraformBBSPlot(adjacentPlot, adjacentPlot:GetTerrainType()-1, -2, -1);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,adjacentPlot:GetTerrainType()-1)
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1)
+            
+            
 				if adjacentPlot:GetTerrainType() == 10 or adjacentPlot:GetTerrainType() == 13 or adjacentPlot:GetTerrainType() == 7 then
-					TerrainBuilder.SetTerrainType(adjacentPlot,4)
+					--TerrainBuilder.SetTerrainType(adjacentPlot,4)
+               terraformBBSPlot(adjacentPlot, 4, -2, -2)
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100
 				if rng > 0.75 then
-					TerrainBuilder.SetFeatureType(adjacentPlot,3)
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3)
+               terraformBBSPlot(adjacentPlot, -2, -2, 3)
 				end
 				__Debug("Terraforming_Mountain X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "turn Mountain into a Hill");
 			end
 			if (adjacentPlot2:IsImpassable() == true and adjacentPlot2:GetFeatureType() ~= g_FEATURE_VOLCANO) then
-				TerrainBuilder.SetTerrainType(adjacentPlot2,adjacentPlot2:GetTerrainType()-1)
-				TerrainBuilder.SetFeatureType(adjacentPlot2,-1)
+				--TerrainBuilder.SetTerrainType(adjacentPlot2,adjacentPlot2:GetTerrainType()-1)
+				--TerrainBuilder.SetFeatureType(adjacentPlot2,-1)
+            terraformBBSPlot(adjacentPlot2, adjacentPlot2:GetTerrainType() - 1 , -2, -1)
+            
 				if adjacentPlot2:GetTerrainType() == 10 or adjacentPlot2:GetTerrainType() == 13 or adjacentPlot2:GetTerrainType() == 7 then
-					TerrainBuilder.SetTerrainType(adjacentPlot2,4)
+					--TerrainBuilder.SetTerrainType(adjacentPlot2,4)
+               terraformBBSPlot(adjacentPlot2, 4, -2, -2)
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100
 				if rng > 0.75 then
 					TerrainBuilder.SetFeatureType(adjacentPlot2,3)
+               terraformBBSPlot(adjacentPlot2, -2, -2, 3)
 				end
 				__Debug("Terraforming_Mountain X: ", adjacentPlot2:GetX(), "Y: ", adjacentPlot2:GetY(), "turn Mountain into a Hill");
 			end
 			if (adjacentPlot3:IsImpassable() == true and adjacentPlot3:GetFeatureType() ~= g_FEATURE_VOLCANO) then
-				TerrainBuilder.SetTerrainType(adjacentPlot3,adjacentPlot3:GetTerrainType()-1)
-				TerrainBuilder.SetFeatureType(adjacentPlot3,-1)
+				--TerrainBuilder.SetTerrainType(adjacentPlot3,adjacentPlot3:GetTerrainType()-1)
+				--TerrainBuilder.SetFeatureType(adjacentPlot3,-1)
+            terraformBBSPlot(adjacentPlot3, adjacentPlot3:GetTerrainType() - 1 , -2, -1)
+            
 				if adjacentPlot3:GetTerrainType() == 10 or adjacentPlot3:GetTerrainType() == 13 or adjacentPlot3:GetTerrainType() == 7 then
-					TerrainBuilder.SetTerrainType(adjacentPlot3,4)
+					--TerrainBuilder.SetTerrainType(adjacentPlot3,4)
+               terraformBBSPlot(adjacentPlot3, 4, -2, -2)
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100
 				if rng > 0.75 then
-					TerrainBuilder.SetFeatureType(adjacentPlot3,3)
+					--TerrainBuilder.SetFeatureType(adjacentPlot3,3)
+               terraformBBSPlot(adjacentPlot3, 3, -2, -2)
 				end
 				__Debug("Terraforming_Mountain X: ", adjacentPlot3:GetX(), "Y: ", adjacentPlot3:GetY(), "turn Mountain into a Hill");
 			end
 			if (adjacentPlot4:IsImpassable() == true and adjacentPlot4:GetFeatureType() ~= g_FEATURE_VOLCANO) then
-				TerrainBuilder.SetTerrainType(adjacentPlot4,adjacentPlot4:GetTerrainType()-1)
-				TerrainBuilder.SetFeatureType(adjacentPlot4,-1)
+				--TerrainBuilder.SetTerrainType(adjacentPlot4,adjacentPlot4:GetTerrainType()-1)
+				--TerrainBuilder.SetFeatureType(adjacentPlot4,-1)
+            terraformBBSPlot(adjacentPlot4, adjacentPlot4:GetTerrainType() - 1 , -2, -1)
+            
 				if adjacentPlot4:GetTerrainType() == 10 or adjacentPlot4:GetTerrainType() == 13 or adjacentPlot4:GetTerrainType() == 7 then
-					TerrainBuilder.SetTerrainType(adjacentPlot4,4)
+					--TerrainBuilder.SetTerrainType(adjacentPlot4,4)
+               terraformBBSPlot(adjacentPlot4, 4, -2, -2)
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100
 				if rng > 0.75 then
-					TerrainBuilder.SetFeatureType(adjacentPlot4,3)
+					--TerrainBuilder.SetFeatureType(adjacentPlot4,3)
+               terraformBBSPlot(adjacentPlot4, -2, -2, 3)
 				end
 				__Debug("Terraforming_Mountain X: ", adjacentPlot4:GetX(), "Y: ", adjacentPlot4:GetY(), "turn Mountain into a Hill");
 			end
@@ -3775,20 +3800,24 @@ function Terraforming_Polar_Start(plot)
 					local resourceType = pPlot:GetResourceType();
 					if (resourceType == 45) then
 						-- Oil requires a Marsh to spawn on Plains
-						TerrainBuilder.SetFeatureType(pPlot,-1);
-						TerrainBuilder.SetFeatureType(pPlot,5);
-						elseif (resourceType == 16) then
+						--TerrainBuilder.SetFeatureType(pPlot,-1);
+						--TerrainBuilder.SetFeatureType(pPlot,5);
+                  terraformBBSPlot(pPlot, -2, -2, 5)
+               elseif (resourceType == 16) then
 						-- Fur requires a Wood to spawn on Plains
-						TerrainBuilder.SetFeatureType(pPlot,-1);
-						TerrainBuilder.SetFeatureType(pPlot,3);
-						elseif (resourceType == 26) then
+						--TerrainBuilder.SetFeatureType(pPlot,-1);
+						--TerrainBuilder.SetFeatureType(pPlot,3);
+                  terraformBBSPlot(pPlot, -2, -2, 3)
+               elseif (resourceType == 26) then
 						-- Silver cannot spawn on Plains
-						ResourceBuilder.SetResourceType(pPlot,-1);
-						TerrainBuilder.SetFeatureType(pPlot,3);
-						elseif (resourceType == 4) then
+						--ResourceBuilder.SetResourceType(pPlot,-1);
+						--TerrainBuilder.SetFeatureType(pPlot,3);
+                  terraformBBSPlot(pPlot, -2, -1, 3)
+               elseif (resourceType == 4) then
 						-- Deer requires Wood
-						TerrainBuilder.SetFeatureType(pPlot,-1);
-						TerrainBuilder.SetFeatureType(pPlot,3);
+						--TerrainBuilder.SetFeatureType(pPlot,-1);
+						--TerrainBuilder.SetFeatureType(pPlot,3);
+                  terraformBBSPlot(pPlot, -2, -2, -1)
 					end
 				end
 			end
@@ -3796,7 +3825,8 @@ function Terraforming_Polar_Start(plot)
 			-- Let Snow warm to Tundra
 
 			if (terrainType == 12 or terrainType == 13 or terrainType == 14) then
-				TerrainBuilder.SetTerrainType(pPlot,terrainType - 3);
+				--TerrainBuilder.SetTerrainType(pPlot,terrainType - 3);
+            terraformBBSPlot(pPlot, terrainType - 3, -2, -2)
 			end		
 			
 		end
@@ -3810,7 +3840,8 @@ function Terraforming_Polar_Start(plot)
 		if (adjacentPlot ~= nil) then
 			if (adjacentPlot:GetFeatureType() == 1 and rng > 0.1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Removing Ice",i);
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBSPlot(adjacentPlot, -2, -2, -1)
 			end
 		end
 	end
@@ -4086,7 +4117,8 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 			-- Grassland
 			if ( target_plot_1:GetTerrainType() == 0 or target_plot_1:GetTerrainType() == 1 or (target_plot_1:GetTerrainType() == 2 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO) ) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND) then
 				
 					rng = TerrainBuilder.GetRandomNumber(100,"test")/100	
 					
@@ -4175,7 +4207,8 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 				-- Plains
          elseif ( target_plot_1:GetTerrainType() == 3 or target_plot_1:GetTerrainType() == 4 or (target_plot_1:GetTerrainType() == 5 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO)) then
 					
-            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+            --if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS) then
                -- +5.5 on Plains		
                rng = TerrainBuilder.GetRandomNumber(100,"test")/100
                
@@ -4463,7 +4496,9 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 				-- Grassland
 			if ( target_plot_1:GetTerrainType() == 0 or target_plot_1:GetTerrainType() == 1 or (target_plot_1:GetTerrainType() == 2 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO) ) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+            
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND) then
 				
 					if (flag == 1 or flag == 2) then
 						target_yield = math.min(target_yield,5.5)
@@ -4551,7 +4586,9 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 				-- Plains
 				elseif ( target_plot_1:GetTerrainType() == 3 or target_plot_1:GetTerrainType() == 4 or (target_plot_1:GetTerrainType() == 5 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO)) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+            
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS) then
                -- +5.5 on Plains		
                rng = TerrainBuilder.GetRandomNumber(100,"test")/100
                
@@ -4862,7 +4899,9 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 			if target_yield ~= -1 then
 			if ( target_plot_1:GetTerrainType() == 0 or target_plot_1:GetTerrainType() == 1 or (target_plot_1:GetTerrainType() == 2 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO) ) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+            
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND) then
 				
 					rng = TerrainBuilder.GetRandomNumber(100,"test")/100	
 					
@@ -4944,7 +4983,10 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 				-- Plains
 				elseif ( target_plot_1:GetTerrainType() == 3 or target_plot_1:GetTerrainType() == 4 or (target_plot_1:GetTerrainType() == 5 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO)) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+            
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS) then
+            
 					-- +5.5 on Plains		
 					rng = TerrainBuilder.GetRandomNumber(100,"test")/100
 					
@@ -5185,7 +5227,9 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 			if target_yield ~= -1 then
 			if ( target_plot_1:GetTerrainType() == 0 or target_plot_1:GetTerrainType() == 1 or (target_plot_1:GetTerrainType() == 2 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO) ) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_GRASSLAND and flag ~= 4) ) then
+            
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_GRASSLAND) then
 				
 					rng = TerrainBuilder.GetRandomNumber(100,"test")/100	
 					
@@ -5267,7 +5311,9 @@ function Terraforming_Best(plot, missing_amount, best_1ring, best_2ring, avg_rin
 				-- Plains
 				elseif ( target_plot_1:GetTerrainType() == 3 or target_plot_1:GetTerrainType() == 4 or (target_plot_1:GetTerrainType() == 5 and flag ~= 3 and target_plot_1:GetFeatureType() ~= g_FEATURE_VOLCANO)) then
 					
-				if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+				--if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS or ( target_plot_1:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS and flag ~= 4) ) then
+            
+            if ( target_plot_1:GetFeatureType() ~= g_FEATURE_FLOODPLAINS_PLAINS) then
 					-- +5.5 on Plains		
 					rng = TerrainBuilder.GetRandomNumber(100,"test")/100
 					
@@ -5532,8 +5578,9 @@ function Terraforming_Water(plot,civilizationType)
 		if (adjacentPlot ~=nil) then
 			if (adjacentPlot:GetResourceCount() < 1 and adjacentPlot:IsUnit() == false and adjacentPlot:IsCoastalLand() == false) then
 				__Debug("Terraforming Water X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Water Lake");
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-				TerrainBuilder.SetTerrainType(adjacentPlot, 15);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetTerrainType(adjacentPlot, 15);
+            terraformBBSPlot(adjacentPlot, 15, -2, -2)
 				return
 			end
 		end
@@ -5546,8 +5593,9 @@ function Terraforming_Water(plot,civilizationType)
 		if (adjacentPlot ~=nil) then
 			if (adjacentPlot:GetResourceCount() < 1 and adjacentPlot:IsCoastalLand() == false and adjacentPlot:GetFeatureType() ~= g_FEATURE_VOLCANO) then
 				__Debug("Terraforming Water X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Water Lake but unit was on the way");
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-				TerrainBuilder.SetTerrainType(adjacentPlot, 15);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetTerrainType(adjacentPlot, 15);
+            terraformBBSPlot(adjacentPlot, 15, -2, -2)
 				return
 			end
 		end
@@ -5561,8 +5609,9 @@ function Terraforming_Water(plot,civilizationType)
          if (adjacentPlot:IsCoastalLand() == false) then
             __Debug("Terraforming Water X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Water Lake but unit was on the way");
             ResourceBuilder.SetResourceType(adjacentPlot, -1);
-            TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-            TerrainBuilder.SetTerrainType(adjacentPlot, 15);
+            --TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            --TerrainBuilder.SetTerrainType(adjacentPlot, 15);
+            terraformBBSPlot(adjacentPlot, 15, -2, -2)
             return
          end
 		end
@@ -8220,6 +8269,14 @@ function Terraforming(plot, intensity, flag)
 				d_factor = 2
 		end
 		adjacentPlot = GetAdjacentTiles(plot, i);
+      
+      local adjX = -5
+      local adjY = -5
+      
+      if (adjacentPlot ~= nil) then
+         adjX = adjacentPlot:GetX();
+         adjY = adjacentPlot:GetY();
+      end
 		--__Debug("Evaluate Start X: ", adjacentPlot:GetX(), "Evaluate Start Y: ", adjacentPlot:GetY(), "Terrain Type: ", terrainType);
 		--__Debug("Evaluate Start X: ", adjacentPlot:GetX(), "Evaluate Start Y: ", adjacentPlot:GetY(), "Feature Type: ", adjacentPlot:GetFeatureType());
 
@@ -8228,102 +8285,126 @@ function Terraforming(plot, intensity, flag)
 			terrainType = adjacentPlot:GetTerrainType()
 			if (adjacentPlot:GetFeatureType() == g_FEATURE_OASIS and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Remove Oasis",i);
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBS(adjX, adjY, -2, -2, -1);
 			end
 			if (adjacentPlot:GetFeatureType() == 1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Remove Ice",i);
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBS(adjX, adjY, -2, -2, -1);
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 			if((terrainType == 9) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+            terraformBBS(adjX, adjY, 3, -2, -2);
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 				if world_age == 1 and adjacentPlot:GetResourceCount() == 0 and adjacentPlot:GetFeatureType() < 4 and rng < 0.20 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Make it a Plains hill",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);				
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);	
+               terraformBBS(adjX, adjY, 4, -2, -2);
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 				if adjacentPlot:GetFeatureType() == -1 and adjacentPlot:GetResourceCount() == 0 and rng < 0.15 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Add woods",i);
-					TerrainBuilder.SetFeatureType(adjacentPlot,3);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+               terraformBBS(adjX, adjY, -2, -2, 3);
 				end
 			end
 			if((terrainType == 10) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 				if adjacentPlot:GetFeatureType() == -1 and adjacentPlot:GetResourceCount() == 0 and rng < 0.15 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Add woods",i);
-					TerrainBuilder.SetFeatureType(adjacentPlot,3);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+               terraformBBS(adjX, adjY, -2, -2, 3);
 				end
 			end
 			if((terrainType == 11) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra Mountains to Plains Mountains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,5);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,5);
+            terraformBBS(adjX, adjY, 5, -2, -2);
 			end
 			if((terrainType == 6) and rng > limit and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Desert to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+            terraformBBS(adjX, adjY, 3, -2, -2);
 				if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS) then
-					TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-					TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
+               terraformBBS(adjX, adjY, -2, -2, -1);
+               terraformBBS(adjX, adjY, -2, -2, 32);
 				end
 			end
 			if((terrainType == 7) and rng > limit and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Desert Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 			end
 			if((terrainType == 8) and rng > limit and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Desert Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,5);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,5);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 			end
 			if(terrainType == 12) then
 				if(i < 18 and flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Plain tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
-					elseif(i < 36 and flag == 1) then
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+               terraformBBS(adjX, adjY, 3, -2, -2);
+            elseif(i < 36 and flag == 1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,9);
-					elseif(flag ~=1) then
+					--TerrainBuilder.SetTerrainType(adjacentPlot,9);
+               terraformBBS(adjX, adjY, 9, -2, -2);
+            elseif(flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,9);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,9);
+               terraformBBS(adjX, adjY, 9, -2, -2);
 				end
 			end
 			if(terrainType == 13) then
 				if(i < 18 and flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Plain tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+               terraformBBS(adjX, adjY, 4, -2, -2);
 					elseif(i < 36 and flag == 1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,10);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,10);
+               terraformBBS(adjX, adjY, 10, -2, -2);
 					elseif(flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,10);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,10);
+               terraformBBS(adjX, adjY, 10, -2, -2);
 				end
 			end
 			if((terrainType == 4) and rng > limit and adjacentPlot:GetFeatureType() ~= g_FEATURE_JUNGLE and flag ~=1 and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Grassland Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,1);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,1);
+            terraformBBS(adjX, adjY, 1, -2, -2);
 			end
 			if((terrainType == 3) and rng > limit and adjacentPlot:GetFeatureType() ~= g_FEATURE_JUNGLE and flag ~=1 and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Grassland tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,0);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,0);
+            terraformBBS(adjX, adjY, 0, -2, -2);
 			end
 			if((terrainType == 0) and adjacentPlot:GetResourceCount() <1 and flag == 2 and rng < 0.50) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,3);
-				if (adjacentPlot:IsRiver() == true) then
-					TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-					TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
-				end
+				--TerrainBuilder.SetTerrainType(adjacentPlot,3);
+            terraformBBS(adjX, adjY, 3, -2, -2);
+				--if (adjacentPlot:IsRiver() == true) then
+					--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
+				--end
 			end
 			if((terrainType == 1) and adjacentPlot:GetResourceCount() <1 and flag == 2 and rng < 0.66) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,4);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,4);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 			end
 			if((terrainType == 2) and adjacentPlot:GetResourceCount() <1 and flag == 2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland Mountains to Plains Mountains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,5);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,5);
+            terraformBBS(adjX, adjY, 5, -2, -2);
 			end
 			if( (terrainType == 3 or terrainType == 4 or terrainType == 5) and flag == 2) then
 				local d_count = 0
@@ -8338,22 +8419,26 @@ function Terraforming(plot, intensity, flag)
 				end
 				if d_count > d_factor then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Plains to Desert tile",i);
-					ResourceBuilder.SetResourceType(adjacentPlot, -1);
-					TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
+					--ResourceBuilder.SetResourceType(adjacentPlot, -1);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
+               terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
 					if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-						elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-						else
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+               elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+                  terraformBBS(adjX, adjY, -2, -2, 32);
+               else
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+                  terraformBBS(adjX, adjY, -2, -2, -1);
 					end
 				end
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 			if (adjacentPlot:IsWater() == false and adjacentPlot:IsImpassable() == false and adjacentPlot:GetTerrainType() ~= 12 and adjacentPlot:GetTerrainType() ~= 13 and adjacentPlot:GetTerrainType() ~= 6 and adjacentPlot:GetTerrainType() ~= 7 and adjacentPlot:GetFeatureType() == -1 and rng > limit_tree and adjacentPlot:GetResourceType() == -1 and count_wood < max_wood) then
-				TerrainBuilder.SetFeatureType(adjacentPlot,3);
+            terraformBBS(adjX, adjY, -2, -2, 3);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,3);
 				count_wood = count_wood + 1;
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Wood",i);
 			end
@@ -8396,6 +8481,13 @@ function Terraforming(plot, intensity, flag)
 				d_factor = 3
 		end
 		adjacentPlot = GetAdjacentTiles(east_plot, i);
+      local adjX = -5
+      local adjY = -5
+      
+      if (adjacentPlot ~= nil) then
+         adjX = adjacentPlot:GetX();
+         adjY = adjacentPlot:GetY();
+      end
 		--__Debug("Evaluate Start X: ", adjacentPlot:GetX(), "Evaluate Start Y: ", adjacentPlot:GetY(), "Terrain Type: ", terrainType);
 		--__Debug("Evaluate Start X: ", adjacentPlot:GetX(), "Evaluate Start Y: ", adjacentPlot:GetY(), "Feature Type: ", adjacentPlot:GetFeatureType());
 
@@ -8404,69 +8496,83 @@ function Terraforming(plot, intensity, flag)
 			terrainType = adjacentPlot:GetTerrainType()
 			if (adjacentPlot:GetFeatureType() == g_FEATURE_OASIS and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Remove Oasis",i);
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBS(adjX, adjY, -2, -2, -1);
 			end
 			if (adjacentPlot:GetFeatureType() == 1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Remove Ice",i);
-				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBS(adjX, adjY, -2, -2, -1);
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 			if((terrainType == 9) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+            terraformBBS(adjX, adjY, 3, -2, -2);
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 				if world_age == 1 and adjacentPlot:GetResourceCount() == 0 and adjacentPlot:GetFeatureType() < 4 and rng < 0.20 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Make it a Plains hill",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);				
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);				
+               terraformBBS(adjX, adjY, 4, -2, -2);
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 				if adjacentPlot:GetFeatureType() == -1 and adjacentPlot:GetResourceCount() == 0 and rng < 0.15 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Add woods",i);
-					TerrainBuilder.SetFeatureType(adjacentPlot,3);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+               terraformBBS(adjX, adjY, -3, -2, -2);
 				end
 			end
 			if((terrainType == 10) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 				if adjacentPlot:GetFeatureType() == -1 and adjacentPlot:GetResourceCount() == 0 and rng < 0.15 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Add woods",i);
-					TerrainBuilder.SetFeatureType(adjacentPlot,3);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+               terraformBBS(adjX, adjY, 3, -2, -2);
 				end
 			end
 			if(terrainType == 12) then
 				if(i < 18 and flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Plain tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+               terraformBBS(adjX, adjY, 3, -2, -2);
 					elseif(flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,9);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,9);
+               terraformBBS(adjX, adjY, 9, -2, -2);
 				end
 			end
 			if(terrainType == 13) then
 				if(i < 18 and flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Plain tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
-					elseif(flag ~=1) then
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+               terraformBBS(adjX, adjY, 4, -2, -2);
+            elseif(flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,10);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,10);
+               terraformBBS(adjX, adjY, 10, -2, -2);
 				end
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 			if((terrainType == 0) and adjacentPlot:GetResourceCount() <1 and flag == 2 and rng < 0.50) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,3);
-				if (adjacentPlot:IsRiver() == true) then
-					TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-					TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
-				end
+				--TerrainBuilder.SetTerrainType(adjacentPlot,3);
+            terraformBBS(adjX, adjY, 3, -2, -2);
+				--if (adjacentPlot:IsRiver() == true) then
+					--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
+				--end
 			end
 			if((terrainType == 1) and adjacentPlot:GetResourceCount() <1 and flag == 2 and rng < 0.66) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,4);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,4);
+            terraformBBS(adjX, adjY, 1, -2, -2);
 			end
 			if((terrainType == 2) and adjacentPlot:GetResourceCount() <1 and flag == 2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland Mountains to Plains Mountains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,5);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,5);
+            terraformBBS(adjX, adjY, 5, -2, -2);
 			end
 			if((terrainType == 3 or terrainType == 4 or terrainType == 5) and flag == 2) then
 				local d_count = 0
@@ -8481,21 +8587,23 @@ function Terraforming(plot, intensity, flag)
 				end
 				if d_count > d_factor then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Plains to Desert tile",i);
-					ResourceBuilder.SetResourceType(adjacentPlot, -1);
-					TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
+					--ResourceBuilder.SetResourceType(adjacentPlot, -1);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
+               terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
 					if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+               elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
 						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-						elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-						else
+               else
 						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 					end
 				end
 			end
 			if (adjacentPlot:IsWater() == false and adjacentPlot:IsImpassable() == false and adjacentPlot:GetTerrainType() ~= 12 and adjacentPlot:GetTerrainType() ~= 13 and adjacentPlot:GetTerrainType() ~= 6 and adjacentPlot:GetTerrainType() ~= 7 and adjacentPlot:GetFeatureType() == -1 and rng > limit_tree and adjacentPlot:GetResourceType() == -1 and count_wood < max_wood) then
-				TerrainBuilder.SetFeatureType(adjacentPlot,3);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+            terraformBBS(adjX, adjY, -2, -2, 3);
 				count_wood = count_wood + 1;
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Wood",i);
 			end
@@ -8528,6 +8636,13 @@ function Terraforming(plot, intensity, flag)
 				d_factor = 3
 		end
 		adjacentPlot = GetAdjacentTiles(west_plot, i);
+      local adjX = -5
+      local adjY = -5
+      
+      if (adjacentPlot ~= nil) then
+         adjX = adjacentPlot:GetX();
+         adjY = adjacentPlot:GetY();
+      end
 		--__Debug("Evaluate Start X: ", adjacentPlot:GetX(), "Evaluate Start Y: ", adjacentPlot:GetY(), "Terrain Type: ", terrainType);
 		--__Debug("Evaluate Start X: ", adjacentPlot:GetX(), "Evaluate Start Y: ", adjacentPlot:GetY(), "Feature Type: ", adjacentPlot:GetFeatureType());
 
@@ -8537,68 +8652,82 @@ function Terraforming(plot, intensity, flag)
 			if (adjacentPlot:GetFeatureType() == g_FEATURE_OASIS and flag ~=2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Remove Oasis",i);
 				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBS(adjX, adjY, -2, -2, -1);
 			end
 			if (adjacentPlot:GetFeatureType() == 1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Remove Ice",i);
 				TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+            terraformBBS(adjX, adjY, -2, -2, -1);
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 			if((terrainType == 9) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 				if world_age == 1 and adjacentPlot:GetResourceCount() == 0 and adjacentPlot:GetFeatureType() < 4 and rng < 0.20 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Make it a Plains hill",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);				
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);				
+               terraformBBS(adjX, adjY, 4, -2, -2);
 				end
 				rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 				if adjacentPlot:GetFeatureType() == -1 and adjacentPlot:GetResourceCount() == 0 and rng < 0.15 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Add woods",i);
-					TerrainBuilder.SetFeatureType(adjacentPlot,3);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+               terraformBBS(adjX, adjY, 3, -2, -2);
 				end
 			end
 			if((terrainType == 10) and rng > limit and flag ~=1) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Tundra Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 				if adjacentPlot:GetFeatureType() == -1 and adjacentPlot:GetResourceCount() == 0 and rng < 0.15 then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Add woods",i);
-					TerrainBuilder.SetFeatureType(adjacentPlot,3);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+               terraformBBS(adjX, adjY, -2, -2, 3);
 				end
 			end
 			if(terrainType == 12) then
 				if(i < 18 and flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Plain tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS);
+               terraformBBS(adjX, adjY, 3, -2, -2);
 					elseif(flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,9);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,9);
+               terraformBBS(adjX, adjY, 9, -2, -2);
 				end
 			end
 			if(terrainType == 13) then
 				if(i < 18 and flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Plain tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
-					elseif(flag ~=1) then
+					--TerrainBuilder.SetTerrainType(adjacentPlot,g_TERRAIN_TYPE_PLAINS_HILLS);
+               terraformBBS(adjX, adjY, 4, -2, -2);
+            elseif(flag ~=1) then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing to Tundra tile",i);
-					TerrainBuilder.SetTerrainType(adjacentPlot,10);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,10);
+               terraformBBS(adjX, adjY, 10, -2, -2);
 				end
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
 			if((terrainType == 0) and adjacentPlot:GetResourceCount() <1 and flag == 2 and rng < 0.50) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland to Plains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,3);
-				if (adjacentPlot:IsRiver() == true) then
-					TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-					TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
-				end
+				--TerrainBuilder.SetTerrainType(adjacentPlot,3);
+            terraformBBS(adjX, adjY, 3, -2, -2);
+				--if (adjacentPlot:IsRiver() == true) then
+					--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+					--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS_PLAINS);
+				--end
 			end
 			if((terrainType == 1) and adjacentPlot:GetResourceCount() <1 and flag == 2 and rng < 0.66) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland Hills to Plains Hills tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,4);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,4);
+            terraformBBS(adjX, adjY, 4, -2, -2);
 			end
 			if((terrainType == 2) and adjacentPlot:GetResourceCount() <1 and flag == 2) then
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Grassland Mountains to Plains Mountains tile",i);
-				TerrainBuilder.SetTerrainType(adjacentPlot,5);
+				--TerrainBuilder.SetTerrainType(adjacentPlot,5);
+            terraformBBS(adjX, adjY, 5, -2, -2);
 			end
 			if((terrainType == 3 or terrainType == 4 or terrainType == 5) and flag == 2) then
 				local d_count = 0
@@ -8613,21 +8742,25 @@ function Terraforming(plot, intensity, flag)
 				end
 				if d_count > d_factor then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Plains to Desert tile",i);
-					ResourceBuilder.SetResourceType(adjacentPlot, -1);
-					TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
+					--ResourceBuilder.SetResourceType(adjacentPlot, -1);
+					--TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
+               terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
 					if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-						elseif (adjacentPlot:IsRiver() == true and  rng < 0.33 and TerrainType == 3) then
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-						else
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+               elseif (adjacentPlot:IsRiver() == true and  rng < 0.33 and TerrainType == 3) then
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+                  terraformBBS(adjX, adjY, -2, -2, 0);
+               else
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+                  terraformBBS(adjX, adjY, -2, -2, -1);
 					end
 				end
 			end
 			if (adjacentPlot:IsWater() == false and adjacentPlot:IsImpassable() == false and adjacentPlot:GetTerrainType() ~= 12 and adjacentPlot:GetTerrainType() ~= 13 and adjacentPlot:GetTerrainType() ~= 6 and adjacentPlot:GetTerrainType() ~= 7 and adjacentPlot:GetFeatureType() == -1 and rng > limit_tree and adjacentPlot:GetResourceType() == -1 and count_wood < max_wood) then
-				TerrainBuilder.SetFeatureType(adjacentPlot,3);
+				--TerrainBuilder.SetFeatureType(adjacentPlot,3);
+            terraformBBS(adjX, adjY, -2, -2, 3);
 				count_wood = count_wood + 1;
 				__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Wood",i);
 			end
@@ -8753,11 +8886,19 @@ end
 function Terraforming_BanLux(plot)
 	for j = 0, 6 do
 		local otherPlot = GetAdjacentTiles(plot, j);
+      local adjX = -5
+      local adjY = -5
+      
+      if (otherPlot ~= nil) then
+         adjX = otherPlot:GetX();
+         adjY = otherPlot:GetY();
+      end
 		if otherPlot ~= nil then
 			__Debug("Check Luxury Start X: ", otherPlot:GetX(), "Evaluate Start Y: ", otherPlot:GetY(), "Resource Type: ",otherPlot:GetResourceType());
 			if (otherPlot:GetResourceType() == 31 or otherPlot:GetResourceType() == 33 or otherPlot:GetResourceType() == 16 or otherPlot:GetResourceType() == 12 or otherPlot:GetResourceType() == 25) then
 				__Debug("Luxury balancing: Banned Luxury Removed", otherPlot:GetResourceType());
-				ResourceBuilder.SetResourceType(otherPlot, -1);
+				--ResourceBuilder.SetResourceType(otherPlot, -1);
+            terraformBBS(adjX, adjY, -2, -1, -2)
 			end
 		end
 	end 
@@ -8767,7 +8908,8 @@ function Terraforming_BanLux(plot)
 			__Debug("Check Luxury Start X: ", otherPlot:GetX(), "Evaluate Start Y: ", otherPlot:GetY(), "Resource Type: ",otherPlot:GetResourceType());
 			if (otherPlot:GetResourceType() == 11 or otherPlot:GetResourceType() == 27 or otherPlot:GetResourceType() == 28) then
 				__Debug("Luxury balancing: Banned Luxury Removed", otherPlot:GetResourceType());
-				ResourceBuilder.SetResourceType(otherPlot, -1);
+				--ResourceBuilder.SetResourceType(otherPlot, -1);
+            terraformBBS(adjX, adjY, -2, -1, -2)
 			end
 		end
 	end 

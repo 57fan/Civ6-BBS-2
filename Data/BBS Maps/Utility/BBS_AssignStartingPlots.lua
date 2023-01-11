@@ -674,39 +674,94 @@ local SHIT_PERCENTAGE_R5 = 0.15;
 
 local SEA_PERCANTEGE_R3 = 0.50;
 
+function terraformBBSPlot(plot, newTerrain, newResource, newFeature)
+   if (plot ~= nil) then
+      return terraformBBS(plot:GetX(), plot:GetY(), newTerrain, newResource, newFeature);
+   else
+      ___Debug("ERROR: tried to Terrafor a nil tile !");
+      return -1;
+   end
+end
+
 function terraformBBS(x, y, newTerrain, newResource, newFeature)
+   
+   if (x < 0 or y < 0 or x > mapXSize or y > mapYSize) then
+      print("ERROR, tried to terraform tile outside the map ! X:", x, "Y:", y);
+      return -1;
+   end
    
    local xIndex = x + 1;
    local yIndex = y + 1;
    
    local plot = Map.GetPlot(x, y);
-   
-   
+
    -- Terrain first
    if (newTerrain ~= -2) then -- -2 = no change
+   
+      if (newTerrain < 0 or newTerrain > 16) then
+         print("ERROR, usage of invalid terrain ID:", newTerrain);
+         return -1;
+      end
       TerrainBuilder.SetTerrainType(plot, newTerrain);
       mapTerrainCode[xIndex][yIndex] = newTerrain;
+      
+      if (mapFeatureCode[xIndex][yIndex] == 0 or mapFeatureCode[xIndex][yIndex] == 31 or mapFeatureCode[xIndex][yIndex] == 32) then -- floodplains, need an update
+         if newTerrain == 0 then --grassland
+            mapFeatureCode[xIndex][yIndex] = 31;
+            TerrainBuilder.SetFeatureType(plot, 31, 1);
+         elseif newTerrain == 3 then --plain
+            mapFeatureCode[xIndex][yIndex] = 32;
+            TerrainBuilder.SetFeatureType(plot, 32, 1);
+         elseif newTerrain == 3 then --plain
+            mapFeatureCode[xIndex][yIndex] = 0;
+            TerrainBuilder.SetFeatureType(plot, 0, 1);
+         else
+            ___Debug("Warning, terraformed a flooded tiles, without proper terrain:, X:", x, "Y:", y, "New Terrain:", newTerrain);
+         end
+         
+      end
+      
+      ___Debug("Changed Terrain of tile X:", x, "Y:", y, "New Terrain:", newTerrain);
+      
    end
    
    -- Resource 
    
    if (newResource ~= -2) then -- -2 = no change
+      if (newResource < -2) then
+         print("ERROR, usage of invalid Resource ID:", newResource);
+         return -1;
+      end
+      
       if (newResource == -1) then --clean, no resource
          ResourceBuilder.SetResourceType(plot, -1);
+         ___Debug("Cleaned Resource of tile ", x, "Y:", y);
       else
          ResourceBuilder.SetResourceType(plot, newResource, 1);
+         ___Debug("Changed Resource of tile X:", x, "Y:", y, "New Resource:", newResource);
       end
       
       mapResourceCode[xIndex][yIndex] = newResource;
+      
+      
    end
    
    
    -- Feature
    if (newFeature ~= -2) then -- -2 = no change
+      if (newResource < -2) then
+         print("ERROR, usage of invalid Feature ID:", newFeature);
+         return -1;
+      end
+      
+   
       if (newResource == -1) then -- clean, no feature
          TerrainBuilder.SetFeatureType(plot, -1);
+         ___Debug("Cleaned Feature of tile ", x, "Y:", y);
       else
+         TerrainBuilder.SetFeatureType(plot, -1);
          TerrainBuilder.SetFeatureType(plot, newFeature, 1);
+         ___Debug("Changed Feature of tile X:", x, "Y:", y, "New Feature:", newResource);
       end
 
       mapFeatureCode[xIndex][yIndex] = newFeature;
@@ -2727,7 +2782,7 @@ function NewBBS(instance)
    --Now Deciding which tiles are going to be "settle forbidden"
    --
    -- Forbidden:
-   --    - Spawn on a resource (any resource)
+   --    - Spawn on a luxury resource (any lux) (other resources will be destroyed)
    --    - Spawn Ring 1 of 1-3 (1-4) gypsum/Ivory/deer with fresh water or coastal (would make capital 2-3)
    --    - Spawn Ring 2 of a Spice (any spice, any land)
    --    - Spawn Ring 2 of 4-0 sugar/honey/citrus, flat grassland, with fresh water or coastal (would make cap 4-1) 
@@ -2809,9 +2864,9 @@ function NewBBS(instance)
             end
          end
          
-         ------ removing ... resources -----------
-         --if isLuxury(mapResourceCode[iIndex][jIndex]) then
-         if (mapResourceCode[iIndex][jIndex] >= 0) then
+         ------ removing ... luxuries -----------
+         if isLuxury(mapResourceCode[iIndex][jIndex]) then
+         --if (mapResourceCode[iIndex][jIndex] >= 0) then
             mapSpawnable[iIndex][jIndex] = false;
             
             ___Debug("---- Banning resource X:", i, "Y:", j);
@@ -3834,6 +3889,11 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       end
       ___Debug("-------------------------------------------------");
       ___Debug("-------------------------------------------------");
+      
+      if (mapResourceCode[player.spawnX + 1][player.spawnY + 1] ~= -1) then
+         ___Debug("Player spawned on a resource:", mapResourceCode[player.spawnX + 1][player.spawnY + 1], "Removing it");
+         terraformBBS(player.spawnX, player.spawnY, -2, -1, -2);
+      end
    
    --- Could not make civ spawn, first, let's try with less distance
    else
@@ -3898,6 +3958,11 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
          end
          ___Debug("-------------------------------------------------");
          ___Debug("-------------------------------------------------");
+         
+         if (mapResourceCode[player.spawnX + 1][player.spawnY + 1] ~= -1) then
+         ___Debug("CS spawned on a resource:", mapResourceCode[player.spawnX + 1][player.spawnY + 1], "Removing it");
+         terraformBBS(player.spawnX, player.spawnY, -2, -1, -2);
+      end
          
          break;
       end
@@ -6913,6 +6978,10 @@ end
 -- Firaxis function would return true for tiles bordering lakes, which we don't want--
 function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
 
+   if (xStart < 0 or yStart < 0 or xStart > xSize or yStart > ySize) then
+      return false;
+   end
+   
    -- the tile is water, no sense to evaluate
    if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
       ___Debug("out direct")
@@ -6937,6 +7006,10 @@ end
 
 function isNextToWaterTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
 
+   if (xStart < 0 or yStart < 0 or xStart > xSize or yStart > ySize) then
+      return false;
+   end
+   
    -- the tile is water, no sense to evaluate
    if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
       ___Debug("out direct")
@@ -6959,6 +7032,11 @@ end
 
 -- Recoded because of firaxis issue
 function hasFreshWater (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
+
+   if (xStart < 0 or yStart < 0 or xStart > xSize or yStart > ySize) then
+      return false;
+   end
+
    -- the tile is water, no sense to evaluate
    if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
       ___Debug("out direct")
