@@ -45,7 +45,7 @@ BBS_AssignStartingPlots = {};
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-    print (...);
+    --print (...);
 end
 
 ------------------------------------------------------------- BBS ----------------------------
@@ -839,11 +839,11 @@ function terraformBBS(x, y, newTerrain, newResource, newFeature)
             mapFreshWater[tempX + 1][tempY + 1] = true;
          end 
          
-         if (isCoastalTile(tempX, tempX, mapXSize, mapYSize, mapIsRoundWestEast)) then
+         if (isCoastalTile(tempX, tempY, mapXSize, mapYSize, mapIsRoundWestEast)) then
             mapCoastal[tempX + 1][tempY + 1] = true;
          end
          
-         if isNextToWaterTile(i, j, mapXSize, mapYSize, mapIsRoundWestEast) then
+         if isNextToWaterTile(tempX, tempY, mapXSize, mapYSize, mapIsRoundWestEast) then
             mapNextToWater[tempX + 1][tempY + 1] = true;
          end
       end
