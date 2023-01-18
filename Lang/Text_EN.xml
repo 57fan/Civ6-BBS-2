@@ -292,7 +292,7 @@
 		  <Text>Barringer Crater</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION" Language="en_US">
-		  <Text>One tile natural wonder. Yields +3 [ICON_SCIENCE] Science and +3 [ICON_GOLD] Gold. +10% [ICON_PRODUCTION] Production toward Space Race Projects if you own this tile.</Text>
+		  <Text>One tile natural wonder. Yields +3 [ICON_SCIENCE] Science, +2 [ICON_FOOD] and +3 [ICON_GOLD] Gold. +10% [ICON_PRODUCTION] Production toward Space Race Projects if you own this tile.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_QUOTE" Language="en_US">
 		  <Text>"In fact we can now prove that this crater is due to the collision with the earth of an extra-terrestrial body, possibly a small asteroid, which was presumably metallic in nature."[NEWLINE]- Daniel Barringer</Text>
@@ -334,7 +334,7 @@
 		  <Text>Dallol</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="en_US">
-		  <Text>One tile natural wonder. Provides +2 [ICON_SCIENCE] Science, +2 [ICON_PRODUCTION] Production and +1 [ICON_GOLD] Gold.</Text>
+		  <Text>One tile natural wonder. Provides +2 [ICON_SCIENCE] Science, +2 [ICON_PRODUCTION] Production, +2 [ICON_FOOD] and +1 [ICON_GOLD] Gold.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="en_US">
 		  <Text>"There is hell, there is darkness, there is the sulfurous pit— burning, scalding, stench, consumption!"[NEWLINE]- William Shakespeare, King Lear</Text>
@@ -376,7 +376,7 @@
 		  <Text>Lake Victoria</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="en_US">
-		  <Text>Four tile natural wonder. Appears as a Lake and provides fresh water. Yields +3 [ICON_FOOD] Food, +1 [ICON_CULTURE] Culture, and +1 [ICON_GOLD] Gold.</Text>
+		  <Text>Four tile natural wonder. Appears as a Lake and provides fresh water. Yields +3 [ICON_FOOD] Food, +1 [ICON_CULTURE] Culture, +1 [ICON_PRODUCTION] and +1 [ICON_GOLD] Gold.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="en_US">
 		  <Text>"I saw that old father Nile without any doubt rises in the Victoria Nyanza, and as I had foretold, that lake is the great source of the holy river which cradled the first expounder of our religious belief."[NEWLINE]- John Hanning Speke</Text>
@@ -389,7 +389,7 @@
 		  <Text>Lençóis Maranhenses</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="en_US">
-		  <Text>Two tile natural wonder. Provides fresh water. Yields +2 [ICON_FOOD] Food, +3 [ICON_CULTURE] Culture. +1 [ICON_CULTURE] Culture on Desert and Plains Floodplains if you own at least one of these tiles.</Text>
+		  <Text>Two tile natural wonder. Provides fresh water. Yields +2 [ICON_FOOD] Food, +2 [ICON_CULTURE] Culture and +2 [ICON_GOLD]. +1 [ICON_CULTURE] Culture on Desert and Plains Floodplains if you own at least one of these tiles.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="en_US">
 		  <Text>"I saw meadows of white and golden sands, ever shifting their shape according to the creative mood and whim of the winds."[NEWLINE]- Geert Mauricio Bas</Text>
@@ -462,7 +462,7 @@
 		  <Text>Namib Sand Sea</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="en_US">
-		  <Text>Three tile natural wonder. Yields +3 [ICON_CULTURE] Culture and +2 [ICON_GOLD] Gold. Recon units who go through to the Namib Sand Sea gain +1 Movement for the rest of the game.</Text>
+		  <Text>Three tile natural wonder. Yields +2 [ICON_CULTURE] Culture, +2 [ICON_PRODUCTION] and +2 [ICON_GOLD] Gold. Recon units who go through to the Namib Sand Sea gain +1 Movement for the rest of the game.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="en_US">
 		  <Text>"I love to hear the sound made by sand dunes, I am one of those who perceive the rhythm of a landscape as recorded in many paintings, I am one of thousands who know I am finally home."[NEWLINE]- Mvula Ya Nangolo</Text>
@@ -496,7 +496,7 @@
 		  <Text>Old Faithful</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="en_US">
-		  <Text>One tile natural wonder. Yields +3 [ICON_SCIENCE] Science, +1 [ICON_Faith] Faith, and +1 [ICON_GOLD] Gold. Major bonus adjacency to Campus districts.</Text>
+		  <Text>One tile natural wonder. Yields +3 [ICON_SCIENCE] Science, +2 [ICON_FOOD], +1 [ICON_Faith] Faith, and +1 [ICON_GOLD] Gold. Major bonus adjacency to Campus districts.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="en_US">
 		  <Text>"It spouted at regular intervals nine times during our stay, the columns of boiling water being thrown from ninety to one hundred and twenty-five feet at each discharge, which lasted from fifteen to twenty minutes. We gave it the name of Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
@@ -512,7 +512,7 @@
 		  <Text>Lakes of Ounianga</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="en_US">
-		  <Text>Two tile natural wonder. Provides fresh water. Yields +2 [ICON_FOOD] Food, +2 [ICON_CULTURE] Culture, and +1 [ICON_GOLD] Gold. +1 [ICON_FOOD] Food to Adjacent tiles.</Text>
+		  <Text>Two tile natural wonder. Provides fresh water. Yields +2 [ICON_FOOD] Food, +2 [ICON_CULTURE] Culture, and +2 [ICON_GOLD] Gold. +1 [ICON_FOOD] Food to Adjacent tiles.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="en_US">
 		  <Text>"At the beginning, the language of the desert was grass blooming against the wall of wind, tall palms swaying in the season of seeding and cinders carried by air to the blue welcome of warm sand. She was our first fountain, our mother, who held us, then gave us away to the age of waiting cities."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
@@ -525,7 +525,7 @@
 		  <Text>Salar de Uyuni</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="en_US">
-		  <Text>Four tile natural wonder. Yields +2 [ICON_SCIENCE] Science, +1 [ICON_PRODUCTION] Production, and +2 [ICON_GOLD] Gold. Major adjacency bonus to Commercial Hub districts.</Text>
+		  <Text>Four tile natural wonder. Yields +2 [ICON_SCIENCE] Science, +2 [ICON_PRODUCTION] Production, and +4 [ICON_GOLD] Gold. Major adjacency bonus to Commercial Hub districts.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="en_US">
 		  <Text>"I shivered in those solitudes when I heard the voice of the salt in the desert."[NEWLINE]- Pablo Neruda</Text>
@@ -576,7 +576,7 @@
 		  <Text>Vredefort Dome</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_DESCRIPTION" Language="en_US">
-		  <Text>Two tile natural wonder. Yields +2 [ICON_FOOD] Food, +2 [ICON_SCIENCE] Science, and +1 [ICON_CULTURE] Culture.</Text>
+		  <Text>Two tile natural wonder. Yields +2 [ICON_FOOD] Food, +1 [ICON_PRODUCTION], +2 [ICON_SCIENCE] Science, and +1 [ICON_CULTURE] Culture.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_QUOTE" Language="en_US">
 		  <Text>"When geologists first wandered the spectacular ring of hills straddling the Vaal River north of Vredefort nearly 150 years ago, they immediately recognised that the unusually shattered and uptilted rocks bore witness to an exceptionally violent event in the distant past."[NEWLINE]- Wolf Uwe Reimold</Text>
@@ -589,7 +589,7 @@
 		  <Text>Wulingyuan</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_WULINGYUAN_DESCRIPTION" Language="en_US">
-		  <Text>Two tile impassable natural wonder. Adjacent plots yield +2 [ICON_CULTURE] Culture</Text>
+		  <Text>Two tile impassable natural wonder. Adjacent plots yield +1 [ICON_CULTURE] Culture</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_WULINGYUAN_QUOTE" Language="en_US">
 		  <Text>"From ten thousand valleys the trees touch heaven, on a thousand peaks cuckoos are calling, and, after a night of mountain rain, from each summit come hundreds of silken cascades."[NEWLINE]- Wang Wei</Text>
