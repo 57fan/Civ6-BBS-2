@@ -36,7 +36,7 @@ INSERT OR IGNORE INTO Features
 		(FeatureType,								Name,											Description,										Quote,										QuoteAudio,				NaturalWonder,		Appeal,		 	Tiles,			NoAdjacentFeatures,	NoRiver,		RequiresRiver,	Settlement, 	Coast,		NoCoast, 	Impassable,		SightThroughModifier, 	FollowRulesInWB,	MinDistanceNW, 	AddsFreshWater, Lake,	NotCliff, 	MinDistanceLand,	MaxDistanceLand, 	CustomPlacement)
 		VALUES	
 		('FEATURE_BARRINGER_CRATER',				'LOC_FEATURE_BARRINGER_CRATER_NAME',			'LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION',			'LOC_FEATURE_BARRINGER_CRATER_QUOTE',		NULL,					1,					2,				1,				1,					1,				0,				0,				0,			1,			0,				1,						0,					0, 				0, 				0, 		0, 			0, 					0, 					NULL),
-		('FEATURE_BIOLUMINESCENT_BAY',				'LOC_FEATURE_BIOLUMINESCENT_BAY_NAME',			'LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION',		'LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE',		NULL,					1,					2,				1,				0,					1,				0,				0,				0,			0,			0,				2,						0,					0, 				0, 				0, 		0, 			1, 					1, 					NULL),
+		('FEATURE_BIOLUMINESCENT_BAY',				'LOC_FEATURE_BIOLUMINESCENT_BAY_NAME',			'LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION',		'LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE',		NULL,					1,					2,				1,				0,					1,				0,				0,				0,			0,			0,				0,						0,					0, 				0, 				0, 		0, 			1, 					1, 					NULL),
 		('FEATURE_CERRO_DE_POTOSI',					'LOC_FEATURE_CERRO_DE_POTOSI_NAME',				'LOC_FEATURE_CERRO_DE_POTOSI_DESCRIPTION',			'LOC_FEATURE_CERRO_DE_POTOSI_QUOTE',		NULL,					1,					2,				1,				0,					1,				0,				0,				0,			1,			1,				2,						0,					0, 				0, 				0, 		0, 			0, 					0, 					NULL),
 		('FEATURE_DALLOL',							'LOC_FEATURE_DALLOL_NAME',						'LOC_FEATURE_DALLOL_DESCRIPTION',					'LOC_FEATURE_DALLOL_QUOTE',					NULL,					1,					2,				1,				1,					1,				0,				0,				0,			0,			0,				2,						0,					0, 				0, 				0, 		0,			0, 					0, 					NULL),
 		('FEATURE_GIBRALTAR',						'LOC_FEATURE_GIBRALTAR_NAME',					'LOC_FEATURE_GIBRALTAR_DESCRIPTION',				'LOC_FEATURE_GIBRALTAR_QUOTE',				NULL,					1,					2,				1,				0,					1,				0,				0,				1,			1,			1,				2,						0,					0, 				0, 				0, 		0, 			0, 					0, 					'PLACEMENT_GIBRALTAR'),
@@ -207,7 +207,7 @@ INSERT OR IGNORE INTO Feature_YieldChanges
 		(FeatureType,								YieldType,					YieldChange)
 		VALUES	
 		('FEATURE_LAKE_VICTORIA',					'YIELD_GOLD',				1),
-		('FEATURE_LAKE_VICTORIA',					'YIELD_FOOD',				3),
+		('FEATURE_LAKE_VICTORIA',					'YIELD_FOOD',				2),
 		('FEATURE_LAKE_VICTORIA',					'YIELD_CULTURE',			1),
       ('FEATURE_LAKE_VICTORIA',					'YIELD_PRODUCTION',			1),
       ('FEATURE_DALLOL',					'YIELD_GOLD',				1),

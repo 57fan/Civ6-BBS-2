@@ -237,6 +237,80 @@
 		  <Text>25 tiles</Text>
 	</Replace>
    
+   <Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="en_US">
+		  <Text>Minimum BBS attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="en_US">
+		  <Text>1</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="en_US">
+		  <Text>1 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="en_US">
+		  <Text>2</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="en_US">
+		  <Text>2 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="en_US">
+		  <Text>3</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="en_US">
+		  <Text>3 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="en_US">
+		  <Text>4</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="en_US">
+		  <Text>4 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="en_US">
+		  <Text>5</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="en_US">
+		  <Text>5 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="en_US">
+		  <Text>6</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="en_US">
+		  <Text>6 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="en_US">
+		  <Text>7</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="en_US">
+		  <Text>7 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="en_US">
+		  <Text>8</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="en_US">
+		  <Text>8 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="en_US">
+		  <Text>9</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="en_US">
+		  <Text>9 attempts</Text>
+	</Replace>
+   
+   <Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="en_US">
+		  <Text>10</Text>
+	</Replace>
+   <Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="en_US">
+		  <Text>10 attempts</Text>
+	</Replace>
+   
 	<Replace Tag="BBS_NATURAL_NORMAL_NAME" Language="en_US">
 		  <Text>Standard</Text>
 	</Replace>

@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 2.1.3
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.2.0
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.1.3"
+local bbs_version = "2.2.0"
 
 local bError_major = false;
 local bError_minor = false;
@@ -45,7 +45,7 @@ BBS_AssignStartingPlots = {};
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-    --print (...);
+    print (...);
 end
 
 ------------------------------------------------------------- BBS ----------------------------
@@ -177,9 +177,9 @@ function BBS_AssignStartingPlots.Create(args)
 	--print("Calculating Island Size: Start", os.date("%c"));
 	for iPlotIndex = 0, Map.GetPlotCount()-1, 1 do
 		local pPlot = Map.GetPlotByIndex(iPlotIndex)
-		if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
-			local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
-		end
+		--if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
+			--local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
+		--end
 	end
 	--print("Calculating Island Size: End", os.date("%c"));
 	end
@@ -2921,6 +2921,7 @@ function NewBBS(instance)
          end
          
          ----- Spice: no settle ring 2 near a spice -----
+         --[[
          if (mapResourceCode[iIndex][jIndex] == 27) then
             ___Debug("Found Spice on X:", i, "Y:", j);
             local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
@@ -2930,7 +2931,6 @@ function NewBBS(instance)
                mapSpawnable[x + 1][y + 1] = false;
                ___Debug("---- Banning X:", x, "Y:", y);
             end
-            
             list = getRing(i, j, 2, mapXSize, mapXSize, mapIsRoundWestEast);
             for _, element in ipairs(list) do
                local x = element[1];
@@ -2939,6 +2939,7 @@ function NewBBS(instance)
                ___Debug("---- Banning X:", x, "Y:", y);
             end
          end
+         --]]
          
          -- sugar/honey/citrus on fresf water/coastal and on flat grassland
          -- will terraform to plain + remove marsh if on coastal/fresh water
@@ -3021,6 +3022,19 @@ function NewBBS(instance)
                local y = element[2];
                mapSpawnable[x + 1][y + 1] = false;
                ___Debug("---- Banning X:", x, "Y:", y);
+            end
+         
+            if mapFeatureCode[iIndex][jIndex] == 21 then -- Giant's Causeway
+               
+               local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
+               for _, element in ipairs(list) do
+                  local x = element[1];
+                  local y = element[2];
+                  if (mapTerrainCode[x + 1][y + 1] == 16) then -- ocean
+                     terraformBBS(x, y, 15, -2, -2)
+                     ___Debug("---- Giant's Causeway fix: ocean to Coast at :", x, "Y:", y);
+                  end
+               end
             end
          end
       end
@@ -3613,7 +3627,17 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       end
    end
    
-   local attempts = 13;
+   local fullAttempts = MapConfiguration.GetValue("BBSMinAttempts");
+   
+   ___Debug("Read Min attempts value", fullAttempts);
+   
+   if (fullAttempts == nil or fullAttempts > 10) then
+      fullAttempts = 6;
+   end
+   
+   local attempts = fullAttempts + 7;
+   
+   ___Debug("Attempts", attempts);
    
    local playerDistance = Major_Distance_Target
    local settleSuccess = false;
@@ -5612,7 +5636,12 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                
                
                local ring3Floods = ringFloodPlains[1] + ringFloodPlains[2] + ringFloodPlains[3];
-               if (mapFeatureCode[iIndex][jIndex] == 0 or mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
+               --if (mapFeatureCode[iIndex][jIndex] == 0 or mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
+               --   ring3Floods = ring3Floods + 1;
+               --end
+               
+               -- Not counting desert floodplains, should help mali
+               if (mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
                   ring3Floods = ring3Floods + 1;
                end
                

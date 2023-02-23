@@ -1,5 +1,5 @@
  ------------------------------------------------------------------------------
---	FILE:	 BBS_Balance.lua 2.1.3
+--	FILE:	 BBS_Balance.lua 2.2.0
 --	AUTHOR:  D. / Jack The Narrator, 57Fan
 --	PURPOSE: Rebalance the map spawn post placement 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3226,9 +3226,20 @@ function AddBonusProd(plot, intensity,flag)
 					-- Small Island
 
 					if(rng > limit_1 and bWater == true) then
-					__Debug("Prod Balancing X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Island");
-					TerrainBuilder.SetTerrainType(adjacentPlot,1);
-					return true;
+                  print("Prod Balancing X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added: Island");
+                  TerrainBuilder.SetTerrainType(adjacentPlot,1);
+                  
+                  local list = getRing(adjacentPlot:GetX(), adjacentPlot:GetY(), 1, mapXSize, mapXSize, mapIsRoundWestEast);
+                  for _, element in ipairs(list) do
+                     local x = element[1];
+                     local y = element[2];
+                     if (mapTerrainCode[x + 1][y + 1] == 16) then -- ocean
+                        terraformBBS(x, y, 15, -2, -2)
+                        print("---- Remove ocean around manually added island :", x, "Y:", y);
+                     end
+                  end
+                  
+                  return true;
 					end
 
 					elseif(terrainType == 15 and adjacentPlot:GetFeatureType() == -1 and adjacentPlot:IsFreshWater() == false and (adjacentPlot:GetResourceCount() < 1 or adjacentPlot:GetResourceType() == 5 )   ) then
@@ -10474,5 +10485,5 @@ end
 
 -----------------------------------------------------------------------------
 function __Debug(...)
-    print (...);
+   --print (...);
 end
