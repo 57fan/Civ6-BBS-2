@@ -519,7 +519,7 @@
 			<Text>Namib Sand Sea</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="en_US">
-			<Text>Three tile natural wonder. Provides +2 [ICON_CULTURE] Culture, +2 [ICON_PRODUCTION] Production and +2 [ICON_GOLD] Gold. Recon units that enter Namib Sand Sea tiles receive the ability 'Desert Nomads' (+1 [ICON_Movement] Movement)</Text>
+			<Text>Three tile natural wonder. Provides +2 [ICON_CULTURE] Culture, +2 [ICON_PRODUCTION] Production and +2 [ICON_GOLD] Gold. Recon units that enter Namib Sand Sea tiles receive the ability 'Desert Nomads' (+1 [ICON_Movement] Movement).</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="en_US">
 			<Text>"I love to hear the sound made by sand dunes, I am one of those who perceive the rhythm of a landscape as recorded in many paintings, I am one of thousands who know I am finally home."[NEWLINE]- Mvula Ya Nangolo</Text>
