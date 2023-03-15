@@ -2828,6 +2828,7 @@ function NewBBS(instance)
          if (mapTerrainCode[iIndex][jIndex] < 15) then
             local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
             local unusableTiles = 0;
+            local floodTiles = 0;
             --___Debug("Villes ouvertes:", i, j)
             for _, element in ipairs(list) do
                local x = element[1];
@@ -2835,8 +2836,8 @@ function NewBBS(instance)
                if (isMountainCode(mapTerrainCode[x + 1][y + 1]) or mapTerrainCode[x + 1][y + 1] >= 15) then
                   --___Debug("Out:", x, y)
                   unusableTiles = unusableTiles + 1;
-               else
-                  --___Debug("In:", x, y)
+               elseif (mapFeatureCode[x + 1][y + 1] == 0 or mapFeatureCode[x + 1][y + 1] == 31 or mapFeatureCode[x + 1][y + 1] == 32) then
+                  floodTiles = floodTiles + 1;
                end
             end
             
@@ -2845,6 +2846,21 @@ function NewBBS(instance)
             if (unusableTiles >= 3) then
                ___Debug("not enough workable tiles around X:", i, "Y:", j);
                mapSpawnable[iIndex][jIndex] = false;
+            elseif (unusableTiles == 2) then
+               if floodTiles >= 3 then
+                  ___Debug("2 unusable + 3 or more floods around X:", i, "Y:", j);
+                  mapSpawnable[iIndex][jIndex] = false;
+               end
+            elseif (unusableTiles == 1) then
+               if floodTiles >= 4 then
+                  ___Debug("1 unusable + 4 or more floods around X:", i, "Y:", j);
+                  mapSpawnable[iIndex][jIndex] = false;
+               end
+            elseif (unusableTiles == 0) then
+               if floodTiles >= 5 then
+                  ___Debug("0 unusable + 5 or more floods around X:", i, "Y:", j);
+                  mapSpawnable[iIndex][jIndex] = false;
+               end
             end
          end
          ------ Too close to map border ! ----------

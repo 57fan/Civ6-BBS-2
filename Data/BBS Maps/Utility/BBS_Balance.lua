@@ -120,20 +120,26 @@ function isHillAble (x, y)
       return -1;
    end
    
-   -- Mountain
+   -- Hill
    if terrain % 3 == 1 then
       __Debug("Is already a hill ...", x, y);
       return -1;
    end
    
    -- Rice, wheat, cattle and Maize: will need to remove if we wanna change
-   if resource == 1 or resource == 6 or resource == 9 or resource == 52 then
+   -- including deer: want to prevent 2-3 possible
+   if (resource == 1 or resource == 4 or resource == 6 or resource == 9 or resource == 52) then
       return 0;
    end
    
    -- resources only found on flat land
    if (resource == 10 or resource == 12 or resource == 18 or resource == 20 or resource == 22 or resource == 24 or resource == 27 or resource == 28
         or resource == 30 or resource == 31 or resource == 42 or resource == 44 or resource == 45 or resource == 53) then
+      return -1;
+   end
+   
+   -- plain with gypsum or ivory, can't cuz would great 2-3 tile
+   if (terrain == 3 and (resource == 17 or resource == 19)) then
       return -1;
    end
    
@@ -195,15 +201,24 @@ function toHill (x, y, cleanResource, cleanFeature)
    local plot = Map.GetPlot(x, y)
    local terrain = mapTerrainCode[xIndex][yIndex];
    
+   local newResource = -2;
+   local newFeature = -2;
+   
    if cleanResource then
-      ResourceBuilder.SetResourceType(plot, -1);
-      mapResourceCode[xIndex][yIndex] = -1;
+      newResource = -1;
+      --ResourceBuilder.SetResourceType(plot, -1);
+      --mapResourceCode[xIndex][yIndex] = -1;
    end
    
    if cleanFeature then
-      TerrainBuilder.SetFeatureType(plot, -1);
-      mapFeatureCode[xIndex][yIndex] = -1;
+      newFeature = -1;
+      --TerrainBuilder.SetFeatureType(plot, -1);
+      --mapFeatureCode[xIndex][yIndex] = -1;
    end
+   
+   terraformBBS(x, y, terrain + 1, newResource, newFeature);
+   
+   --[[
    
    TerrainBuilder.SetTerrainType(plot, terrain + 1);
    mapTerrainCode[xIndex][yIndex] = mapTerrainCode[xIndex][yIndex] + 1;
@@ -244,10 +259,11 @@ function toHill (x, y, cleanResource, cleanFeature)
    mapScienceYield[xIndex][yIndex] = science;
    mapCultureYield[xIndex][yIndex] = culture;
    mapFaithYield[xIndex][yIndex] = faith;
+   --]]
    
    local twoTwo = twoTwoScore(x, y);
    
-   mapTwoTwo[xIndex][yIndex] = twoTwo;
+   --mapTwoTwo[xIndex][yIndex] = twoTwo;
    
    if (twoTwo >= 2) then
       return 2;
@@ -7598,7 +7614,8 @@ function mountainToHill(plot)
 	if plot:GetFeatureType() ~= g_FEATURE_VOLCANO and plot:IsNaturalWonder() == false then
 		local terrainType = plot:GetTerrainType();
 		
-		TerrainBuilder.SetTerrainType(plot, terrainType - 1);
+		--TerrainBuilder.SetTerrainType(plot, terrainType - 1);
+      terraformBBSPlot(plot, terrainType - 1, -2, -2)
    
 		return;
 		else
@@ -9820,19 +9837,19 @@ function AddLuxuryStarting(plot, s_type)
 
 		local pPlot = Map.GetPlotByIndex(plot);
 		if (pPlot~=nil) then
-				if (pPlot:GetResourceCount() > 0) and pPlot:IsNaturalWonder() == false and pPlot:IsWater() == false  then
-					-- 10 is citrus, 34 is jeans
-					if ((pPlot:GetResourceType() >= 10 and pPlot:GetResourceType() < 34 and pPlot:GetResourceType() ~= 27 and pPlot:GetResourceType() ~= 28 and pPlot:GetResourceType() ~= 11 and s_type ~= "plains") 
-					or (pPlot:GetResourceType() == 14 and pPlot:GetResourceType() == 16 and pPlot:GetResourceType() == 17 and pPlot:GetResourceType() == 26 and pPlot:GetResourceType() == 31 and s_type ~= "plains")
-					or pPlot:GetResourceType() == 53) then
-						bHasLuxury = true;
-						--__Debug("found luxury at X",  pPlot:GetX(), "Y: ", pPlot:GetY());
-						count = count + 1;
-						table.insert(eAddLux, pPlot:GetResourceType());
-						table.insert(eAddLux_Terrain, pPlot:GetTerrainType());
-						table.insert(eAddLux_Feature, pPlot:GetFeatureType());
-					end
-				end
+         if (pPlot:GetResourceCount() > 0) and pPlot:IsNaturalWonder() == false and pPlot:IsWater() == false  then
+            -- 10 is citrus, 34 is jeans
+            if ((pPlot:GetResourceType() >= 10 and pPlot:GetResourceType() < 34 and pPlot:GetResourceType() ~= 27 and pPlot:GetResourceType() ~= 28 and pPlot:GetResourceType() ~= 11 and s_type ~= "plains") 
+            or (pPlot:GetResourceType() == 14 and pPlot:GetResourceType() == 16 and pPlot:GetResourceType() == 17 and pPlot:GetResourceType() == 26 and pPlot:GetResourceType() == 31 and s_type ~= "plains")
+            or pPlot:GetResourceType() == 53) then
+               bHasLuxury = true;
+               --__Debug("found luxury at X",  pPlot:GetX(), "Y: ", pPlot:GetY());
+               count = count + 1;
+               table.insert(eAddLux, pPlot:GetResourceType());
+               table.insert(eAddLux_Terrain, pPlot:GetTerrainType());
+               table.insert(eAddLux_Feature, pPlot:GetFeatureType());
+            end
+         end
 		end
 		
 	end
@@ -9845,13 +9862,34 @@ function AddLuxuryStarting(plot, s_type)
 		for i = lower_bound, upper_bound, 1 do
 			adjacentPlot = GetAdjacentTiles(plot, i);
 			if (adjacentPlot ~= nil) then
+            
+            local x = adjacentPlot:GetX()
+            local y = adjacentPlot:GetY()
+            
+            local isFlood = false;
+            if (mapFeatureCode[x + 1][y + 1] == 0 or mapFeatureCode[x + 1][y + 1] == 31 or mapFeatureCode[x + 1][y + 1] == 32) then
+               isFlood = true;
+            end
+            
+            local newTerrain = -2;
+         
 				for j = 1, count do
-					if((adjacentPlot:GetTerrainType() == eAddLux_Terrain[j]) and (adjacentPlot:GetResourceType() == -1)) and adjacentPlot:IsNaturalWonder() == false and pPlot:IsWater() == false  then
-						if (i > 5 and (eAddLux[j] == 17 or eAddLux[j] == 19)) or (eAddLux[j] ~= 17 and eAddLux[j] ~= 19) then
-							TerrainBuilder.SetFeatureType(adjacentPlot,eAddLux_Feature[j]);
-							__Debug("Balancing X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added a Luxury:",eAddLux[j]);
-							ResourceBuilder.SetResourceType(adjacentPlot, eAddLux[j], 1);
-							return true;
+					if((adjacentPlot:GetTerrainType() == eAddLux_Terrain[j]) and (adjacentPlot:GetResourceType() == -1)) and adjacentPlot:IsNaturalWonder() == false and pPlot:IsWater() == false and isFlood == false then
+						if (i > 5 and (eAddLux[j] == 17 or eAddLux[j] == 19)) or (eAddLux[j] ~= 17 and eAddLux[j] ~= 19) then -- very unclear
+                     if (mapTerrainCode[x + 1][y + 1] == 4 and (eAddLux[j] == 17 or eAddLux[j] == 19)) then -- no gypsum/ivory on hill
+                        newTerrain = 3;
+                     end
+                     
+                     if (mapTerrainCode[x + 1][y + 1] == 0 and (eAddLux[j] == 10 or eAddLux[j] == 28 or eAddLux[j] == 53)) then -- no citrus/sugar/honey on flat grassland
+                        newTerrain = 3;
+                     end
+                     
+                     terraformBBSPlot(adjacentPlot, newTerrain, eAddLux[j], eAddLux_Feature[j]);
+                     --TerrainBuilder.SetFeatureType(adjacentPlot,eAddLux_Feature[j]);
+                     __Debug("Balancing X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Added a Luxury:",eAddLux[j]);
+                     
+                     --ResourceBuilder.SetResourceType(adjacentPlot, eAddLux[j], 1);
+                     return true;
 						end
 					end
 				end
