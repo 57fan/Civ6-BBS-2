@@ -3,6 +3,7 @@
 
 	<LocalizedText>		
 	<!-- Map Sizes -->
+	<!-- == Map features == -->
 	<Replace Tag="LOC_MAPSIZE_ENORMOUS_NAME" Language="ru_RU">
 		<Text>Гигантская</Text>
 	</Replace>
@@ -112,6 +113,8 @@
 	<Replace Tag="LOC_GAME_BBS_NATURAL_DESC" Language="ru_RU">
 		  <Text>Регулирует максимальное количество чудес природы на карте.</Text>
 	</Replace>		
+	
+	
 	<Replace Tag="LOC_BBS_Team_Spawn_NAME" language="ru_RU">
 		<Text>Командный старт</Text>
 	</Replace>
@@ -137,13 +140,211 @@
 		<Text>Для 2x2 или 4x4: игроки одной команды будут с большей вероятностью расположены на Севере или Юге.</Text>
 	</Replace>
 	
+	<!-- == Min distance == -->
+	<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="en_US">
+			<Text>Минимальное расстояние между игроками</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="en_US">
+			<Text>Стандартное</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="en_US">
+			<Text>Стандартное расстояние, зависит от карты</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="en_US">
+			<Text>6</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="en_US">
+			<Text>6 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="en_US">
+			<Text>7</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="en_US">
+			<Text>7 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="en_US">
+			<Text>8</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="en_US">
+			<Text>8 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="en_US">
+			<Text>9</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="en_US">
+			<Text>9 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="en_US">
+			<Text>10</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="en_US">
+			<Text>10 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="en_US">
+			<Text>11</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="en_US">
+			<Text>11 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="en_US">
+			<Text>12</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="en_US">
+			<Text>12 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="en_US">
+			<Text>13</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="en_US">
+			<Text>13 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="en_US">
+			<Text>14</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="en_US">
+			<Text>14 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="en_US">
+			<Text>15</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="en_US">
+			<Text>15 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="en_US">
+			<Text>16</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="en_US">
+			<Text>16 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="en_US">
+			<Text>17</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="en_US">
+			<Text>17 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="en_US">
+			<Text>18</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="en_US">
+			<Text>18 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="en_US">
+			<Text>19</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="en_US">
+			<Text>19 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="en_US">
+			<Text>20</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="en_US">
+			<Text>20 клеток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="en_US">
+			<Text>21</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="en_US">
+			<Text>21 клетка</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="en_US">
+			<Text>22</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="en_US">
+			<Text>22 клетки</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="en_US">
+			<Text>23</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="en_US">
+			<Text>23 клетки</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="en_US">
+			<Text>24</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="en_US">
+			<Text>24 клетки</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="en_US">
+			<Text>25</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="en_US">
+			<Text>25 клеток</Text>
+		</Replace>
+	
+	<!-- == Players options == -->
+	<!-- = Attempts = -->
+	<Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="en_US">
+			<Text>Минимум попыток BBS</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="en_US">
+			<Text>1</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="en_US">
+			<Text>1 попытка</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="en_US">
+			<Text>2</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="en_US">
+			<Text>2 попытки</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="en_US">
+			<Text>3</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="en_US">
+			<Text>3 попытки</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="en_US">
+			<Text>4</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="en_US">
+			<Text>4 попытки</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="en_US">
+			<Text>5</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="en_US">
+			<Text>5 попыток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="en_US">
+			<Text>6</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="en_US">
+			<Text>6 попыток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="en_US">
+			<Text>7</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="en_US">
+			<Text>7 попыток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="en_US">
+			<Text>8</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="en_US">
+			<Text>8 попыток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="en_US">
+			<Text>9</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="en_US">
+			<Text>9 попыток</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="en_US">
+			<Text>10</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="en_US">
+			<Text>10 попыток</Text>
+		</Replace>	
+	
 	
 	<!-- Wonders -->
+			<!-- = Barringer Crater = -->
 	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_NAME" Language="ru_RU">
 		  <Text>Кратер Бэрринджера</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на одну клетку. +3 [ICON_SCIENCE] науки и +3 [ICON_GOLD] золота. +10% [ICON_PRODUCTION] производства к проектом космический гонки, если вы владеете этой клеткой.</Text>
+		  <Text>Чудо природы на одну клетку. +3 [ICON_SCIENCE] науки, +2 [ICON_FOOD] пищи и +3 [ICON_GOLD] золота. +10% [ICON_PRODUCTION] производства к проектам космической гонки, если вы владеете этой клеткой.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_QUOTE" Language="ru_RU">
 		  <Text>"Фактически, теперь мы можем доказать, что этот кратер образовался в результате столкновения с землей внеземного тела, возможно, небольшого астероида, который, предположительно, был металлическим по природе."[NEWLINE]- Даниэль Бэрринджер</Text>
@@ -151,12 +352,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BARRINGER_CRATER_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>Кратер Бэрринджера - огромный метеоритный кратер, расположенный в Аризоне, в Соединенных Штатах Америки. Кратер имеет диаметр 1200 метров (4000 футов). Ученые полагают, что он был создан около 50 000 лет назад, когда на это место обрушился большой никель-железный метеорит, весивший во время удара 160 000 тонн и двигающийся со скоростью примерно 44 000 километров в час (27 000 миль в час).</Text>
 	</Replace>	
-	
+			<!-- = Bioluminescent Bay = -->
 	<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_NAME" Language="ru_RU">
 		  <Text>Баия Биолуминиссенте</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на одну клетку. +3 [ICON_SCIENCE] науки, +1 [ICON_FOOD] пищи и +1 [ICON_GOLD] золото. +1 [ICON_GOLD] золото от рыбацких судов, если вы владеете этой клеткой.</Text>
+		  <Text>Чудо природы на одну клетку. Представляет из себя риф и даёт +3 [ICON_SCIENCE] науки, +1 [ICON_FOOD] пищи и +1 [ICON_GOLD] золота. +1 [ICON_GOLD] золото от рыбацких лодок во всех городах, если вы владеете этой клеткой.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE" Language="ru_RU">
 		  <Text>"Излучение света от огня, молний, звезд или живых существ привлекает внимание любого человека. В случае биолюминесценции свет имеет странное свечение, что-то волшебное и загадочное." [NEWLINE] - Кассиус Стевани</Text>
@@ -167,7 +368,7 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_2" Language="ru_RU">
 		  <Text>A combination of factors creates the necessary conditions for bioluminescence: red mangrove trees surround the water, a complete lack of modern development around the bay, the water is cool enough and deep enough, and a small channel to the ocean keeps the dinoflagellates in the bay. This small channel was created artificially, being the result of attempts by the occupants of Spanish ships to choke off the bay from the ocean. The Spanish believed that the bioluminescence they encountered there while first exploring the area, was the work of the devil and tried to block ocean water from entering the bay by dropping huge boulders in the channel. The Spanish only succeeded in preserving and increasing the luminescence in the now isolated bay.</Text>
 	</Replace>	
-	
+			<!-- = Cerro de Potosi = -->
 	<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_NAME" Language="ru_RU">
 		  <Text>Сьерро Рико</Text>
 	</Replace>
@@ -180,12 +381,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_CERRO_DE_POTOSI_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>Located in southern Bolivia, the mountain of Potosi produced nearly all of the silver mined by the Spanish during their imperial days. Once removed from the mountain, it was taken by llama and mule to the coast where it was then loaded onto treasure ships sailing back to Europe. Nearly 41,000 tons of pure silver were mined over the course of 200 years, 8,200 of which went directly to the Spanish crown. After 1800, the main silver mines were depleted, but the mining of Potosi still continues today - some for silver but now mostly for tin.</Text>
 	</Replace>	
-	
+			<!-- = Dallol = -->
 		<Replace Tag="LOC_FEATURE_DALLOL_NAME" Language="ru_RU">
 		  <Text>Даллол</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на одну клетку. +2 [ICON_SCIENCE] науки, +2 [ICON_PRODUCTION] производства и +1 [ICON_GOLD] золото.</Text>
+		  <Text>Чудо природы на одну клетку. +2 [ICON_SCIENCE] науки, +2 [ICON_PRODUCTION] производства, +2 [ICON_FOOD] пищи и +1 [ICON_GOLD] золото.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="ru_RU">
 		  <Text>"Там ад, там тьма, там серная яма - горение, обжиг, зловоние, чахотка!" [NEWLINE] - Уильям Шекспир, Король Лир</Text>
@@ -196,7 +397,7 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_2" Language="ru_RU">
 		  <Text>Numerous hot springs are discharging brine and acidic liquid here. Small, widespread, temporary geysers produce cones of salt. The Dallol deposits include significant bodies of potash found directly at the surface. The term 'Dallol' was coined by the Afar people and means 'dissolution' or 'disintegration', describing a landscape of green acid ponds (pH-values less than 1) and iron oxide, sulfur and salt desert plains.</Text>
 	</Replace>	
-	
+	<!-- = Grand Mesa = -->
 	<Replace Tag="LOC_FEATURE_GRAND_MESA_NAME" Language="ru_RU">
 		  <Text>Гранд-Меса</Text>
 	</Replace>
@@ -209,12 +410,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GRAND_MESA_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>The Grand Mesa is a large geologic formation in Colorado, the United States of America. Rising some 1,500 meters (5,000 feet) above the surrounding territory and with an area of 1300 square kilometers (500 square miles), it is the largest mesa in the world. The Grand Mesa has a layer of volcanic basalt on top, which resists erosion. It did not so much rise into the air, as it remained at its original height, as the surrounding terrain was eroded by the action of the Colorado and Gunnison rivers.  The Grand Mesa National Forest (originally called Battlement Mesa Forest Reserve) was created by Benjamin Harrison on December 24, 1892. It was the third forest reserve created in United States.</Text>
 	</Replace>	
-	
+<!-- = Mount Kailash = -->
 		<Replace Tag="LOC_FEATURE_KAILASH_NAME" Language="ru_RU">
 		  <Text>Гора Кайлас</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_KAILASH_DESCRIPTION" Language="ru_RU">
-		  <Text>Непроходимое чудо природы на одну клетку. Является горой. Соседние клетки получают +1 [ICON_Faith] веры и +1 [ICON_CULTURE] культуры. +1 [ICON_CULTURE] культуры от иностранных городов, исповедующих вашу религию, если владеете этой клеткой.</Text>
+		  <Text>Непроходимое чудо природы на одну клетку. Является горой. Соседние клетки получают +1 [ICON_Faith] веры и +1 [ICON_CULTURE] культуры. +1 [ICON_CULTURE] культуры от иностранных городов, исповедующих вашу [ICON_RELIGION] религию, если владеете этой клеткой.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_KAILASH_QUOTE" Language="ru_RU">
 		  <Text>"After thus having instructed the godly ones Lord Brahma went away with in his wake the forefathers and the leaders of the people whom he took from his own place to the abode of Lord Shiva, Kailash, the best of all mountains that is so dear to the master."[NEWLINE]- The Bhagavata Purana</Text>
@@ -222,12 +423,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KAILASH_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>The sacred peak of Mount Kailash, found in the Himalayas of Tibet, is cherished by a number of religions, particularly the followers of Hinduism. It is believed to be the home of Lord Shiva, who dwells on the mountain in a state of eternal bliss. Mount Kailash is said to be among the most difficult of all religious pilgrimages, as the harsh conditions dissuade many would-be pilgrims, and the mountain is not accessible by any forms of modern transportation.</Text>
 	</Replace>	
-	
+<!-- = Lake Victoria = -->
 	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_NAME" Language="ru_RU">
 		  <Text>Озеро Виктория</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 4 клетки. Является озером и источником пресной воды. +3 [ICON_FOOD] пищи, +1 [ICON_CULTURE] культуры и +1 [ICON_GOLD] золото.</Text>
+		  <Text>Чудо природы на 4 клетки. Является озером и источником пресной воды. +3 [ICON_FOOD] пищи, +1 [ICON_CULTURE] культуры, +1 [ICON_PRODUCTION] производства и +1 [ICON_GOLD] золота.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="ru_RU">
 		  <Text>"Я видел, что старый отец Нил, без всякого сомнения, берет свое начало в Виктория-Ньянза, и, как я и предсказывал, это озеро является великим источником священной реки, которая убаюкала первого толкователя нашей религиозной веры." [NEWLINE] - Джон Ханнинг Спик</Text>
@@ -235,12 +436,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LAKE_VICTORIA_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>With a surface area over 26,000 square miles (68,800 km²), Lake Victoria is the largest lake in Africa, the second largest freshwater lake on Earth, and the largest tropical lake in the world. Two large rivers leave the lake, the White Nile and the Katonga. The first historical records of the lake come from Arab traders seeking gold, ivory and other commodities from the natives as they pushed inland from the coast. The search by European explorers for the source of the Nile led to the discovery of the lake by the Englishman John Speke in 1858 AD, who named it after the then British monarch.</Text>
 	</Replace>	
-	
+<!-- = Lençóis Maranhenses = -->
 	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_NAME" Language="ru_RU">
 		  <Text>Ленсойс-Мараньенсис</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 2 клетки. Источник пресной воды. +2 [ICON_FOOD] пищи, +3 [ICON_CULTURE] культуры. +1 [ICON_CULTURE] культуры на равнинах или в поймах пустынь, если вы владеете хотя бы одной из этих клеток.</Text>
+		  <Text>Чудо природы на 2 клетки. Источник пресной воды. +2 [ICON_FOOD] пищи, +3 [ICON_CULTURE] культуры. +1 [ICON_CULTURE] культуры на равнинных поймах и в пустыне, если вы владеете хотя бы одной из этих клеток.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="ru_RU">
 		  <Text>"Я видел луга с белым и золотым песком, которые постоянно меняли свою форму в зависимости от настроения и прихоти ветра." [NEWLINE] - Герт Маурисио Бас</Text>
@@ -248,7 +449,7 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LENCOIS_MARANHENSES_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>Located in Maranhão state in northeastern Brazil, Lençóis Maranhenses National Park is composed of 380,000 acres of rolling sand dunes that flood with freshwater during the rainy season. The park is home to a range of species, four of which are endangered, and due to its unique physical properties it has become a popular destination for ecotourists.</Text>
 	</Replace>	
-	
+<!-- = Krakatoa = -->
 	<Replace Tag="LOC_FEATURE_KRAKATOA_NAME" Language="ru_RU">
 		  <Text>Кракатау</Text>
 	</Replace>
@@ -279,7 +480,7 @@
 	<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_DESCRIPTION" Language="ru_RU">
 		  <Text>Проклята земля, на которую Кракатау отбрасывает свою могучую тень. И огонь, и камень воздействовали на нас. Ибо из-под земли мы были взяты из пепла, который мы есть ... и в пепел мы вернулись.</Text>
 	</Replace>
-	
+			<!-- = Mosi-oa-Tunya = -->
 		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_NAME" Language="ru_RU">
 		  <Text>Моси-оа-Тунья</Text>
 	</Replace>
@@ -292,7 +493,7 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOSI_OA_TUNYA_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>The Mosi-oa-Tunya, otherwise known as Victoria Falls, is among the most spectacular waterfalls in the world. The Zambezi River, which is more than 2 kilometers wide at this point, plunges noisily down a series of basalt gorges and raises an iridescent mist that can be seen more than 50 km away. Its name, which translates to 'The Smoke Which Thunders', comes from the Kololo or Lozi language used throughout Zambia and in parts of Zimbabwe, though it is more commonly known worldwide as Victoria Falls due to Scottish missionary and explorer, David Livingstone, who is perhaps most famous for giving a name to a waterfall that already had one.</Text>
 	</Replace>	
-	
+			<!-- = Motlatse Canyon = -->
 		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_NAME" Language="ru_RU">
 		  <Text>Каньон Мотлетс</Text>
 	</Replace>
@@ -308,12 +509,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_2" Language="ru_RU">
 		  <Text>While it is difficult to compare canyons world-wide, Blyde River Canyon is one of the largest canyons on Earth, and it may be the largest green canyon due to its lush subtropical foliage. It supports a large diversity of flora and fauna, including numerous fish and antelope species as well as hippos, crocodiles and every primate species that may be seen in south Africa, making it a very popular region for tourism.</Text>
 	</Replace>	
-	
+	<!-- = Namib Sand Sea = -->
 		<Replace Tag="LOC_FEATURE_NAMIB_NAME" Language="ru_RU">
 		  <Text>Набиб</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 3 клетки. +3 [ICON_CULTURE] культуры и +2 [ICON_GOLD] золота. Разведывательные юниты, прошедшие по нему, получают +1 очко перемещения до конца игры.</Text>
+		  <Text>Чудо природы на 3 клетки. +2 [ICON_CULTURE] культуры, +2 [ICON_PRODUCTION] производства и +2 [ICON_GOLD] золота. Разведывательные юниты, прошедшие по нему, получают способность "Кочевники пустыни" (+1 [ICON_Movement] очко перемещения до конца игры).</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="ru_RU">
 		  <Text>"Мне нравится слышать звук, издаваемый песчаными дюнами, я один из тех, кто воспринимает ритм пейзажа, записанный на многих картинах, я один из тысяч людей, которые знают, что я наконец дома." [NEWLINE] - Мвула Я Нанголо</Text>
@@ -322,12 +523,12 @@
 		  <Text>The Namib is a coastal desert in southern Africa, whose name is of Nama origin and means 'vast place'. The Namib stretches for more than 2,000km along the Atlantic coasts of Angola, Namibia, and South Africa. Having endured arid, or semi-arid conditions for roughly 55-80 million years, the Namib may be the oldest desert in the world, containing some of the world's driest regions. Owing to its aridity, the Namib is almost totally uninhabited except for a small number of scattered settlements, which have historically served as trading posts for the routes of traders and missionaries that cross the desert.</Text>
 	</Replace>	
 	<Replace Tag="LOC_ABILITY_NAMIB_BUFF_NAME" Language="ru_RU">
-		  <Text>Desert Nomads</Text>
+		  <Text>Кочевники пустыни</Text>
 	</Replace>
 	<Replace Tag="LOC_ABILITY_NAMIB_BUFF_DESCRIPTION" Language="ru_RU">
-		  <Text>+1 очко перемещения</Text>
+		  <Text>Кочевники пустыни: +1 [ICON_Movement] очко перемещения</Text>
 	</Replace>	
-	
+	<!-- = Rock of Gibraltar = -->
 	<Replace Tag="LOC_FEATURE_GIBRALTAR_NAME" Language="ru_RU">
 		  <Text>Гибралтарская скала</Text>
 	</Replace>
@@ -342,12 +543,12 @@
 	</Replace>	
 
 	
-	
+	<!-- = Old Faithful = -->
 	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_NAME" Language="ru_RU">
 		  <Text>Олд-Фейтфул</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на одну клетку. +3 [ICON_SCIENCE] науки, +1 [ICON_Faith] вера и +1 [ICON_GOLD] золото. Повышенный бонус соседства для кампуса.</Text>
+		  <Text>Чудо природы на одну клетку. +3 [ICON_SCIENCE] науки, +2 [ICON_FOOD] пищи, +1 [ICON_Faith] вера и +1 [ICON_GOLD] золота. Повышенный бонус соседства для кампуса.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="ru_RU">
 		  <Text>"It spouted at regular intervals nine times during our stay, the columns of boiling water being thrown from ninety to one hundred and twenty-five feet at each discharge, which lasted from fifteen to twenty minutes. We gave it the name of Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
@@ -358,28 +559,28 @@
 	<Replace Tag="LOC_DISTRICT_OLD_FAITHFUL_SCIENCE" Language="ru_RU">
 			<Text>+{1_num} [ICON_SCIENCE] науки за соседство с Олд-Фейтфул.</Text>
 	</Replace>		
-	
+	<!-- = Lakes of Ounianga = -->
 		<Replace Tag="LOC_FEATURE_OUNIANGA_NAME" Language="ru_RU">
 		  <Text>Озера Унианга</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 2 клетки. Источник пресной воды. +2 [ICON_FOOD] пищи, +2 [ICON_CULTURE] культуры и +1 [ICON_GOLD] золото. +1 [ICON_FOOD] пищи на соседних клетках.</Text>
+		  <Text>Чудо природы на 2 клетки. Источник пресной воды. +2 [ICON_FOOD] пищи, +2 [ICON_CULTURE] культуры и +2 [ICON_GOLD] золота. +1 [ICON_FOOD] пищи на соседних клетках.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="ru_RU">
-		  <Text>"At the beginning, the language of the desert was grass blooming against the wall of wind, tall palms swaying in the season of seeding and cinders carried by air to the blue welcome of warm sand. She was our first fountain, our mother, who held us, then gave us away to the age of waiting cities."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
+		  <Text>"Вначале языком пустыни была трава, распускающаяся под порывами ветра, высокие пальмы, раскачивающиеся в сезон посева, и зола, переносимая воздухом к голубому гостеприимству теплого песка. Она была нашим первым источником, нашей матерью, которая держала нас, а затем отдала в эпоху городов ожидания."[NEWLINE]- Аль-Мунсиф аль-Вахайби</Text>
 	</Replace>	
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OUNIANGA_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>Lakes of Ounianga are a series of eighteen interconnected lakes in the hyper arid Ennedi region of the Sahara desert, occupying a basin in the mountains of West Tibesti and Ennedi East. It constitutes an exceptional natural landscape of great beauty with striking colours and shapes. The saline, hyper saline and freshwater lakes are supplied by groundwater and are found in two groups 40 km apart. Ounianga Kebir comprises four lakes, the largest of which, Yoan, covers an area of 358 ha and is 27 m deep. Its highly saline waters only sustain algae and some microorganisms. The second group, Ounianga Serir, comprises fourteen lakes separated by sand dunes. Floating reeds cover almost half the surface of these lakes reducing evaporation. Lake Teli has the largest surface area but is less than 10 m deep. With their high quality freshwater, some of these lakes are home to aquatic fauna, particularly fish.</Text>
 	</Replace>	
-	
+	<!-- = Salar de Uyuni = -->
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_NAME" Language="ru_RU">
 		  <Text>Уюни</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 4 клетки. +2 [ICON_SCIENCE] науки, +1 [ICON_PRODUCTION] производство и +2 [ICON_GOLD] золота. Повышенный бонус соседства для центра коммерции.</Text>
+		  <Text>Чудо природы на 4 клетки. +2 [ICON_SCIENCE] науки, +2 [ICON_PRODUCTION] производство и +4 [ICON_GOLD] золота. Повышенный бонус соседства для центра коммерции.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="ru_RU">
-		  <Text>"I shivered in those solitudes when I heard the voice of the salt in the desert."[NEWLINE]- Pablo Neruda</Text>
+		  <Text>"Я задрожал в этой пустоте, когда услышал голос соли в пустыне."[NEWLINE]- Пабло Неруда</Text>
 	</Replace>	
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SALAR_DE_UYUNI_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>Situated in southwest Bolivia, near the Chilean border and the Atacama Desert, lies Salar de Uyuni; the largest salt flat on Earth at 10,582 square kilometers, roughly 100 times the size of the Bonneville Salt Flats in the United States. The Salar was formed a result of transformations between several prehistoric lakes. Covered by a few meters of salt crust, it has an extraordinary flatness with the average elevation variations within one meter over the entire area of the Salar. The large area, clear skies, and exceptional flatness of the surface make it an ideal object for calibrating the altimeters of Earth observation satellites.</Text>
@@ -387,8 +588,7 @@
 	<Replace Tag="LOC_DISTRICT_SALAR_DE_UYUNI_GOLD" Language="ru_RU">
 			<Text>+{1_num} [ICON_GOLD] золото за соседство с Уюни.</Text>
 	</Replace>
-	
-	
+	<!-- = Mount Sinai = -->
 	<Replace Tag="LOC_FEATURE_SINAI_NAME" Language="ru_RU">
 		  <Text>Гора Синай</Text>
 	</Replace>
@@ -409,7 +609,7 @@
 	</Replace>	
 	
 	
-	
+	<!-- = Sri Pada = -->
 	<Replace Tag="LOC_FEATURE_SRI_PADA_NAME" Language="ru_RU">
 		  <Text>Адамов Пик</Text>
 	</Replace>
@@ -422,12 +622,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SRI_PADA_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>Towering above Sri Lanka, Sri Pada is a large mountain peak with an unusually conical shape that is held sacred by a number of religions for the footprint found at its peak. The footprint, a large depression found in a rock formation on the summit, has been attributed to Buddha, Shiva, and the biblical figure Adam, leading to a reverence among followers of Buddhism, Hinduism, and Islam. Each year, thousands of pilgrims trek for hours up the mountain to pay their respects at the holy site.</Text>
 	</Replace>	
-	
+	<!-- = Vredefort Dome = -->
 		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_NAME" Language="ru_RU">
 		  <Text>Кратер Вредефорт</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 2 клетки. +2 [ICON_FOOD] пищи, +2 [ICON_SCIENCE] науки и +1 [ICON_CULTURE] культуры.</Text>
+		  <Text>Чудо природы на 2 клетки. +2 [ICON_FOOD] пищи, +1 [ICON_PRODUCTION] производства, +2 [ICON_SCIENCE] науки и +1 [ICON_CULTURE] культуры.</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_QUOTE" Language="ru_RU">
 		  <Text>"When geologists first wandered the spectacular ring of hills straddling the Vaal River north of Vredefort nearly 150 years ago, they immediately recognised that the unusually shattered and uptilted rocks bore witness to an exceptionally violent event in the distant past."[NEWLINE]- Wolf Uwe Reimold</Text>
@@ -435,12 +635,12 @@
 	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_VREDEFORT_DOME_CHAPTER_HISTORY_PARA_1" Language="ru_RU">
 		  <Text>The Vredefort Dome is the largest verified impact crater on Earth, more than 300km across when it was formed. What remains of it is located in the present-day Free State province of South Africa where cultivated agriculture dominates the landscape. The crater is estimated to be over 2 billion years old, with impact taking place in the Paleoproterozoic Era, making it the second-oldest known crater on Earth.</Text>
 	</Replace>	
-	
+	<!-- = Wulingyuan = -->
 	<Replace Tag="LOC_FEATURE_WULINGYUAN_NAME" Language="ru_RU">
 		  <Text>Улинъюань</Text>
 	</Replace>
 	<Replace Tag="LOC_FEATURE_WULINGYUAN_DESCRIPTION" Language="ru_RU">
-		  <Text>Чудо природы на 2 клетки. Соседние клетки получают +2 [ICON_CULTURE] культуры</Text>
+		  <Text>Чудо природы на 2 непроходимые клетки. Соседние клетки получают +1 [ICON_CULTURE] культуры</Text>
 	</Replace>	
 	<Replace Tag="LOC_FEATURE_WULINGYUAN_QUOTE" Language="ru_RU">
 		  <Text>"Из десяти тысяч долин деревья касаются неба, на тысячах вершин кричат кукушки, и после ночи горного дождя с каждой вершины исходят сотни шелковых каскадов." [NEWLINE] - Ван Вэй</Text>
