@@ -13,53 +13,53 @@
 
 		<!-- === SETUP === -->
 		<!-- == Map features == -->
-		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" language="zh">
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" Language="zh_Hans_CN">
 			<Text>重新计算初始位置</Text>
 		</Replace>
-		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" language="zh">
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" Language="zh_Hans_CN">
 			<Text>试图优化文明初始位置。</Text>
 		</Replace>
 		<!-- = Ridges definition = -->
-		<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" language="zh">
+		<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" Language="zh_Hans_CN">
 			<Text>山脊定义</Text>
 		</Replace>
-		<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" language="zh">
+		<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" Language="zh_Hans_CN">
 			<Text>控制地图中山脉的形成模式。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NORMAL_NAME" language="zh">
+		<Replace Tag="BBS_RIDGE_NORMAL_NAME" Language="zh_Hans_CN">
 			<Text>标准</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NORMAL_DESC" language="zh">
+		<Replace Tag="BBS_RIDGE_NORMAL_DESC" Language="zh_Hans_CN">
 			<Text>原版设定。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_LESS_NAME" language="zh">
+		<Replace Tag="BBS_RIDGE_LESS_NAME" Language="zh_Hans_CN">
 			<Text>隘口</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_LESS_DESC" language="zh">
+		<Replace Tag="BBS_RIDGE_LESS_DESC" Language="zh_Hans_CN">
 			<Text>在山脉中额外增加狭窄的山口。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_VLESS_NAME" language="zh">
+		<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="zh_Hans_CN">
 			<Text>大开口</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_VLESS_DESC" language="zh">
+		<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="zh_Hans_CN">
 			<Text>在山脉中额外增加开阔的山口，方便部队从不同方向进攻。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NONE_NAME" language="zh">
+		<Replace Tag="BBS_RIDGE_NONE_NAME" Language="zh_Hans_CN">
 			<Text>地平论</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NONE_DESC" language="zh">
+		<Replace Tag="BBS_RIDGE_NONE_DESC" Language="zh_Hans_CN">
 			<Text>山脉被严重侵蚀，形成一个有很多丘陵的更平坦地图。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_MORE_NAME" language="zh">
+		<Replace Tag="BBS_RIDGE_MORE_NAME" Language="zh_Hans_CN">
 			<Text>无法穿过</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_MORE_DESC" language="zh">
+		<Replace Tag="BBS_RIDGE_MORE_DESC" Language="zh_Hans_CN">
 			<Text>使山脊更加广阔，存在更少通行路线。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_RF_NAME" language="zh">
+		<Replace Tag="BBS_RIDGE_RF_NAME" Language="zh_Hans_CN">
 			<Text>经典</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_RF_DESC" language="zh">
+		<Replace Tag="BBS_RIDGE_RF_DESC" Language="zh_Hans_CN">
 			<Text>“风云变幻”之前所使用的模式，山脉形成与大陆分布无关。</Text>
 		</Replace>
 		<!-- = Strategic resources = -->
@@ -316,28 +316,28 @@
 			<Text>10次</Text>
 		</Replace>
 		<!-- = Teamers start position = -->
-		<Replace Tag="LOC_BBS_Team_Spawn_NAME" language="zh">
+		<Replace Tag="LOC_BBS_Team_Spawn_NAME" Language="zh_Hans_CN">
 			<Text>团队战初始位置</Text>
 		</Replace>
-		<Replace Tag="LOC_BBS_Team_Spawn_DESC" language="zh">
+		<Replace Tag="LOC_BBS_Team_Spawn_DESC" Language="zh_Hans_CN">
 			<Text>控制团队战中主要文明在地图上的初始位置。</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" language="zh">
+		<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" Language="zh_Hans_CN">
 			<Text>标准</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" language="zh">
+		<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" Language="zh_Hans_CN">
 			<Text>原版设定：各文明位置随机分配</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_EW_NAME" language="zh">
+		<Replace Tag="BBS_Team_Spawn_EW_NAME" Language="zh_Hans_CN">
 			<Text>东西对战</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_EW_DESC" language="zh">
+		<Replace Tag="BBS_Team_Spawn_EW_DESC" Language="zh_Hans_CN">
 			<Text>2v2或4v4时：同一队伍的文明很大概率共同位于东侧或西侧。</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NS_NAME" language="zh">
+		<Replace Tag="BBS_Team_Spawn_NS_NAME" Language="zh_Hans_CN">
 			<Text>南北对战</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NS_DESC" language="zh">
+		<Replace Tag="BBS_Team_Spawn_NS_DESC" Language="zh_Hans_CN">
 			<Text>2v2或4v4时：同一队伍的文明很大概率共同位于南侧或北侧。</Text>
 		</Replace>
 		

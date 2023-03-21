@@ -10,52 +10,52 @@
 		<Text>Map pour 16 joueurs.</Text>
 	</Replace>
 	<!-- Setup -->
-	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" language="fr">
+	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" Language="fr_FR">
 		<Text>Recalcul des spawn</Text>
 	</Replace>
-	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" language="fr">
+	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" Language="fr_FR">
 		<Text>Attempt to place the civ in better starting location</Text>
 	</Replace>
-	<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" language="fr">
+	<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" Language="fr_FR">
 		<Text>Choix des ridges</Text>
 	</Replace>
-	<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" language="fr">
+	<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" Language="fr_FR">
 		<Text>Contrôle la taille des chaînes de montagnes.</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_NORMAL_NAME" language="fr">
+	<Replace Tag="BBS_RIDGE_NORMAL_NAME" Language="fr_FR">
 		<Text>Standard</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_NORMAL_DESC" language="fr">
+	<Replace Tag="BBS_RIDGE_NORMAL_DESC" Language="fr_FR">
 		<Text>Paramètres d'origine</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_LESS_NAME" language="fr">
+	<Replace Tag="BBS_RIDGE_LESS_NAME" Language="fr_FR">
 		<Text>Petits Goulets</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_LESS_DESC" language="fr">
+	<Replace Tag="BBS_RIDGE_LESS_DESC" Language="fr_FR">
 		<Text>Ajoute de petits goulets dans les chaînes de montagnes.</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_VLESS_NAME" language="fr">
+	<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="fr_FR">
 		<Text>Grandes Ouvertures</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_VLESS_DESC" language="fr">
+	<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="fr_FR">
 		<Text>Ajoute des passages plus larges dans la chaîne de montagnes.</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_NONE_NAME" language="fr">
+	<Replace Tag="BBS_RIDGE_NONE_NAME" Language="fr_FR">
 		<Text>Terre Plate</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_NONE_DESC" language="fr">
+	<Replace Tag="BBS_RIDGE_NONE_DESC" Language="fr_FR">
 		<Text>Les chaînes de montagnes sont fortement érodées pour créer une carte beaucoup plus plate avec beaucoup de collines.</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_MORE_NAME" language="fr">
+	<Replace Tag="BBS_RIDGE_MORE_NAME" Language="fr_FR">
 		<Text>Impénétrable</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_MORE_DESC" language="fr">
+	<Replace Tag="BBS_RIDGE_MORE_DESC" Language="fr_FR">
 		<Text>Élargit les crêtes de montagne avec moins de passages</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_RF_NAME" language="fr">
+	<Replace Tag="BBS_RIDGE_RF_NAME" Language="fr_FR">
 		<Text>Classique</Text>
 	</Replace>
-	<Replace Tag="BBS_RIDGE_RF_DESC" language="fr">
+	<Replace Tag="BBS_RIDGE_RF_DESC" Language="fr_FR">
 		<Text>Pre-Gathering Storm, placement des montagnes en dehors des continents.</Text>
 	</Replace>
 	<Replace Tag="LOC_GAME_BBS_SRESOURCES_NAME" Language="fr_FR">
@@ -335,28 +335,28 @@
 	<Replace Tag="LOC_GAME_BBS_NATURAL_DESC" Language="fr_FR">
 		  <Text>Contrôle le nombre maximum de merveilles naturelles qui peuvent apparaître sur la carte.</Text>
 	</Replace>		
-	<Replace Tag="LOC_BBS_Team_Spawn_NAME" language="fr">
+	<Replace Tag="LOC_BBS_Team_Spawn_NAME" Language="fr_FR">
 		<Text>Positions Teamer</Text>
 	</Replace>
-	<Replace Tag="LOC_BBS_Team_Spawn_DESC" language="fr">
+	<Replace Tag="LOC_BBS_Team_Spawn_DESC" Language="fr_FR">
 		<Text>Contrôlez la position des civilisations sur la carte dans un teamer</Text>
 	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" language="fr">
+	<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" Language="fr_FR">
 		<Text>Standard</Text>
 	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" language="fr">
+	<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" Language="fr_FR">
 		<Text>Paramètres d'origine : les joueurs sont placés aléatoirement</Text>
 	</Replace>
-	<Replace Tag="BBS_Team_Spawn_EW_NAME" language="fr">
+	<Replace Tag="BBS_Team_Spawn_EW_NAME" Language="fr_FR">
 		<Text>Est contre Ouest</Text>
 	</Replace>
-	<Replace Tag="BBS_Team_Spawn_EW_DESC" language="fr">
+	<Replace Tag="BBS_Team_Spawn_EW_DESC" Language="fr_FR">
 		<Text>Pour les 2v2 et 4v4 : les joueurs de la même équipe sont beaucoup plus susceptibles d'apparaître à l'Est ou à l'Ouest.</Text>
 	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NS_NAME" language="fr">
+	<Replace Tag="BBS_Team_Spawn_NS_NAME" Language="fr_FR">
 		<Text>Nord contre Sud</Text>
 	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NS_DESC" language="fr">
+	<Replace Tag="BBS_Team_Spawn_NS_DESC" Language="fr_FR">
 		<Text>Pour les 2v2 et 4v4 : les joueurs de la même équipe sont beaucoup plus susceptibles d'apparaître au Nord ou au Sud.</Text>
 	</Replace>
 	

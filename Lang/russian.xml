@@ -141,199 +141,199 @@
 	</Replace>
 	
 	<!-- == Min distance == -->
-	<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="en_US">
+	<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="ru_RU">
 			<Text>Минимальное расстояние между игроками</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="ru_RU">
 			<Text>Стандартное</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="ru_RU">
 			<Text>Стандартное расстояние, зависит от карты</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="ru_RU">
 			<Text>6</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="ru_RU">
 			<Text>6 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="ru_RU">
 			<Text>7</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="ru_RU">
 			<Text>7 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="ru_RU">
 			<Text>8</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="ru_RU">
 			<Text>8 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="ru_RU">
 			<Text>9</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="ru_RU">
 			<Text>9 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="ru_RU">
 			<Text>10</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="ru_RU">
 			<Text>10 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="ru_RU">
 			<Text>11</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="ru_RU">
 			<Text>11 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="ru_RU">
 			<Text>12</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="ru_RU">
 			<Text>12 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="ru_RU">
 			<Text>13</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="ru_RU">
 			<Text>13 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="ru_RU">
 			<Text>14</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="ru_RU">
 			<Text>14 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="ru_RU">
 			<Text>15</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="ru_RU">
 			<Text>15 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="ru_RU">
 			<Text>16</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="ru_RU">
 			<Text>16 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="ru_RU">
 			<Text>17</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="ru_RU">
 			<Text>17 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="ru_RU">
 			<Text>18</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="ru_RU">
 			<Text>18 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="ru_RU">
 			<Text>19</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="ru_RU">
 			<Text>19 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="ru_RU">
 			<Text>20</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="ru_RU">
 			<Text>20 клеток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="ru_RU">
 			<Text>21</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="ru_RU">
 			<Text>21 клетка</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="ru_RU">
 			<Text>22</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="ru_RU">
 			<Text>22 клетки</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="ru_RU">
 			<Text>23</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="ru_RU">
 			<Text>23 клетки</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="ru_RU">
 			<Text>24</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="ru_RU">
 			<Text>24 клетки</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="ru_RU">
 			<Text>25</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="ru_RU">
 			<Text>25 клеток</Text>
 		</Replace>
 	
 	<!-- == Players options == -->
 	<!-- = Attempts = -->
-	<Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="en_US">
+	<Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="ru_RU">
 			<Text>Минимум попыток BBS</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="ru_RU">
 			<Text>1</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="ru_RU">
 			<Text>1 попытка</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="ru_RU">
 			<Text>2</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="ru_RU">
 			<Text>2 попытки</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="ru_RU">
 			<Text>3</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="ru_RU">
 			<Text>3 попытки</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="ru_RU">
 			<Text>4</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="ru_RU">
 			<Text>4 попытки</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="ru_RU">
 			<Text>5</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="ru_RU">
 			<Text>5 попыток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="ru_RU">
 			<Text>6</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="ru_RU">
 			<Text>6 попыток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="ru_RU">
 			<Text>7</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="ru_RU">
 			<Text>7 попыток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="ru_RU">
 			<Text>8</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="ru_RU">
 			<Text>8 попыток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="ru_RU">
 			<Text>9</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="ru_RU">
 			<Text>9 попыток</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="ru_RU">
 			<Text>10</Text>
 		</Replace>
-		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="en_US">
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="ru_RU">
 			<Text>10 попыток</Text>
 		</Replace>	
 	

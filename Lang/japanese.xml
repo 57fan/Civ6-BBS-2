@@ -13,53 +13,53 @@
 
 		<!-- === SETUP === -->
 		<!-- == Map features == -->
-		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" language="ja">
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" Language="ja_JP">
 			<Text>スポーン位置の再計算</Text>
 		</Replace>
-		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" language="ja">
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" Language="ja_JP">
 			<Text>文明をより良い開始地点に配置しようとします。</Text>
 		</Replace>
 		<!-- = Ridges definition = -->
-		<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" language="ja">
+		<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" Language="ja_JP">
 			<Text>山脈</Text>
 		</Replace>
-		<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" language="ja">
+		<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" Language="ja_JP">
 			<Text>山脈の連続性を定義します。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NORMAL_NAME" language="ja">
+		<Replace Tag="BBS_RIDGE_NORMAL_NAME" Language="ja_JP">
 			<Text>標準</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NORMAL_DESC" language="ja">
+		<Replace Tag="BBS_RIDGE_NORMAL_DESC" Language="ja_JP">
 			<Text>通常の設定</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_LESS_NAME" language="ja">
+		<Replace Tag="BBS_RIDGE_LESS_NAME" Language="ja_JP">
 			<Text>隘路</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_LESS_DESC" language="ja">
+		<Replace Tag="BBS_RIDGE_LESS_DESC" Language="ja_JP">
 			<Text>山脈に狭い隘路を配置します。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_VLESS_NAME" language="ja">
+		<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="ja_JP">
 			<Text>開口</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_VLESS_DESC" language="ja">
+		<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="ja_JP">
 			<Text>山脈に広い開口部を開け、複数個所から侵入可能にします。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NONE_NAME" language="ja">
+		<Replace Tag="BBS_RIDGE_NONE_NAME" Language="ja_JP">
 			<Text>地球平面論者</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_NONE_DESC" language="ja">
+		<Replace Tag="BBS_RIDGE_NONE_DESC" Language="ja_JP">
 			<Text>山脈を大幅に侵食させ、比較的平らな丘陵の多いマップにします。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_MORE_NAME" language="ja">
+		<Replace Tag="BBS_RIDGE_MORE_NAME" Language="ja_JP">
 			<Text>侵入不可</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_MORE_DESC" language="ja">
+		<Replace Tag="BBS_RIDGE_MORE_DESC" Language="ja_JP">
 			<Text>山脈が途切れなく続き、通行が困難になります。</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_RF_NAME" language="ja">
+		<Replace Tag="BBS_RIDGE_RF_NAME" Language="ja_JP">
 			<Text>古典的</Text>
 		</Replace>
-		<Replace Tag="BBS_RIDGE_RF_DESC" language="ja">
+		<Replace Tag="BBS_RIDGE_RF_DESC" Language="ja_JP">
 			<Text>「嵐の訪れ」以前のように、大陸境界が山脈により定義されなくなります。</Text>
 		</Replace>
 		<!-- = Strategic resources = -->
@@ -316,28 +316,28 @@
 			<Text>10回</Text>
 		</Replace>
 		<!-- = Teamers start position = -->
-		<Replace Tag="LOC_BBS_Team_Spawn_NAME" language="ja">
+		<Replace Tag="LOC_BBS_Team_Spawn_NAME" Language="ja_JP">
 			<Text>チームの開始位置</Text>
 		</Replace>
-		<Replace Tag="LOC_BBS_Team_Spawn_DESC" language="ja">
+		<Replace Tag="LOC_BBS_Team_Spawn_DESC" Language="ja_JP">
 			<Text>チーム戦における文明の配置を調整する。</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" language="ja">
+		<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" Language="ja_JP">
 			<Text>標準</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" language="ja">
+		<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" Language="ja_JP">
 			<Text>Firaxisによる標準設定。文明はランダムに配置される。</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_EW_NAME" language="ja">
+		<Replace Tag="BBS_Team_Spawn_EW_NAME" Language="ja_JP">
 			<Text>東西</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_EW_DESC" language="ja">
+		<Replace Tag="BBS_Team_Spawn_EW_DESC" Language="ja_JP">
 			<Text>2対2または4対4向け。同じチームの文明が東西いずれかの同じ側にスポーンしやすくなる。</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NS_NAME" language="ja">
+		<Replace Tag="BBS_Team_Spawn_NS_NAME" Language="ja_JP">
 			<Text>南北</Text>
 		</Replace>
-		<Replace Tag="BBS_Team_Spawn_NS_DESC" language="ja">
+		<Replace Tag="BBS_Team_Spawn_NS_DESC" Language="ja_JP">
 			<Text>2対2または4対4向け。同じチームの文明が南北いずれかの同じ側にスポーンしやすくなる。</Text>
 		</Replace>
 		
