@@ -103,6 +103,7 @@ function BBS_NaturalWonderGenerator:__FindValidLocs()
 		for iI = 0, self.iNumWondersInDB - 1 do
 			local customPlacement = GameInfo.Features[self.eFeatureType[iI]].CustomPlacement;
 			if (customPlacement == nil) then
+            --print(i, TerrainBuilder.CanHaveFeature(pPlot, self.eFeatureType[iI], false), self.aInvalidNaturalWonders[iI]);
 				if (TerrainBuilder.CanHaveFeature(pPlot, self.eFeatureType[iI], false) and self.aInvalidNaturalWonders[iI] == true) then
 					row = {};
 					row.MapIndex = i;
@@ -110,8 +111,11 @@ function BBS_NaturalWonderGenerator:__FindValidLocs()
 					table.insert (self.aaPossibleLocs[iI], row);
 				end
 			else
-			
-				if (CustomCanHaveFeature(pPlot, self.eFeatureType[iI])) then
+            --print("placement", customPlacement);
+            local returnValue = false;
+            returnValue = BBSCustomCanHaveFeature(pPlot, self.eFeatureType[iI])
+            --print("return value", returnValue);
+				if (returnValue) then
 					row = {};
 					row.MapIndex = i;
 					row.Score = iBaseScore;
@@ -267,16 +271,17 @@ function BBS_NaturalWonderGenerator:__ScorePlots(NWIndex)
 end
 
 ------------------------------------------------------------------------------
-function CustomCanHaveFeature(pPlot, eFeatureType)
+function BBSCustomCanHaveFeature(pPlot, eFeatureType)
 	local aPlots = {};
-	return CustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots);
+   --print("custom can have", eFeatureType);
+	return BBSCustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots);
 end
 
 ------------------------------------------------------------------------------
 function CustomSetFeatureType(pPlot, eFeatureType)
 
 	local aPlots = {};
-	if (CustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots)) then
+	if (BBSCustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots)) then
 		TerrainBuilder.SetMultiPlotFeatureType(aPlots, eFeatureType);
 
 		for k, plot in ipairs(aPlots) do
@@ -287,9 +292,11 @@ function CustomSetFeatureType(pPlot, eFeatureType)
 end
 
 ------------------------------------------------------------------------------
-function CustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots)
+function BBSCustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots)
 	-- First check this plot itself
+   --print ("entree fonction");
 	if (not TerrainBuilder.CanHaveFeature(pPlot, eFeatureType, true)) then
+      --print("direct out");
 		return false;
 	else
 		table.insert(aPlots, pPlot:GetIndex());
@@ -297,6 +304,8 @@ function CustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots)
 
 	-- Which type of custom placement is it?
 	local customPlacement = GameInfo.Features[eFeatureType].CustomPlacement;
+   
+   --print("placement name", customPlacement);
 	-- 2 tiles inland, east-west facing camera
 	if (customPlacement == "PLACEMENT_TORRES_DEL_PAINE" or
 			customPlacement == "PLACEMENT_YOSEMITE") then
@@ -340,10 +349,14 @@ function CustomGetMultiTileFeaturePlotList(pPlot, eFeatureType, aPlots)
 
 	elseif (customPlacement == "PLACEMENT_GIBRALTAR") then
 		
+      
+        --print("we are in");
         -- Assume first tile a land tile without hills, check around it in a preferred order for water
         if (pPlot:IsWater()) then --or pPlot:IsHills()
             return false;
         end
+        
+        
 
         local pSWPlot = Map.GetAdjacentPlot(pPlot:GetX(), pPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
 		local pSEPlot = Map.GetAdjacentPlot(pPlot:GetX(), pPlot:GetY(), DirectionTypes.DIRECTION_SOUTHEAST);

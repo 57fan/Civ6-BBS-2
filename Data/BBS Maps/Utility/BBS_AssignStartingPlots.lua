@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 2.1.4
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.2.0
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.1.4"
+local bbs_version = "2.2.0"
 
 local bError_major = false;
 local bError_minor = false;
@@ -177,9 +177,9 @@ function BBS_AssignStartingPlots.Create(args)
 	--print("Calculating Island Size: Start", os.date("%c"));
 	for iPlotIndex = 0, Map.GetPlotCount()-1, 1 do
 		local pPlot = Map.GetPlotByIndex(iPlotIndex)
-		if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
-			local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
-		end
+		--if pPlot ~= nil and (pPlot:IsCoastalLand() or iPlotIndex == Map.GetPlotCount()-1) then
+			--local tmp = GetIslandPerimeter(pPlot,false,true,iPlotIndex == Map.GetPlotCount()-1)
+		--end
 	end
 	--print("Calculating Island Size: End", os.date("%c"));
 	end
@@ -673,6 +673,189 @@ local SHIT_PERCENTAGE_R3 = 0.15;
 local SHIT_PERCENTAGE_R5 = 0.15;
 
 local SEA_PERCANTEGE_R3 = 0.50;
+
+function terraformBBSPlot(plot, newTerrain, newResource, newFeature)
+   if (plot ~= nil) then
+      return terraformBBS(plot:GetX(), plot:GetY(), newTerrain, newResource, newFeature);
+   else
+      ___Debug("ERROR: tried to Terrafor a nil tile !");
+      return -1;
+   end
+end
+
+function terraformBBS(x, y, newTerrain, newResource, newFeature)
+   
+   if (x < 0 or y < 0 or x > mapXSize or y > mapYSize) then
+      print("ERROR, tried to terraform tile outside the map ! X:", x, "Y:", y);
+      return -1;
+   end
+   
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   local plot = Map.GetPlot(x, y);
+
+   -- Terrain first
+   if (newTerrain ~= -2) then -- -2 = no change
+   
+      if (newTerrain < 0 or newTerrain > 16) then
+         print("ERROR, usage of invalid terrain ID:", newTerrain);
+         return -1;
+      end
+      TerrainBuilder.SetTerrainType(plot, newTerrain);
+      mapTerrainCode[xIndex][yIndex] = newTerrain;
+      
+      if (mapFeatureCode[xIndex][yIndex] == 0 or mapFeatureCode[xIndex][yIndex] == 31 or mapFeatureCode[xIndex][yIndex] == 32) then -- floodplains, need an update
+         if newTerrain == 0 then --grassland
+            mapFeatureCode[xIndex][yIndex] = 31;
+            TerrainBuilder.SetFeatureType(plot, 31, 1);
+         elseif newTerrain == 3 then --plain
+            mapFeatureCode[xIndex][yIndex] = 32;
+            TerrainBuilder.SetFeatureType(plot, 32, 1);
+         elseif newTerrain == 3 then --plain
+            mapFeatureCode[xIndex][yIndex] = 0;
+            TerrainBuilder.SetFeatureType(plot, 0, 1);
+         else
+            ___Debug("Warning, terraformed a flooded tiles, without proper terrain:, X:", x, "Y:", y, "New Terrain:", newTerrain);
+         end
+         
+      end
+      
+      ___Debug("Changed Terrain of tile X:", x, "Y:", y, "New Terrain:", newTerrain);
+      
+   end
+   
+   -- Resource 
+   
+   if (newResource ~= -2) then -- -2 = no change
+      if (newResource < -2) then
+         print("ERROR, usage of invalid Resource ID:", newResource);
+         return -1;
+      end
+      
+      if (newResource == -1) then --clean, no resource
+         ResourceBuilder.SetResourceType(plot, -1);
+         ___Debug("Cleaned Resource of tile ", x, "Y:", y);
+      else
+         ResourceBuilder.SetResourceType(plot, newResource, 1);
+         ___Debug("Changed Resource of tile X:", x, "Y:", y, "New Resource:", newResource);
+      end
+      
+      mapResourceCode[xIndex][yIndex] = newResource;
+      
+      
+   end
+   
+   
+   -- Feature
+   if (newFeature ~= -2) then -- -2 = no change
+      if (newResource < -2) then
+         print("ERROR, usage of invalid Feature ID:", newFeature);
+         return -1;
+      end
+      
+   
+      if (newResource == -1) then -- clean, no feature
+         TerrainBuilder.SetFeatureType(plot, -1);
+         ___Debug("Cleaned Feature of tile ", x, "Y:", y);
+      else
+         TerrainBuilder.SetFeatureType(plot, -1);
+         TerrainBuilder.SetFeatureType(plot, newFeature, 1);
+         ___Debug("Changed Feature of tile X:", x, "Y:", y, "New Feature:", newResource);
+      end
+
+      mapFeatureCode[xIndex][yIndex] = newFeature;
+   end
+   
+   -- Upgrade yield arrays --
+   local food = plot:GetYield(g_YIELD_FOOD);
+   local prod = plot:GetYield(g_YIELD_PRODUCTION);
+   local gold = plot:GetYield(g_YIELD_GOLD);
+   local science = plot:GetYield(g_YIELD_SCIENCE);
+   local culture = plot:GetYield(g_YIELD_CULTURE);
+   local faith = plot:GetYield(g_YIELD_FAITH);
+   
+   --- strategics are not visible at start, but the game would count their stat anyway
+   if (resource == 40 or resource == 43) then
+      science = science - 1;
+   elseif resource == 41 then
+      prod = prod - 2;
+   elseif (resource == 42 or resource == 44) then
+      prod = prod - 1;
+      food = food - 1;
+   elseif resource == 45 then
+      prod = prod - 3;
+   elseif resource == 46 then
+      prod = prod - 2; 
+   end
+   
+   mapFoodYield[iIndex][jIndex] = food;
+   mapProdYield[iIndex][jIndex] = prod;
+   mapGoldYield[iIndex][jIndex] = gold;
+   mapScienceYield[iIndex][jIndex] = science;
+   mapCultureYield[iIndex][jIndex] = culture;
+   mapFaithYield[iIndex][jIndex] = faith;
+   
+   
+   -- 2-2 map
+   
+   local previousTwoTWo = mapTwoTwo[iIndex][jIndex];
+   
+   -- Mapping 2-2
+   if (newTerrain >= 15) then -- water
+      mapTwoTwo[iIndex][jIndex] = 0;
+   
+   elseif (food < 2 or prod < 2) then -- not 2-2
+      mapTwoTwo[iIndex][jIndex] = 1;
+      
+      if previousTwoTWo >= 2 then -- we had a 2-2, not anymore
+         twoTwoCount = twoTwoCount - 1;
+      end
+      
+   elseif (food == 2 and prod == 2) then -- 2-2
+      mapTwoTwo[iIndex][jIndex] = 2;
+      
+      if previousTwoTWo < 2 then -- we did not have a 2-2, now we have
+         twoTwoCount = twoTwoCount + 1;
+      end
+   
+   else -- better than 2-2
+      mapTwoTwo[iIndex][jIndex] = 3;
+      if previousTwoTWo < 2 then -- we did not have a 2-2, now we have
+         twoTwoCount = twoTwoCount + 1;
+      end
+   end
+   --- end mapping 2-2 --
+   
+   -- updating fresh water (in case we added lake tile) or coastal (in case we added coast).
+   if (newTerrain == 15) then
+      local list = getRing(x, y, 1, mapXSize, mapYSize, mapIsRoundWestEast);
+
+      for _, element in ipairs(list) do
+         local tempX = element[1];
+         local tempY = element[2];
+         
+         if(hasFreshWater(tempX, tempY, mapXSize, mapYSize, mapIsRoundWestEast)) then
+            mapFreshWater[tempX + 1][tempY + 1] = true;
+         end 
+         
+         if (isCoastalTile(tempX, tempY, mapXSize, mapYSize, mapIsRoundWestEast)) then
+            mapCoastal[tempX + 1][tempY + 1] = true;
+         end
+         
+         if isNextToWaterTile(tempX, tempY, mapXSize, mapYSize, mapIsRoundWestEast) then
+            mapNextToWater[tempX + 1][tempY + 1] = true;
+         end
+      end
+   end
+   
+   -- desert map
+   if (newTerrain == 6 or newTerrain == 7) then
+      mapDesert[iIndex][jIndex] = true;
+   end
+   
+
+end
 
 function biasFeatureScore(bias, percentageR3, percentageR5)
 
@@ -2599,7 +2782,7 @@ function NewBBS(instance)
    --Now Deciding which tiles are going to be "settle forbidden"
    --
    -- Forbidden:
-   --    - Spawn on a resource (any resource)
+   --    - Spawn on a luxury resource (any lux) (other resources will be destroyed)
    --    - Spawn Ring 1 of 1-3 (1-4) gypsum/Ivory/deer with fresh water or coastal (would make capital 2-3)
    --    - Spawn Ring 2 of a Spice (any spice, any land)
    --    - Spawn Ring 2 of 4-0 sugar/honey/citrus, flat grassland, with fresh water or coastal (would make cap 4-1) 
@@ -2645,6 +2828,7 @@ function NewBBS(instance)
          if (mapTerrainCode[iIndex][jIndex] < 15) then
             local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
             local unusableTiles = 0;
+            local floodTiles = 0;
             --___Debug("Villes ouvertes:", i, j)
             for _, element in ipairs(list) do
                local x = element[1];
@@ -2652,8 +2836,8 @@ function NewBBS(instance)
                if (isMountainCode(mapTerrainCode[x + 1][y + 1]) or mapTerrainCode[x + 1][y + 1] >= 15) then
                   --___Debug("Out:", x, y)
                   unusableTiles = unusableTiles + 1;
-               else
-                  --___Debug("In:", x, y)
+               elseif (mapFeatureCode[x + 1][y + 1] == 0 or mapFeatureCode[x + 1][y + 1] == 31 or mapFeatureCode[x + 1][y + 1] == 32) then
+                  floodTiles = floodTiles + 1;
                end
             end
             
@@ -2662,6 +2846,21 @@ function NewBBS(instance)
             if (unusableTiles >= 3) then
                ___Debug("not enough workable tiles around X:", i, "Y:", j);
                mapSpawnable[iIndex][jIndex] = false;
+            elseif (unusableTiles == 2) then
+               if floodTiles >= 3 then
+                  ___Debug("2 unusable + 3 or more floods around X:", i, "Y:", j);
+                  mapSpawnable[iIndex][jIndex] = false;
+               end
+            elseif (unusableTiles == 1) then
+               if floodTiles >= 4 then
+                  ___Debug("1 unusable + 4 or more floods around X:", i, "Y:", j);
+                  mapSpawnable[iIndex][jIndex] = false;
+               end
+            elseif (unusableTiles == 0) then
+               if floodTiles >= 5 then
+                  ___Debug("0 unusable + 5 or more floods around X:", i, "Y:", j);
+                  mapSpawnable[iIndex][jIndex] = false;
+               end
             end
          end
          ------ Too close to map border ! ----------
@@ -2681,9 +2880,9 @@ function NewBBS(instance)
             end
          end
          
-         ------ removing ... resources -----------
-         --if isLuxury(mapResourceCode[iIndex][jIndex]) then
-         if (mapResourceCode[iIndex][jIndex] >= 0) then
+         ------ removing ... luxuries -----------
+         if isLuxury(mapResourceCode[iIndex][jIndex]) then
+         --if (mapResourceCode[iIndex][jIndex] >= 0) then
             mapSpawnable[iIndex][jIndex] = false;
             
             ___Debug("---- Banning resource X:", i, "Y:", j);
@@ -2712,6 +2911,8 @@ function NewBBS(instance)
          ------ gypsum/ivory/deer  needs :----
          ----- Fresh water
          ----- plain hills
+         
+         --[[
          if ((mapResourceCode[iIndex][jIndex] == 17 or mapResourceCode[iIndex][jIndex] == 4 or mapResourceCode[iIndex][jIndex] == 19) and 
                mapFreshWater[iIndex][jIndex] == true and
                mapTerrainCode[iIndex][jIndex] == 4) then
@@ -2724,8 +2925,19 @@ function NewBBS(instance)
                ___Debug("---- Banning X:", x, "Y:", y);
             end
          end
+         --]]
+         
+         -- removing the hill from these resources, map wide, if they are on a fresh/coastal tile
+         if ((mapResourceCode[iIndex][jIndex] == 17 or mapResourceCode[iIndex][jIndex] == 4 or mapResourceCode[iIndex][jIndex] == 19) and 
+               (mapFreshWater[iIndex][jIndex] == true or mapCoastal[iIndex][jIndex] == true) and
+               mapTerrainCode[iIndex][jIndex] == 4) then
+               
+            ___Debug("Found forbidden Gypsum/Ivory/ on X:", i, "Y:", j);
+            terraformBBS(i, j, 3, -2, -2);
+         end
          
          ----- Spice: no settle ring 2 near a spice -----
+         --[[
          if (mapResourceCode[iIndex][jIndex] == 27) then
             ___Debug("Found Spice on X:", i, "Y:", j);
             local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
@@ -2735,7 +2947,6 @@ function NewBBS(instance)
                mapSpawnable[x + 1][y + 1] = false;
                ___Debug("---- Banning X:", x, "Y:", y);
             end
-            
             list = getRing(i, j, 2, mapXSize, mapXSize, mapIsRoundWestEast);
             for _, element in ipairs(list) do
                local x = element[1];
@@ -2744,8 +2955,31 @@ function NewBBS(instance)
                ___Debug("---- Banning X:", x, "Y:", y);
             end
          end
+         --]]
          
          -- sugar/honey/citrus on fresf water/coastal and on flat grassland
+         -- will terraform to plain + remove marsh if on coastal/fresh water
+         
+         if ((mapResourceCode[iIndex][jIndex] == 53 or mapResourceCode[iIndex][jIndex] == 10 or mapResourceCode[iIndex][jIndex] == 28) and
+               (mapFreshWater[iIndex][jIndex] or mapCoastal[iIndex][jIndex]) and
+               (mapTerrainCode[iIndex][jIndex] == 0)) then
+            
+            ___Debug("Found a forbidden sugar/honey/citrus on X:", i, "Y:", j);         
+            ___Debug("Terraforming to plain");
+            
+            local oldFeature = mapFeatureCode[iIndex][jIndex];
+            
+            
+            if (oldFeature == 5) then -- removing marsh, which would make the tile a 4-2
+               terraformBBS(i, j, 3, -2, -1);
+            elseif (oldFeature == 31) then 
+               terraformBBS(i, j, 3, -2, 32); -- transforming floodplain type
+            else
+               terraformBBS(i, j, 3, -2, -2); -- Keeping feature otherwise
+            end
+         end
+         
+         --[[
          if ((mapResourceCode[iIndex][jIndex] == 53 or mapResourceCode[iIndex][jIndex] == 10 or mapResourceCode[iIndex][jIndex] == 28) and
                (mapFreshWater[iIndex][jIndex] or mapCoastal[iIndex][jIndex]) and
                (mapTerrainCode[iIndex][jIndex] == 0)) then
@@ -2766,6 +3000,7 @@ function NewBBS(instance)
                ___Debug("---- Banning X:", x, "Y:", y);
             end
          end
+         --]]
          
          -- wonder neighbourhood ---
          if mapWonder[iIndex][jIndex] then
@@ -2803,6 +3038,19 @@ function NewBBS(instance)
                local y = element[2];
                mapSpawnable[x + 1][y + 1] = false;
                ___Debug("---- Banning X:", x, "Y:", y);
+            end
+         
+            if mapFeatureCode[iIndex][jIndex] == 21 then -- Giant's Causeway
+               
+               local list = getRing(i, j, 1, mapXSize, mapXSize, mapIsRoundWestEast);
+               for _, element in ipairs(list) do
+                  local x = element[1];
+                  local y = element[2];
+                  if (mapTerrainCode[x + 1][y + 1] == 16) then -- ocean
+                     terraformBBS(x, y, 15, -2, -2)
+                     ___Debug("---- Giant's Causeway fix: ocean to Coast at :", x, "Y:", y);
+                  end
+               end
             end
          end
       end
@@ -3210,7 +3458,7 @@ function NewBBS(instance)
                           majorPrimaryOKSecondaryNOKWaterOK = {}, majorPrimaryOKSecondaryNOKSeaOK = {}, majorPrimaryOKSecondaryNOKWaterNOK = {},
                           majorPrimaryOKSecondaryOKWaterOKCount = 0, majorPrimaryOKSecondaryOKSeaOKCount = 0, majorPrimaryOKSecondaryOKWaterNOKCount = 0,
                           majorPrimaryOKSecondaryNOKWaterOKCount = 0, majorPrimaryOKSecondaryNOKSeaOKCount = 0, majorPrimaryOKSecondaryNOKWaterNOKCount = 0,
-                          spawnX = -1, spawnY = -1,
+                          spawnX = -1, spawnY = -1, freshWaterSpawn = false,
                           teamID = teamID, rtsFreeSim = false
                           };
          --print(i, majorAll[majorCount]);
@@ -3395,31 +3643,64 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       end
    end
    
+   local fullAttempts = MapConfiguration.GetValue("BBSMinAttempts");
    
+   ___Debug("Read Min attempts value", fullAttempts);
+   
+   if (fullAttempts == nil or fullAttempts > 10) then
+      fullAttempts = 6;
+   end
+   
+   local attempts = fullAttempts + 7;
+   
+   ___Debug("Attempts", attempts);
    
    local playerDistance = Major_Distance_Target
    local settleSuccess = false;
    
-   for i = 1, 10 do
+   local attemptSuccessful = {};
+   for i = 1, attempts do
+      attemptSuccessful[i] = false;
+   end
+   
+   -- will contain a list of all major coordinates, for each try
+   local majorSaved = {}
+   for i = 1, attempts do
+      majorSaved[i] = {};
+      
+      for j = 1, majorCount do
+         majorSaved[i][j] = {};
+      end
+   end
+   
+   
+   for i = 1, attempts do
+      Game:SetProperty("BBS_ITERATION", i);
       local distance = playerDistance
       
       -- shuffle all the spawns of the civs first
       shuffleSpawns(majorAll, majorCount);
       
-      if i >= 8 then
+      for j = 1, majorCount do
+         majorAll[j].freshWaterSpawn = false;
+      end
+      
+      if i >= attempts - 2 then
          distance = distance - 3;
-      elseif i >= 6 then
+      elseif i >= attempts - 4 then
          distance = distance - 2;
-      elseif i >= 4 then
+      elseif i >= attempts - 6 then
          distance = distance - 1;
       end
       
+      Game:SetProperty("BBS_MAJOR_DISTANCE", distance);
+      
       local proximityMap = {}
    
-      for i = 1, mapXSize do
-         proximityMap[i] = {};
-         for j = 1, mapYSize do
-            proximityMap[i][j] = false;
+      for j = 1, mapXSize do
+         proximityMap[j] = {};
+         for k = 1, mapYSize do
+            proximityMap[j][k] = false;
          end
       end
       
@@ -3576,6 +3857,7 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       print("-------------");
       print("-------------");
       print("Attempt n°", i, "Distance:", distance);
+      print(os.date("%c"));
       print("-------------");
       print("-------------");
    
@@ -3583,11 +3865,62 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
           standardNoWaterIndex)) then
          print("Attempt sucessful !");
          settleSuccess = true;
-         break;
+         attemptSuccessful[i] = true;
+         
+         for j = 1, majorCount do
+         local player = majorAll[j];
+            majorSaved[i][j] = {player.freshWaterSpawn, player.spawnX, player.spawnY};
+            ___Debug(player.spawnX, player.spawnY)
+         end
+         
+         -- We are working reduced distance -> break first occasion !
+         if i >= attempts - 7 then
+            break;
+         end
       end
    end
       
    if (settleSuccess) then
+      ___Debug("-------------------------------------------------");
+      ___Debug("------------Picking best attempt-----------------");
+      
+      local bestSpawnID = -1;
+      local bestSpawnScore = -1; -- the amount of civs with fresh water.
+      
+      for i = 1, attempts do
+         if attemptSuccessful[i] then
+            local tempSpawns = majorSaved[i];
+            local attemptScore = 0;
+            
+            for j = 1, majorCount do 
+               if majorSaved[i][j][1] then
+                  attemptScore = attemptScore + 1;
+               end
+               ___Debug("Major", j, "Spawn at", majorSaved[i][j][2], majorSaved[i][j][3]);
+            end
+            
+            if i >= 11 then -- We are here working with reduced distance. In that case, we take the first one coming !
+               attemptScore = 0;
+            end
+            
+            ___Debug("Attempt", i, "Has", attemptScore, "fresh water spawns");
+            
+            if attemptScore > bestSpawnScore then
+               bestSpawnScore = attemptScore;
+               bestSpawnID = i;
+            end
+         end
+      end
+      
+      ___Debug("Attempt", bestSpawnID, "was picked");
+      --majorAll = majorSaved[bestSpawnID];
+      
+      for i = 1, majorCount do
+         local player = majorAll[i];
+         player.spawnX = majorSaved[bestSpawnID][i][2];
+         player.spawnY = majorSaved[bestSpawnID][i][3];
+      end
+      
       ___Debug("-------------------------------------------------");
       ___Debug("-------------------------------------------------");
       for i = 1, majorCount do
@@ -3596,9 +3929,15 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       end
       ___Debug("-------------------------------------------------");
       ___Debug("-------------------------------------------------");
+      
+      if (mapResourceCode[player.spawnX + 1][player.spawnY + 1] ~= -1) then
+         ___Debug("Player spawned on a resource:", mapResourceCode[player.spawnX + 1][player.spawnY + 1], "Removing it");
+         terraformBBS(player.spawnX, player.spawnY, -2, -1, -2);
+      end
    
-   --- Could not make civ spawn, handling to firaxis !
+   --- Could not make civ spawn, first, let's try with less distance
    else
+      
       bbsFailed = true;
       return;
    end
@@ -3640,7 +3979,7 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
       standardWaterIndex = 0;
       standardCoastIndex = 0;
       trashTilesIndex = 0;
-      
+      allTilesIndex = 0;
       
       
       shuffleListsCS();
@@ -3659,6 +3998,11 @@ function assignSpawns(majorAll, majorCount, minorAll, minorCount, playerDistance
          end
          ___Debug("-------------------------------------------------");
          ___Debug("-------------------------------------------------");
+         
+         if (mapResourceCode[player.spawnX + 1][player.spawnY + 1] ~= -1) then
+         ___Debug("CS spawned on a resource:", mapResourceCode[player.spawnX + 1][player.spawnY + 1], "Removing it");
+         terraformBBS(player.spawnX, player.spawnY, -2, -1, -2);
+      end
          
          break;
       end
@@ -4133,6 +4477,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
+                  player.freshWaterSpawn = true;
                   return true;
                end
                
@@ -4143,6 +4488,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                     standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
+                  player.freshWaterSpawn = true;
                   return true; -- all next players have been placed successfuly !
                end
             end
@@ -4360,6 +4706,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
+                  player.freshWaterSpawn = true;
                   return true;
                end
                
@@ -4370,6 +4717,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                     standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
+                  player.freshWaterSpawn = true;
                   return true; -- all next players have been placed successfuly !
                end
             end
@@ -4580,6 +4928,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                   player.spawnX = x;
                   player.spawnY = y;
+                  player.freshWaterSpawn = true;
                   return true;
                end
                
@@ -4590,6 +4939,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                     standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                   player.spawnX = x;
                   player.spawnY = y;
+                  player.freshWaterSpawn = true;
                   return true; -- all next players have been placed successfuly !
                end
             end
@@ -4782,6 +5132,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                   if (currentIndex == majorCount) then -- this was the last player to settle, and he is there !
                      player.spawnX = x;
                      player.spawnY = y;
+                     player.freshWaterSpawn = true;
                      return true;
                   end
                   
@@ -4792,6 +5143,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
                     standardWaterIndex, standardCoastIndex, standardNoWaterIndex)) then
                      player.spawnX = x;
                      player.spawnY = y;
+                     player.freshWaterSpawn = true;
                      return true; -- all next players have been placed successfuly !
                   end
                end
@@ -5300,7 +5652,12 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                
                
                local ring3Floods = ringFloodPlains[1] + ringFloodPlains[2] + ringFloodPlains[3];
-               if (mapFeatureCode[iIndex][jIndex] == 0 or mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
+               --if (mapFeatureCode[iIndex][jIndex] == 0 or mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
+               --   ring3Floods = ring3Floods + 1;
+               --end
+               
+               -- Not counting desert floodplains, should help mali
+               if (mapFeatureCode[iIndex][jIndex] == 31 or mapFeatureCode[iIndex][jIndex] == 32) then
                   ring3Floods = ring3Floods + 1;
                end
                
@@ -6666,6 +7023,10 @@ end
 -- Firaxis function would return true for tiles bordering lakes, which we don't want--
 function isCoastalTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
 
+   if (xStart < 0 or yStart < 0 or xStart > xSize or yStart > ySize) then
+      return false;
+   end
+   
    -- the tile is water, no sense to evaluate
    if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
       ___Debug("out direct")
@@ -6690,6 +7051,10 @@ end
 
 function isNextToWaterTile (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
 
+   if (xStart < 0 or yStart < 0 or xStart > xSize or yStart > ySize) then
+      return false;
+   end
+   
    -- the tile is water, no sense to evaluate
    if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
       ___Debug("out direct")
@@ -6712,6 +7077,11 @@ end
 
 -- Recoded because of firaxis issue
 function hasFreshWater (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
+
+   if (xStart < 0 or yStart < 0 or xStart > xSize or yStart > ySize) then
+      return false;
+   end
+
    -- the tile is water, no sense to evaluate
    if (mapTerrainCode[xStart + 1][yStart + 1] >= 15) then
       ___Debug("out direct")
@@ -6832,8 +7202,8 @@ function BBS_AssignStartingPlots:__InitStartingData()
 	bEndIteration = true
    
    local try = 1
-   Game:SetProperty("BBS_MAJOR_DISTANCE",Major_Distance_Target)
-   Game:SetProperty("BBS_ITERATION",try)
+   --Game:SetProperty("BBS_MAJOR_DISTANCE",Major_Distance_Target)
+   --Game:SetProperty("BBS_ITERATION",try)
    
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2014">
+<Mod id="c88cba8b-8311-4d35-90c3-51a4a5d66550" version="2020">
 	<Properties>
 	    <Name>LOC_BBS_TITLE</Name>
 		<Description>LOC_BBS_DESCRIPTION</Description>
@@ -13,8 +13,8 @@
 	
 		<LocalizedText>
 		<Text id="LOC_BBS_TITLE">
-			<en_US>Better Balanced Starts 2.1.4</en_US>
-			<fr_FR>Better Balanced Starts 2.1.4</fr_FR>
+			<en_US>Better Balanced Starts 2.2.0</en_US>
+			<fr_FR>Better Balanced Starts 2.2.0</fr_FR>
 		</Text>
 		<Text id="LOC_BBS_TEASER">
 			<en_US>Balanced spawn placement for tournaments.</en_US>
@@ -133,8 +133,17 @@
             	<File>Configuration/Config.xml</File>
         </UpdateDatabase>
         <UpdateText id="BBS_SETTINGS_TEXTS">
-            <File>Lang/Text_EN.xml</File>
-			<File>Lang/Text_RU.xml</File>
+            <File>Lang/english.xml</File>
+            <File>Lang/french.xml</File>
+            <File>Lang/russian.xml</File>
+            <File>Lang/chinese.xml</File>
+            <File>Lang/german.xml</File>
+            <File>Lang/italian.xml</File>
+            <File>Lang/japanese.xml</File>
+            <File>Lang/korean.xml</File>
+            <File>Lang/polish.xml</File>
+            <File>Lang/portuguese.xml</File>
+            <File>Lang/spanish.xml</File>
         </UpdateText>
 		<UpdateIcons id="BBS_ICONS">
       <File>sql/bbs_icons_wonders.sql</File>
@@ -200,8 +209,17 @@
     	</UpdateDatabase>
 
         <UpdateText id="BBS_Gameplay_test">
-            <File>Lang/Text_EN.xml</File>
-			<File>Lang/Text_RU.xml</File>
+         <File>Lang/english.xml</File>
+			<File>Lang/french.xml</File>
+         <File>Lang/russian.xml</File>
+			<File>Lang/chinese.xml</File>
+         <File>Lang/german.xml</File>
+			<File>Lang/italian.xml</File>
+         <File>Lang/japanese.xml</File>
+			<File>Lang/korean.xml</File>
+         <File>Lang/polish.xml</File>
+			<File>Lang/portuguese.xml</File>
+         <File>Lang/spanish.xml</File>
         </UpdateText>
 
     	<UpdateDatabase id="BBS_Minor_Bias_Parameters">
@@ -371,8 +389,17 @@
 	<File>Configuration/Config.sql</File>
 	<File>Configuration/Config_minor_bias.sql</File>
 	<File>Configuration/Config_minor_bias_DLC_viking.sql</File>
-	<File>Lang/Text_EN.xml</File>
-	<File>Lang/Text_RU.xml</File>
+	<File>Lang/english.xml</File>
+   <File>Lang/french.xml</File>
+   <File>Lang/russian.xml</File>
+   <File>Lang/chinese.xml</File>
+   <File>Lang/german.xml</File>
+   <File>Lang/italian.xml</File>
+   <File>Lang/japanese.xml</File>
+   <File>Lang/korean.xml</File>
+   <File>Lang/polish.xml</File>
+   <File>Lang/portuguese.xml</File>
+   <File>Lang/spanish.xml</File>
 	<File>Gameplay/GamePlay.xml</File>
 	<File>Gameplay/GamePlayXP2.xml</File>
 	

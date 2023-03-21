@@ -21,6 +21,7 @@
 		<Row ParameterId="BBS_RIDGES" Name="LOC_GAME_BBS_RIDGE_NAME" Description="LOC_GAME_BBS_RIDGE_DESC" Domain="RidgeDomain" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBSRidge" GroupId="MapOptions" SortIndex="231" />
 		<Row ParameterId="BBS_SRESOURCES" Name="LOC_GAME_BBS_SRESOURCES_NAME" Description="LOC_GAME_BBS_SRESOURCES_DESC" Domain="StratResDomain" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBSStratRes" GroupId="MapOptions" SupportsSinglePlayer="1" SortIndex="226" />
       <Row ParameterId="BBS_MIN_DISTANCE" Name="LOC_GAME_BBS_MIN_DISTANCE_NAME" Description="LOC_GAME_BBS_MIN_DISTANCE_DESC" Domain="MinDistance" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBSMinDistance" GroupId="MapOptions" SupportsSinglePlayer="1" SortIndex="234" />
+      <Row ParameterId="BBS_MIN_ATTEMPTS" Name="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Description="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Domain="MinAttempts" DefaultValue="6" ConfigurationGroup="Map" ConfigurationId="BBSMinAttempts" GroupId="MapOptions" SupportsSinglePlayer="1" SortIndex="235" />
 		<Row ParameterId="BBS_Team_Spawn" Name="LOC_BBS_Team_Spawn_NAME" Description="LOC_BBS_Team_Spawn_DESC" Domain="TeamersDomain" DefaultValue="0" ConfigurationGroup="Map" ConfigurationId="BBS_Team_Spawn" GroupId="MapOptions" Visible="1" SupportsSinglePlayer="0" SortIndex="233"/>
 		<Row ParameterId="BBS_NATURAL" Name="LOC_GAME_BBS_NATURAL_NAME" Description="LOC_GAME_BBS_NATURAL_DESC" Domain="NaturalDomain" DefaultValue="1" ConfigurationGroup="Map" ConfigurationId="BBSNatural" GroupId="MapOptions" SortIndex="229" />
 		<!--  Mutually Exclusive -->
@@ -244,6 +245,18 @@
 		<Row Domain="StratResDomain" Value="2" Name="BBS_SRESOURCES_MUCHMORE_NAME" Description="BBS_SRESOURCES_MUCHMORE_DESC" SortIndex="30"/>
 		<Row Domain="StratResDomain" Value="3" Name="BBS_SRESOURCES_GARANTEED_NAME" Description="BBS_SRESOURCES_GARANTEED_DESC" SortIndex="40"/>
       
+      
+      <Row Domain="MinAttempts" Value="1" Name="BBS_MIN_ATTEMPTS_ONE_NAME" Description="BBS_MIN_ATTEMPTS_ONE_DESC" SortIndex="10"/>
+      <Row Domain="MinAttempts" Value="2" Name="BBS_MIN_ATTEMPTS_TWO_NAME" Description="BBS_MIN_ATTEMPTS_TWO_DESC" SortIndex="20"/>
+      <Row Domain="MinAttempts" Value="3" Name="BBS_MIN_ATTEMPTS_THREE_NAME" Description="BBS_MIN_ATTEMPTS_THREE_DESC" SortIndex="30"/>
+      <Row Domain="MinAttempts" Value="4" Name="BBS_MIN_ATTEMPTS_FOUR_NAME" Description="BBS_MIN_ATTEMPTS_FOUR_DESC" SortIndex="40"/>
+      <Row Domain="MinAttempts" Value="5" Name="BBS_MIN_ATTEMPTS_FIVE_NAME" Description="BBS_MIN_ATTEMPTS_FIVE_DESC" SortIndex="50"/>
+      <Row Domain="MinAttempts" Value="6" Name="BBS_MIN_ATTEMPTS_SIX_NAME" Description="BBS_MIN_ATTEMPTS_SIX_DESC" SortIndex="60"/>
+      <Row Domain="MinAttempts" Value="7" Name="BBS_MIN_ATTEMPTS_SEVEN_NAME" Description="BBS_MIN_ATTEMPTS_SEVEN_DESC" SortIndex="70"/>
+      <Row Domain="MinAttempts" Value="8" Name="BBS_MIN_ATTEMPTS_EIGHT_NAME" Description="BBS_MIN_ATTEMPTS_EIGHT_DESC" SortIndex="80"/>
+      <Row Domain="MinAttempts" Value="9" Name="BBS_MIN_ATTEMPTS_NINE_NAME" Description="BBS_MIN_ATTEMPTS_NINE_DESC" SortIndex="90"/>
+      <Row Domain="MinAttempts" Value="10" Name="BBS_MIN_ATTEMPTS_TEN_NAME" Description="BBS_MIN_ATTEMPTS_TEN_DESC" SortIndex="100"/>
+
       
       <Row Domain="MinDistance" Value="0" Name="BBS_MIN_DISTANCE_AUTO_NAME" Description="BBS_MIN_DISTANCE_AUTO_DESC" SortIndex="10"/>
       <Row Domain="MinDistance" Value="6" Name="BBS_MIN_DISTANCE_SIX_NAME" Description="BBS_MIN_DISTANCE_SIX_DESC" SortIndex="60"/>
