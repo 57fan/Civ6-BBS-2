@@ -1,678 +1,656 @@
-<?xml version="1.0" frcoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <GameData>
 
-	<LocalizedText>		
-	<!-- Map Sizes -->
-	<Replace Tag="LOC_MAPSIZE_ENORMOUS_NAME" Language="fr_FR">
-		<Text>Gigantesque</Text>
-	</Replace>
-	<Replace Tag="LOC_MAPSIZE_ENORMOUS_DESCRIPTION" Language="fr_FR">
-		<Text>Map pour 16 joueurs.</Text>
-	</Replace>
-	<!-- Setup -->
-	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" Language="fr_FR">
-		<Text>Recalcul des spawn</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" Language="fr_FR">
-		<Text>Attempt to place the civ in better starting location</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" Language="fr_FR">
-		<Text>Choix des ridges</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" Language="fr_FR">
-		<Text>Contrôle la taille des chaînes de montagnes.</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_NORMAL_NAME" Language="fr_FR">
-		<Text>Standard</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_NORMAL_DESC" Language="fr_FR">
-		<Text>Paramètres d'origine</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_LESS_NAME" Language="fr_FR">
-		<Text>Petits Goulets</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_LESS_DESC" Language="fr_FR">
-		<Text>Ajoute de petits goulets dans les chaînes de montagnes.</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="fr_FR">
-		<Text>Grandes Ouvertures</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="fr_FR">
-		<Text>Ajoute des passages plus larges dans la chaîne de montagnes.</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_NONE_NAME" Language="fr_FR">
-		<Text>Terre Plate</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_NONE_DESC" Language="fr_FR">
-		<Text>Les chaînes de montagnes sont fortement érodées pour créer une carte beaucoup plus plate avec beaucoup de collines.</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_MORE_NAME" Language="fr_FR">
-		<Text>Impénétrable</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_MORE_DESC" Language="fr_FR">
-		<Text>Élargit les crêtes de montagne avec moins de passages</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_RF_NAME" Language="fr_FR">
-		<Text>Classique</Text>
-	</Replace>
-	<Replace Tag="BBS_RIDGE_RF_DESC" Language="fr_FR">
-		<Text>Pre-Gathering Storm, placement des montagnes en dehors des continents.</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_BBS_SRESOURCES_NAME" Language="fr_FR">
-		  <Text>Ressources Stratégiques</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_BBS_SRESOURCES_DESC" Language="fr_FR">
-		  <Text>Modifie la quantité de ressources stratégiques dans les paramètres de BBS.</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_NORMAL_NAME" Language="fr_FR">
-		  <Text>Standard</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_NORMAL_DESC" Language="fr_FR">
-		  <Text>Configuration par défaut du générateur de ressources Firaxis.</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_MORE_NAME" Language="fr_FR">
-		  <Text>Abondantes</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_MORE_DESC" Language="fr_FR">
-		  <Text>20% de ressources stratégiques supplémentaire.</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_MUCHMORE_NAME" Language="fr_FR">
-		  <Text>Épique</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_MUCHMORE_DESC" Language="fr_FR">
-		  <Text>50% de ressources stratégiques supplémentaire.</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_GARANTEED_NAME" Language="fr_FR">
-		  <Text>Spawn Garanti</Text>
-	</Replace>
-	<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="fr_FR">
-		  <Text>la présence de toutes les ressources stratégiques dans un rayon de 5 case autour du spawn est presque garantie.</Text>
-	</Replace>
-   
-   <Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="fr_FR">
-		  <Text>Distance minimum entre les joueurs</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="fr_FR">
-		  <Text>Standard</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="fr_FR">
-		  <Text>Distance standard, dépend du type de carte.</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="fr_FR">
-		  <Text>6</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="fr_FR">
-		  <Text>6 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="fr_FR">
-		  <Text>7</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="fr_FR">
-		  <Text>7 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="fr_FR">
-		  <Text>8</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="fr_FR">
-		  <Text>8 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="fr_FR">
-		  <Text>9</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="fr_FR">
-		  <Text>9 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="fr_FR">
-		  <Text>10</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="fr_FR">
-		  <Text>10 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="fr_FR">
-		  <Text>11</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="fr_FR">
-		  <Text>11 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="fr_FR">
-		  <Text>12</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="fr_FR">
-		  <Text>12 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="fr_FR">
-		  <Text>13</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="fr_FR">
-		  <Text>13 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="fr_FR">
-		  <Text>14</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="fr_FR">
-		  <Text>14 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="fr_FR">
-		  <Text>15</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="fr_FR">
-		  <Text>15 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="fr_FR">
-		  <Text>16</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="fr_FR">
-		  <Text>16 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="fr_FR">
-		  <Text>17</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="fr_FR">
-		  <Text>17 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="fr_FR">
-		  <Text>18</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="fr_FR">
-		  <Text>18 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="fr_FR">
-		  <Text>19</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="fr_FR">
-		  <Text>19 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="fr_FR">
-		  <Text>20</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="fr_FR">
-		  <Text>20 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="fr_FR">
-		  <Text>21</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="fr_FR">
-		  <Text>21 cases</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="fr_FR">
-		  <Text>22</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="fr_FR">
-		  <Text>22 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="fr_FR">
-		  <Text>23</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="fr_FR">
-		  <Text>23 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="fr_FR">
-		  <Text>24</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="fr_FR">
-		  <Text>24 cases</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="fr_FR">
-		  <Text>25</Text>
-	</Replace>
-	
-   <Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="fr_FR">
-		  <Text>25 cases</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="fr_FR">
-		  <Text>Nombre d'essais de BBS</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="fr_FR">
-		  <Text>1</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="fr_FR">
-		  <Text>1 essai</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="fr_FR">
-		  <Text>2</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="fr_FR">
-		  <Text>2 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="fr_FR">
-		  <Text>3</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="fr_FR">
-		  <Text>3 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="fr_FR">
-		  <Text>4</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="fr_FR">
-		  <Text>4 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="fr_FR">
-		  <Text>5</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="fr_FR">
-		  <Text>5 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="fr_FR">
-		  <Text>6</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="fr_FR">
-		  <Text>6 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="fr_FR">
-		  <Text>7</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="fr_FR">
-		  <Text>7 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="fr_FR">
-		  <Text>8</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="fr_FR">
-		  <Text>8 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="fr_FR">
-		  <Text>9</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="fr_FR">
-		  <Text>9 essais</Text>
-	</Replace>
-   
-   <Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="fr_FR">
-		  <Text>10</Text>
-	</Replace>
-   <Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="fr_FR">
-		  <Text>10 essais</Text>
-	</Replace>
-   
-	<Replace Tag="BBS_NATURAL_NORMAL_NAME" Language="fr_FR">
-		  <Text>Standard</Text>
-	</Replace>
-	<Replace Tag="BBS_NATURAL_LESS_NAME" Language="fr_FR">
-		  <Text>Éparse</Text>
-	</Replace>
-	<Replace Tag="BBS_NATURAL_MORE_NAME" Language="fr_FR">
-		  <Text>Abondantes</Text>
-	</Replace>	
-	<Replace Tag="BBS_NATURAL_NORMAL_DESC" Language="fr_FR">
-		  <Text>Duel : 2[NEWLINE]Minuscule : 3[NEWLINE]Petite : 4[NEWLINE]Normale : 5[NEWLINE]Grande : 6[NEWLINE]Immense : 7[NEWLINE]Énorme : 8</Text>
-	</Replace>
-	<Replace Tag="BBS_NATURAL_LESS_DESC" Language="fr_FR">
-		  <Text>Duel : 1[NEWLINE]Minuscule : 1[NEWLINE]Petite : 3[NEWLINE]Normale : 3[NEWLINE]Grande : 4[NEWLINE]Immense  4[NEWLINE]Énorme : 5</Text>
-	</Replace>
-	<Replace Tag="BBS_NATURAL_MORE_DESC" Language="fr_FR">
-		  <Text>Duel : 3[NEWLINE]Minuscule : 4[NEWLINE]Petite : 6[NEWLINE]Normale : 8[NEWLINE]Grande : 10[NEWLINE]Immense : 12[NEWLINE]Énorme : 14</Text>
-	</Replace>	
-	<Replace Tag="LOC_GAME_BBS_NATURAL_NAME" Language="fr_FR">
-		  <Text>Densité de Merveilles Naturelles</Text>
-	</Replace>
-	<Replace Tag="LOC_GAME_BBS_NATURAL_DESC" Language="fr_FR">
-		  <Text>Contrôle le nombre maximum de merveilles naturelles qui peuvent apparaître sur la carte.</Text>
-	</Replace>		
-	<Replace Tag="LOC_BBS_Team_Spawn_NAME" Language="fr_FR">
-		<Text>Positions Teamer</Text>
-	</Replace>
-	<Replace Tag="LOC_BBS_Team_Spawn_DESC" Language="fr_FR">
-		<Text>Contrôlez la position des civilisations sur la carte dans un teamer</Text>
-	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" Language="fr_FR">
-		<Text>Standard</Text>
-	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" Language="fr_FR">
-		<Text>Paramètres d'origine : les joueurs sont placés aléatoirement</Text>
-	</Replace>
-	<Replace Tag="BBS_Team_Spawn_EW_NAME" Language="fr_FR">
-		<Text>Est contre Ouest</Text>
-	</Replace>
-	<Replace Tag="BBS_Team_Spawn_EW_DESC" Language="fr_FR">
-		<Text>Pour les 2v2 et 4v4 : les joueurs de la même équipe sont beaucoup plus susceptibles d'apparaître à l'Est ou à l'Ouest.</Text>
-	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NS_NAME" Language="fr_FR">
-		<Text>Nord contre Sud</Text>
-	</Replace>
-	<Replace Tag="BBS_Team_Spawn_NS_DESC" Language="fr_FR">
-		<Text>Pour les 2v2 et 4v4 : les joueurs de la même équipe sont beaucoup plus susceptibles d'apparaître au Nord ou au Sud.</Text>
-	</Replace>
-	
-	
-	<!-- Wonders -->
-	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_NAME" Language="fr_FR">
-		  <Text>Barringer Crater</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle d'une case. [ICON_SCIENCE] Science +3, [ICON_FOOD] Nourriture +2, et [ICON_GOLD] Or +3. [ICON_PRODUCTION] Production +10% pour les projets de course à l'espace.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_QUOTE" Language="fr_FR">
-		  <Text>"Aujourd'hui nous pouvons prouver que ce cratère est dû à la collision d'un corps extra-terrestres avec la Terre, surement un petit astéroïde de nature métallique."[NEWLINE]- Daniel Barringer</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BARRINGER_CRATER_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Le Barringer Crater est un gigantesque impact de météorite localisé en Arizona, aux États-Unis. Le cratère a un diamètre de 1 200 mètres, et les scientifiques croient qu’il a été créé il y a 50 000 ans quand une météorite composées de nickel et de fer pesant 160 000 tonnes et bougeant à 44 000 kilomètres par heure.</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_NAME" Language="fr_FR">
-		  <Text>Baie bioluminescente</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_BIOLUMINESCEBT_BAY_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle d'une case. [ICON_SCIENCE] Science +3, [ICON_FOOD] Nourriture +1, et [ICON_GOLD] Or +1. [ICON_GOLD] Or +1 sur les bateaux de pêche si vous possédez cette case.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE" Language="fr_FR">
-		  <Text>“L’émission de lumière du feu, des éclairs, des étoiles ou des êtres vivants attire toujours l’attention de tout être humain. Dans le cas de la baie luminescente, elle émet une étrange lueur, quelque chose de magique et mystèrieux."[NEWLINE]- Cassius Stevani</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>La baie bioluminescente (également connue sous le nom de Puerto Mosquito, ou Mosquito Bay), est considérée comme le meilleur exemple de baie bioluminescente aux États-Unis. La luminescence dans la baie est causée par un micro-organisme, le dinoflagellé Pyrodinium bahamense, qui brille chaque fois que l'eau est perturbée, laissant une traînée de bleu néon.</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
-		  <Text>Une combinaison de facteurs crée les conditions nécessaires à la bioluminescence : les mangroves rouges entourent l'eau, l'absence totale de développement moderne autour de la baie, l'eau est fraîche et profonde, et un petit chenal vers l'océan retient les dinoflagellés dans la baie. Ce petit chenal a été créé artificiellement, à la suite des tentatives des occupants des navires espagnols d'étouffer la baie de l'océan. Les Espagnols croyaient que la bioluminescence qu'ils avaient rencontrée lors de leur première exploration de la région était l'œuvre du diable et essayaient d'empêcher l'eau de mer de traverser la baie en jetant d'énormes rochers dans le canal. Les Espagnols n'ont réussi qu'à préserver et à accroître la luminescence de la baie désormais isolée.</Text>
-	</Replace>	
-	
+		<!-- https://github.com/57fan/Civ6-BBS-2 -->
+		
+		<!-- Auteur : Ybanca -->
+		<!-- With the help of CivFr players, LordKnt -->
+
+		<!-- === MAP SIZES === -->
+		<Replace Tag="LOC_MAPSIZE_ENORMOUS_NAME" Language="fr_FR">
+			<Text>Gigantesque</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_ENORMOUS_DESCRIPTION" Language="fr_FR">
+			<Text>Carte pour 16 joueurs.</Text>
+		</Replace>
+
+		<!-- === SETUP === -->
+		<!-- == Map features == -->
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" Language="fr_FR">
+			<Text>Recalcul des spawn</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" Language="fr_FR">
+			<Text>Essaie de placer la civilisation dans un meilleur emplacement de départ.</Text>
+		</Replace>
+		<!-- = Ridges = -->
+		<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" Language="fr_FR">
+			<Text>Choix des ridges</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" Language="fr_FR">
+			<Text>Contrôle la taille des chaînes de montagnes.</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NORMAL_NAME" Language="fr_FR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NORMAL_DESC" Language="fr_FR">
+			<Text>Paramètres d'origine.</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_LESS_NAME" Language="fr_FR">
+			<Text>Petits Goulets</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_LESS_DESC" Language="fr_FR">
+			<Text>Ajoute de petits goulets dans les chaînes de montagnes.</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="fr_FR">
+			<Text>Grandes Ouvertures</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="fr_FR">
+			<Text>Ajoute des passages plus larges dans la chaîne de montagnes.</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NONE_NAME" Language="fr_FR">
+			<Text>Terre Plate</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NONE_DESC" Language="fr_FR">
+			<Text>Les chaînes de montagnes sont fortement érodées pour créer une carte beaucoup plus plate avec beaucoup de collines.</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_MORE_NAME" Language="fr_FR">
+			<Text>Impénétrable</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_MORE_DESC" Language="fr_FR">
+			<Text>Élargit les crêtes de montagne avec moins de passages</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_RF_NAME" Language="fr_FR">
+			<Text>Classique</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_RF_DESC" Language="fr_FR">
+			<Text>Pre-Gathering Storm, placement des montagnes en dehors des continents.</Text>
+		</Replace>
+		<!-- = Strategic resources = -->
+		<Replace Tag="LOC_GAME_BBS_SRESOURCES_NAME" Language="fr_FR">
+			 <Text>Ressources Stratégiques</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_SRESOURCES_DESC" Language="fr_FR">
+			 <Text>Modifie la quantité de ressources stratégiques dans les paramètres de BBS.</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_NORMAL_NAME" Language="fr_FR">
+			 <Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_NORMAL_DESC" Language="fr_FR">
+			 <Text>Configuration par défaut du générateur de ressources Firaxis.</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MORE_NAME" Language="fr_FR">
+			 <Text>Abondantes</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MORE_DESC" Language="fr_FR">
+			 <Text>20% de ressources stratégiques supplémentaires.</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MUCHMORE_NAME" Language="fr_FR">
+			 <Text>Épique</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MUCHMORE_DESC" Language="fr_FR">
+			 <Text>50% de ressources stratégiques supplémentaires.</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_GARANTEED_NAME" Language="fr_FR">
+			 <Text>Spawn Garanti</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="fr_FR">
+			 <Text>La présence de toutes les ressources stratégiques dans un rayon de 5 case autour du spawn est presque garantie.</Text>
+		</Replace>
+		<!-- = Natural Wonders Density = -->
+		<Replace Tag="LOC_GAME_BBS_NATURAL_NAME" Language="fr_FR">
+			  <Text>Densité de Merveilles Naturelles</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_NATURAL_DESC" Language="fr_FR">
+			  <Text>Contrôle le nombre maximum de merveilles naturelles qui peuvent apparaître sur la carte.</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_NORMAL_NAME" Language="fr_FR">
+			  <Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_LESS_NAME" Language="fr_FR">
+			  <Text>Éparses</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_MORE_NAME" Language="fr_FR">
+			  <Text>Abondantes</Text>
+		</Replace>	
+		<Replace Tag="BBS_NATURAL_NORMAL_DESC" Language="fr_FR">
+			  <Text>Duel : 2[NEWLINE]Minuscule : 3[NEWLINE]Petite : 4[NEWLINE]Normale : 5[NEWLINE]Grande : 6[NEWLINE]Immense : 7[NEWLINE]Énorme : 8</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_LESS_DESC" Language="fr_FR">
+			  <Text>Duel : 1[NEWLINE]Minuscule : 1[NEWLINE]Petite : 3[NEWLINE]Normale : 3[NEWLINE]Grande : 4[NEWLINE]Immense  4[NEWLINE]Énorme : 5</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_MORE_DESC" Language="fr_FR">
+			  <Text>Duel : 3[NEWLINE]Minuscule : 4[NEWLINE]Petite : 6[NEWLINE]Normale : 8[NEWLINE]Grande : 10[NEWLINE]Immense : 12[NEWLINE]Énorme : 14</Text>
+		</Replace>	
+
+		<!-- == Min distance == -->
+		<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="fr_FR">
+			  <Text>Distance minimum entre les joueurs</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="fr_FR">
+			  <Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="fr_FR">
+			  <Text>Distance standard, dépend du type de carte.</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="fr_FR">
+			  <Text>6</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="fr_FR">
+			  <Text>6 cases</Text>
+		</Replace>
+		<Replace> Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="fr_FR">
+			  <Text>7</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="fr_FR">
+			  <Text>7 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="fr_FR">
+			  <Text>8</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="fr_FR">
+			  <Text>8 cases</Text>
+		</Replace>
+		 <Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="fr_FR">
+			  <Text>9</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="fr_FR">
+			  <Text>9 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="fr_FR">
+			  <Text>10</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="fr_FR">
+			  <Text>10 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="fr_FR">
+			  <Text>11</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="fr_FR">
+			  <Text>11 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="fr_FR">
+			  <Text>12</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="fr_FR">
+			  <Text>12 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="fr_FR">
+			  <Text>13</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="fr_FR">
+			  <Text>13 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="fr_FR">
+			  <Text>14</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="fr_FR">
+			  <Text>14 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="fr_FR">
+			  <Text>15</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="fr_FR">
+			  <Text>15 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="fr_FR">
+			  <Text>16</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="fr_FR">
+			  <Text>16 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="fr_FR">
+			  <Text>17</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="fr_FR">
+			  <Text>17 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="fr_FR">
+			  <Text>18</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="fr_FR">
+			  <Text>18 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="fr_FR">
+			  <Text>19</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="fr_FR">
+			  <Text>19 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="fr_FR">
+			  <Text>20</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="fr_FR">
+			  <Text>20 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="fr_FR">
+			  <Text>21</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="fr_FR">
+			  <Text>21 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="fr_FR">
+			  <Text>22</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="fr_FR">
+			  <Text>22 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="fr_FR">
+			  <Text>23</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="fr_FR">
+			  <Text>23 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="fr_FR">
+			  <Text>24</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="fr_FR">
+			  <Text>24 cases</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="fr_FR">
+			  <Text>25</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="fr_FR">
+			  <Text>25 cases</Text>
+		</Replace>
+
+		<!-- == Players options == -->
+		<!-- = Attempts = -->	
+		<Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="fr_FR">
+			  <Text>Nombre d'essais de BBS</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="fr_FR">
+			  <Text>1</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="fr_FR">
+			  <Text>1 essai</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="fr_FR">
+			  <Text>2</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="fr_FR">
+			  <Text>2 essais</Text>
+		</Replace>
+		 <Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="fr_FR">
+			  <Text>3</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="fr_FR">
+			  <Text>3 essais</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="fr_FR">
+			  <Text>4</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="fr_FR">
+			  <Text>4 essais</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="fr_FR">
+			  <Text>5</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="fr_FR">
+			  <Text>5 essais</Text>
+		</Replace> 
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="fr_FR">
+			  <Text>6</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="fr_FR">
+			  <Text>6 essais</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="fr_FR">
+			  <Text>7</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="fr_FR">
+			  <Text>7 essais</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="fr_FR">
+			  <Text>8</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="fr_FR">
+			  <Text>8 essais</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="fr_FR">
+			  <Text>9</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="fr_FR">
+			  <Text>9 essais</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="fr_FR">
+			  <Text>10</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="fr_FR">
+			  <Text>10 essais</Text>
+		</Replace>
+		<!-- = Teamers start position = -->		
+		<Replace Tag="LOC_BBS_Team_Spawn_NAME" Language="fr_FR">
+			<Text>Positions Teamer</Text>
+		</Replace>
+		<Replace Tag="LOC_BBS_Team_Spawn_DESC" Language="fr_FR">
+			<Text>Contrôlez la position des civilisations sur la carte dans un teamer.</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" Language="fr_FR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" Language="fr_FR">
+			<Text>Paramètres d'origine : les joueurs sont placés aléatoirement.</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_EW_NAME" Language="fr_FR">
+			<Text>Est contre Ouest</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_EW_DESC" Language="fr_FR">
+			<Text>Pour les 2v2 et 4v4 : les joueurs de la même équipe sont beaucoup plus susceptibles d'apparaître à l'Est ou à l'Ouest.</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NS_NAME" Language="fr_FR">
+			<Text>Nord contre Sud</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NS_DESC" Language="fr_FR">
+			<Text>Pour les 2v2 et 4v4 : les joueurs de la même équipe sont beaucoup plus susceptibles d'apparaître au Nord ou au Sud.</Text>
+		</Replace>
+
+
+
+		<!-- === NATURAL WONDERS === -->
+		<!-- = Barringer Crater = -->
+		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_NAME" Language="fr_FR">
+			  <Text>Barringer Crater</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle d'une case. [ICON_SCIENCE] Science +3, [ICON_FOOD] Nourriture +2 et [ICON_GOLD] Or +3. [ICON_PRODUCTION] Production +10% pour les projets de course à l'espace.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_QUOTE" Language="fr_FR">
+			  <Text>"Aujourd'hui nous pouvons prouver que ce cratère est dû à la collision d'un corps extra-terrestres avec la Terre, surement un petit astéroïde de nature métallique."[NEWLINE]- Daniel Barringer</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BARRINGER_CRATER_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Le Barringer Crater est un gigantesque impact de météorite localisé en Arizona, aux États-Unis. Le cratère a un diamètre de 1 200 mètres, et les scientifiques croient qu’il a été créé il y a 50 000 ans quand une météorite composées de nickel et de fer pesant 160 000 tonnes et bougeant à 44 000 kilomètres par heure.</Text>
+		</Replace>	
+		<!-- = Bioluminescent Bay = -->
+		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_NAME" Language="fr_FR">
+			  <Text>Baie bioluminescente</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle d'une case. [ICON_SCIENCE] Science +3, [ICON_FOOD] Nourriture +1 et [ICON_GOLD] Or +1. [ICON_GOLD] Or +1 sur les bateaux de pêche si vous possédez cette case.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE" Language="fr_FR">
+			  <Text>“L’émission de lumière du feu, des éclairs, des étoiles ou des êtres vivants attire toujours l’attention de tout être humain. Dans le cas de la baie luminescente, elle émet une étrange lueur, quelque chose de magique et mystèrieux."[NEWLINE]- Cassius Stevani</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>La baie bioluminescente (également connue sous le nom de Puerto Mosquito, ou Mosquito Bay), est considérée comme le meilleur exemple de baie bioluminescente aux États-Unis. La luminescence dans la baie est causée par un micro-organisme, le dinoflagellé Pyrodinium bahamense, qui brille chaque fois que l'eau est perturbée, laissant une traînée de bleu néon.</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
+			  <Text>Une combinaison de facteurs crée les conditions nécessaires à la bioluminescence : les mangroves rouges entourent l'eau, l'absence totale de développement moderne autour de la baie, l'eau est fraîche et profonde, et un petit chenal vers l'océan retient les dinoflagellés dans la baie. Ce petit chenal a été créé artificiellement, à la suite des tentatives des occupants des navires espagnols d'étouffer la baie de l'océan. Les Espagnols croyaient que la bioluminescence qu'ils avaient rencontrée lors de leur première exploration de la région était l'œuvre du diable et essayaient d'empêcher l'eau de mer de traverser la baie en jetant d'énormes rochers dans le canal. Les Espagnols n'ont réussi qu'à préserver et à accroître la luminescence de la baie désormais isolée.</Text>
+		</Replace>	
+		<!-- = Cerro de Potosi = -->
 		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_NAME" Language="fr_FR">
-		  <Text>Cerro de Potosi</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case, prenant la forme d'une montagne. [ICON_PRODUCTION] Production +1, et [ICON_GOLD] Or +3 pour les cases adjacentes.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_QUOTE" Language="fr_FR">
-		  <Text>"Je suis le riche Potosi, trésor du monde, roi de toutes les montagnes et convoité par les rois."[NEWLINE]- Premières armoiries de Potosi</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_CERRO_DE_POTOSI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Localisée dans le sud de la Bolivie, la montagne de Potosi a produit la quasi-totalité de l'argent extrait par les Espagnols à l'époque impériale. Une fois extrait de la montagne, l'argent était transporté jusqu'à la côte à dos de lamas et de mules, où il était chargé à bord de bateaux à trésors à destination de l'Europe. Pas loin de 41 000 tonnes d'argent pur ont été minées sur 200 ans, dont 8 200 qui revinrent directement à la couronne espagnole. Après 1800, la plupart des mines d'argent sont épuisées, mais l'exploitation de la montagne continue, non plus pour l'argent mais pour l'étain qu'elle contient.</Text>
-	</Replace>	
-	
+			  <Text>Cerro de Potosi</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_PRODUCTION] Production +1 et [ICON_GOLD] Or +3 pour les cases adjacentes.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_QUOTE" Language="fr_FR">
+			  <Text>"Je suis le riche Potosi, trésor du monde, roi de toutes les montagnes et convoité par les rois."[NEWLINE]- Premières armoiries de Potosi</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_CERRO_DE_POTOSI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Localisée dans le sud de la Bolivie, la montagne de Potosi a produit la quasi-totalité de l'argent extrait par les Espagnols à l'époque impériale. Une fois extrait de la montagne, l'argent était transporté jusqu'à la côte à dos de lamas et de mules, où il était chargé à bord de bateaux à trésors à destination de l'Europe. Pas loin de 41 000 tonnes d'argent pur ont été minées sur 200 ans, dont 8 200 qui revinrent directement à la couronne espagnole. Après 1800, la plupart des mines d'argent sont épuisées, mais l'exploitation de la montagne continue, non plus pour l'argent mais pour l'étain qu'elle contient.</Text>
+		</Replace>	
+		<!-- = Dallol = -->
 		<Replace Tag="LOC_FEATURE_DALLOL_NAME" Language="fr_FR">
-		  <Text>Dallol</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle d'une case. [ICON_Science] Science +2, [ICON_PRODUCTION] Production +2, [ICON_FOOD] Nourriture +2, et [ICON_GOLD] Or +1.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="fr_FR">
-		  <Text>"Là, tout est enfer, ténèbres, gouffre sulfureux, incendie, bouillonnement, infection, consomption"[NEWLINE]- William Shakespeare, King Lear</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Le Dallol est un volcan à cône de cendres dans la dépression de Danakil, au nord-est de la chaîne d'Erta Ale en Éthiopie. Il a été formé par l'intrusion de magma basaltique dans les dépôts de sel du Miocène et l'activité hydrothermale subséquente. Des éruptions phréatiques ont eu lieu en 1926, formant le volcan Dallol, tandis que de nombreux autres cratères d'éruption parsèment les plaines salines avoisinantes. Ces cratères sont les évents volcaniques subaériens les plus bas connus au monde, à 45 mètres ou plus au-dessous du niveau de la mer.</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
-		  <Text>De nombreuses sources chaudes évacuent ici de la saumure et du liquide acide. De petits geysers temporaires répandus produisent des cônes de sel. Les gisements de Dallol comprennent d'importantes quantités de potasse trouvées directement à la surface. Le terme 'Dallol' a été inventé par le peuple afar et signifie 'dissolution' ou 'désintégration', décrivant un paysage d'étangs acides verts (pH inférieur à 1) et de plaines désertiques d'oxyde de fer, de soufre et de sel.</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_GRAND_MESA_NAME" Language="fr_FR">
-		  <Text>Grand Mesa</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_GRAND_MESA_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case. [ICON_FOOD] Nourriture +1 et [ICON_CULTURE] Culture +1 pour les cases adjacentes.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_GRAND_MESA_QUOTE" Language="fr_FR">
-		  <Text>"La conservation, c'est l'utilisation judicieuse de la terre et de ses ressources pour le bien durable de l'homme."[NEWLINE]- Gifford Pinchot</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GRAND_MESA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>La Grande Mesa est une grande formation géologique du Colorado, aux États-Unis d'Amérique. S'élevant à environ 1500 mètres au-dessus du territoire environnant et avec une superficie de 1300 kilomètres carrés, c'est la plus grande mesa du monde. La Grande Mesa est recouverte d'une couche de basalte volcanique qui résiste à l'érosion. Il ne s'éleva pas tant dans les airs qu'il resta à son altitude initiale, car le terrain environnant fut érodé par l'action des rivières Colorado et Gunnison. La forêt nationale de Grand Mesa (à l'origine appelée réserve forestière de Battlemfrt Mesa) a été créée par Benjamin Harrison le 24 décembre 1892. Il s'agit de la troisième réserve forestière créée aux États-Unis.</Text>
-	</Replace>	
-	
+			  <Text>Dallol</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle d'une case. [ICON_Science] Science +2, [ICON_PRODUCTION] Production +2, [ICON_FOOD] Nourriture +2 et [ICON_GOLD] Or +1.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="fr_FR">
+			  <Text>"Là, tout est enfer, ténèbres, gouffre sulfureux, incendie, bouillonnement, infection, consomption"[NEWLINE]- William Shakespeare, King Lear</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Le Dallol est un volcan à cône de cendres dans la dépression de Danakil, au nord-est de la chaîne d'Erta Ale en Éthiopie. Il a été formé par l'intrusion de magma basaltique dans les dépôts de sel du Miocène et l'activité hydrothermale subséquente. Des éruptions phréatiques ont eu lieu en 1926, formant le volcan Dallol, tandis que de nombreux autres cratères d'éruption parsèment les plaines salines avoisinantes. Ces cratères sont les évents volcaniques subaériens les plus bas connus au monde, à 45 mètres ou plus au-dessous du niveau de la mer.</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
+			  <Text>De nombreuses sources chaudes évacuent ici de la saumure et du liquide acide. De petits geysers temporaires répandus produisent des cônes de sel. Les gisements de Dallol comprennent d'importantes quantités de potasse trouvées directement à la surface. Le terme 'Dallol' a été inventé par le peuple afar et signifie 'dissolution' ou 'désintégration', décrivant un paysage d'étangs acides verts (pH inférieur à 1) et de plaines désertiques d'oxyde de fer, de soufre et de sel.</Text>
+		</Replace>	
+		<!-- = Grand Mesa = -->
+		<Replace Tag="LOC_FEATURE_GRAND_MESA_NAME" Language="fr_FR">
+			  <Text>Grand Mesa</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_GRAND_MESA_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case. [ICON_FOOD] Nourriture +1 et [ICON_CULTURE] Culture +1 pour les cases adjacentes.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_GRAND_MESA_QUOTE" Language="fr_FR">
+			  <Text>"La conservation, c'est l'utilisation judicieuse de la terre et de ses ressources pour le bien durable de l'homme."[NEWLINE]- Gifford Pinchot</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GRAND_MESA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>La Grande Mesa est une grande formation géologique du Colorado, aux États-Unis d'Amérique. S'élevant à environ 1500 mètres au-dessus du territoire environnant et avec une superficie de 1300 kilomètres carrés, c'est la plus grande mesa du monde. La Grande Mesa est recouverte d'une couche de basalte volcanique qui résiste à l'érosion. Il ne s'éleva pas tant dans les airs qu'il resta à son altitude initiale, car le terrain environnant fut érodé par l'action des rivières Colorado et Gunnison. La forêt nationale de Grand Mesa (à l'origine appelée réserve forestière de Battlemfrt Mesa) a été créée par Benjamin Harrison le 24 décembre 1892. Il s'agit de la troisième réserve forestière créée aux États-Unis.</Text>
+		</Replace>	
+		<!-- = Mount Kailash = -->
 		<Replace Tag="LOC_FEATURE_KAILASH_NAME" Language="fr_FR">
-		  <Text>Mont Kailash</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_KAILASH_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case, prenant la forme d'une montagne. [ICON_Faith] Foi +1 et [ICON_CULTURE] Culture +1. [ICON_CULTURE] Culture +1 pour chaque ville étrangère qui suit votre religion si vous possédez cette case.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_KAILASH_QUOTE" Language="fr_FR">
-		  <Text>"Après avoir ainsi instruit les pieux Brahma de Seigneur s'en alla avec dans son sillage les ancêtres et les chefs du peuple qu'il emmena de sa propre place à la demeure de Shiva de Seigneur, Kailash, la meilleure de toutes les montagnes qui est si chère au maître. " [NEWLINE]- Le Bhagavata Purana</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KAILASH_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Le sommet sacré du mont Kailash, situé dans l'Himalaya du Tibet, est chéri par un certain nombre de religions, en particulier les adeptes de l'hindouisme. On le croit être la maison de Shiva de Seigneur, qui demeure sur la montagne dans un état de béatitude éternelle. Le mont Kailash est considéré comme l'un des pèlerinages religieux les plus difficiles, car les conditions difficiles dissuadent de nombreux pèlerins potentiels et il n'est accessible par aucun moyen de transport moderne.</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_NAME" Language="fr_FR">
-		  <Text>Lac Victoria</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle de 4 cases, prenant la forme d'un lac et fournit de l'eau douce. [ICON_FOOD] Nourriture +3, [ICON_CULTURE] Culture +1, [ICON_PRODUCTION] Production +1, et [ICON_GOLD] Or +1.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="fr_FR">
-		  <Text>"J'ai vu ce vieux père Nile se lever sans aucun doute dans la Victoria Nyanza, et comme je l'avais prédit, ce lac est la grande source de la rivière sainte qui a bercé le premier exposant de notre croyance religieuse."[NEWLINE]- John Hanning Speke</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LAKE_VICTORIA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Avec une superficie de plus de 68 800 km², le lac Victoria est le plus grand lac d'Afrique, le deuxième plus grand lac d'eau douce de la Terre et le plus grand lac tropical du monde. Deux grands fleuves quittent le lac, le Nil Blanc et le Katonga. Les premiers documents historiques sur le lac proviennent de commerçants arabes qui cherchaient de l'or, de l'ivoire et d'autres produits auprès des indigènes alors qu'ils poussaient vers l'intérieur des terres depuis la côte. La recherche par les explorateurs européens de la source du Nil a conduit à la découverte du lac par le Français John Speke en 1858 après J.-C. , qui l'a nommé d'après le monarque britannique de l'époque.</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_NAME" Language="fr_FR">
-		  <Text>Lençois Maranhenses</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, +2 [ICON_CULTURE] Culture +2, et [ICON_GOLD] Or +2. [ICON_CULTURE] Culture +1 pour les cases de désert et de plaines inondables si vous poussédez au moins une case.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="fr_FR">
-		  <Text>"J'ai vu des prairies de sable blanc et doré, changeant constamment de forme selon l'humeur créative et le caprice des vents."[NEWLINE]- Geert Mauricio Bas</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LENCOIS_MARANHENSES_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Situé dans l'état de Maranhão au nord-est du Brésil, le parc national Lençois Maranhenses se compose de 380 000 hectares de dunes de sable qui inondent d'eau douce pendant la saison des pluies. Le parc abrite une variété d'espèces, dont quatre sont en voie de disparition, et en raison de ses propriétés physiques uniques, il est devenu une destination populaire pour les écotouristes.</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_KRAKATOA_NAME" Language="fr_FR">
-		  <Text>Krakatoa</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_KRAKATOA_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case, prenant la forme d'un volcan. [ICON_Science] Science +2 pour les cases adjacentes. Fournit des rendements supplémentaires en cas d'éruption au coût de [ICON_Citizen] Population et dommages importants aux batîments et aménagmeents. Toujours actif.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_KRAKATOA_QUOTE" Language="fr_FR">
-		  <Text>"J'ai vu avec stupéfaction que l'île de Krakatoa était complètement brûlée et stérile sous nos yeux et qu'à quatre endroits elle lançait de gros morceaux de feu. "[NEWLINE]- Johann Wilhelm Vogel</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KRAKATOA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Krakatoa est une île volcanique indonésienne située entre les îles de Java et Sumatra. Le volcan a explosé violemment en août 1883 avec une force équivalente à 13 000 fois la puissance de la bombe nucléaire d'Hiroshima. L'explosion est largement considérée comme le son le plus fort jamais enregistré. L'éruption a détruit plus de la moitié de l'île et a été entendue dans certaines parties de l'Australie, à quelque 3 200 kilomètres de là. Quelques 37 000 personnes ont été tuées par l'éruption et les tsunamis qui ont suivi. Le volcan émet régulièrement de la lave depuis quatre-vingts ans, reconstruisant le cône à un rythme d'environ 5 mètres par an.</Text>
-	</Replace>	
-		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_GENTLE_NAME" Language="fr_FR">
-		  <Text>Éruption Douce</Text>
-	</Replace>
-		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_GENTLE_DESCRIPTION" Language="fr_FR">
-		  <Text>De la fumée s'échappe de la montagne de feu qu'on appelle le Krakatoa. Cela pourrait-il être un signe avant-coureur des choses à venir ?</Text>
-	</Replace>
-		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_CATASTROPHIC_NAME" Language="fr_FR">
-		  <Text>Éruption catastrophique</Text>
-	</Replace>
-		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_CATASTROPHIC_DESCRIPTION" Language="fr_FR">
-		  <Text>Nous avons dû abandonner nos dieux, car quand nous avons regardé vers le ciel bleu et demandé la pluie, c'était Krakatoa qui a répondu par le feu.</Text>
-	</Replace>
-	<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_NAME" Language="fr_FR">
-		  <Text>MÉruption mégacolossale</Text>
-	</Replace>
-	<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_DESCRIPTION" Language="fr_FR">
-		  <Text>Maudit soit la terre sur laquelle Krakatoa jette son ombre puissante. Le feu et le rocher qu'il a forgés sur nous. Car on nous a enlevés de la terre pour les cendres que nous sommes... et aux cendres que nous sommes retournés.</Text>
-	</Replace>
-	
+			  <Text>Mont Kailash</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_KAILASH_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_Faith] Foi +1 et [ICON_CULTURE] Culture +1.[NEWLINE][ICON_CULTURE] Culture +1 pour chaque ville étrangère qui suit votre religion si vous possédez cette case.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_KAILASH_QUOTE" Language="fr_FR">
+			  <Text>"Après avoir ainsi instruit les pieux Brahma de Seigneur s'en alla avec dans son sillage les ancêtres et les chefs du peuple qu'il emmena de sa propre place à la demeure de Shiva de Seigneur, Kailash, la meilleure de toutes les montagnes qui est si chère au maître. " [NEWLINE]- Le Bhagavata Purana</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KAILASH_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Le sommet sacré du mont Kailash, situé dans l'Himalaya du Tibet, est chéri par un certain nombre de religions, en particulier les adeptes de l'hindouisme. On le croit être la maison de Shiva de Seigneur, qui demeure sur la montagne dans un état de béatitude éternelle. Le mont Kailash est considéré comme l'un des pèlerinages religieux les plus difficiles, car les conditions difficiles dissuadent de nombreux pèlerins potentiels et il n'est accessible par aucun moyen de transport moderne.</Text>
+		</Replace>	
+		<!-- = Lake Victoria = -->
+		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_NAME" Language="fr_FR">
+			  <Text>Lac Victoria</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle de 4 cases, considérées comme un lac et fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_CULTURE] Culture +1, [ICON_PRODUCTION] Production +1 et [ICON_GOLD] Or +1.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="fr_FR">
+			  <Text>"J'ai vu ce vieux père Nile se lever sans aucun doute dans la Victoria Nyanza, et comme je l'avais prédit, ce lac est la grande source de la rivière sainte qui a bercé le premier exposant de notre croyance religieuse."[NEWLINE]- John Hanning Speke</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LAKE_VICTORIA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Avec une superficie de plus de 68 800 km², le lac Victoria est le plus grand lac d'Afrique, le deuxième plus grand lac d'eau douce de la Terre et le plus grand lac tropical du monde. Deux grands fleuves quittent le lac, le Nil Blanc et le Katonga. Les premiers documents historiques sur le lac proviennent de commerçants arabes qui cherchaient de l'or, de l'ivoire et d'autres produits auprès des indigènes alors qu'ils poussaient vers l'intérieur des terres depuis la côte. La recherche par les explorateurs européens de la source du Nil a conduit à la découverte du lac par le Français John Speke en 1858 après J.-C. , qui l'a nommé d'après le monarque britannique de l'époque.</Text>
+		</Replace>	
+		<!-- = Lençóis Maranhenses = -->
+		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_NAME" Language="fr_FR">
+			  <Text>Lençois Maranhenses</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, +2 [ICON_CULTURE] Culture +2 et [ICON_GOLD] Or +2.[NEWLINE][ICON_CULTURE] Culture +1 pour les cases de désert et de plaines inondables si vous possédez au moins une case.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="fr_FR">
+			  <Text>"J'ai vu des prairies de sable blanc et doré, changeant constamment de forme selon l'humeur créative et le caprice des vents."[NEWLINE]- Geert Mauricio Bas</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LENCOIS_MARANHENSES_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Situé dans l'état de Maranhão au nord-est du Brésil, le parc national Lençois Maranhenses se compose de 380 000 hectares de dunes de sable qui inondent d'eau douce pendant la saison des pluies. Le parc abrite une variété d'espèces, dont quatre sont en voie de disparition, et en raison de ses propriétés physiques uniques, il est devenu une destination populaire pour les écotouristes.</Text>
+		</Replace>	
+		<!-- = Krakatoa = -->
+		<Replace Tag="LOC_FEATURE_KRAKATOA_NAME" Language="fr_FR">
+			  <Text>Krakatoa</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_KRAKATOA_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme un volcan. [ICON_Science] Science +2 pour les cases adjacentes. Fournit des rendements supplémentaires en cas d'éruption au coût de [ICON_Citizen] Population et dommages importants aux bâtiments et aménagements. Toujours actif.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_KRAKATOA_QUOTE" Language="fr_FR">
+			  <Text>"J'ai vu avec stupéfaction que l'île de Krakatoa était complètement brûlée et stérile sous nos yeux et qu'à quatre endroits elle lançait de gros morceaux de feu. "[NEWLINE]- Johann Wilhelm Vogel</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KRAKATOA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Krakatoa est une île volcanique indonésienne située entre les îles de Java et Sumatra. Le volcan a explosé violemment en août 1883 avec une force équivalente à 13 000 fois la puissance de la bombe nucléaire d'Hiroshima. L'explosion est largement considérée comme le son le plus fort jamais enregistré. L'éruption a détruit plus de la moitié de l'île et a été entendue dans certaines parties de l'Australie, à quelque 3 200 kilomètres de là. Quelques 37 000 personnes ont été tuées par l'éruption et les tsunamis qui ont suivi. Le volcan émet régulièrement de la lave depuis quatre-vingts ans, reconstruisant le cône à un rythme d'environ 5 mètres par an.</Text>
+		</Replace>	
+			<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_GENTLE_NAME" Language="fr_FR">
+			  <Text>Éruption Douce</Text>
+		</Replace>
+			<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_GENTLE_DESCRIPTION" Language="fr_FR">
+			  <Text>De la fumée s'échappe de la montagne de feu qu'on appelle le Krakatoa. Cela pourrait-il être un signe avant-coureur des choses à venir ?</Text>
+		</Replace>
+			<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_CATASTROPHIC_NAME" Language="fr_FR">
+			  <Text>Éruption catastrophique</Text>
+		</Replace>
+			<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_CATASTROPHIC_DESCRIPTION" Language="fr_FR">
+			  <Text>Nous avons dû abandonner nos dieux, car quand nous avons regardé vers le ciel bleu et demandé la pluie, c'était Krakatoa qui a répondu par le feu.</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_NAME" Language="fr_FR">
+			  <Text>Éruption mégacolossale</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_DESCRIPTION" Language="fr_FR">
+			  <Text>Maudite soit la terre sur laquelle Krakatoa jette son ombre puissante. Le feu et le rocher qu'il a forgés sur nous. Car on nous a enlevés de la terre pour les cendres que nous sommes... et aux cendres que nous sommes retournés.</Text>
+		</Replace>
+		<!-- = Mosi-oa-Tunya = -->
 		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_NAME" Language="fr_FR">
-		  <Text>Mosi-oa-Tunya</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2. Attrait +4 pour les cases adjacentes, au lieu des +2 habituels.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_QUOTE" Language="fr_FR">
-		  <Text>"Rampant avec effroi jusqu'au bord, j'ai regardé vers le bas dans un grand lotissement et j'ai vu qu'un ruisseau de mille mètres de large avait sauté sur une centaine de pieds, puis s'est soudainement comprimé dans un espace de quinze ou vingt mètres, le spectacle le plus merveilleux que j'aie jamais vu en Afrique. "[NEWLINE]- David Livingstone</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOSI_OA_TUNYA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>La Mosi-oa-Tunya, également connue sous le nom de chutes Victoria, est l'une des chutes d'eau les plus spectaculaires au monde. Le fleuve Zambèze, large de plus de 2 kilomètres, s'enfonce bruyamment dans une série de gorges de basalte et soulève un brouillard irisé visible à plus de 50 kilomètres de là. Son nom, qui se traduit par « La fumée qui tonnerre », vient du Kololo ou Lozi utilisé dans toute la Zambie et dans certaines parties du Zimbabwe, bien qu'il soit plus communément connu dans le monde entier sous le nom de Victoria Falls en raison du missionnaire et explorateur écossais David Livingstone, qui est peut-être le plus célèbre pour avoir donné son nom à une cascade qui en avait déjà une.</Text>
-	</Replace>	
-	
+			  <Text>Mosi-oa-Tunya</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2. Attrait +4 pour les cases adjacentes, au lieu des +2 habituels.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_QUOTE" Language="fr_FR">
+			  <Text>"Rampant avec effroi jusqu'au bord, j'ai regardé vers le bas dans un grand lotissement et j'ai vu qu'un ruisseau de mille mètres de large avait sauté sur une centaine de pieds, puis s'est soudainement comprimé dans un espace de quinze ou vingt mètres, le spectacle le plus merveilleux que j'aie jamais vu en Afrique. "[NEWLINE]- David Livingstone</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOSI_OA_TUNYA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>La Mosi-oa-Tunya, également connue sous le nom de chutes Victoria, est l'une des chutes d'eau les plus spectaculaires au monde. Le fleuve Zambèze, large de plus de 2 kilomètres, s'enfonce bruyamment dans une série de gorges de basalte et soulève un brouillard irisé visible à plus de 50 kilomètres de là. Son nom, qui se traduit par « La fumée qui tonnerre », vient du Kololo ou Lozi utilisé dans toute la Zambie et dans certaines parties du Zimbabwe, bien qu'il soit plus communément connu dans le monde entier sous le nom de Victoria Falls en raison du missionnaire et explorateur écossais David Livingstone, qui est peut-être le plus célèbre pour avoir donné son nom à une cascade qui en avait déjà une.</Text>
+		</Replace>	
+		<!-- = Motlatse Canyon = -->
 		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_NAME" Language="fr_FR">
-		  <Text>Motlatse Canyon</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable de 4 cases. [ICON_CULTURE] Culture +1 et [ICON_FAITH] Foi +1.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_QUOTE" Language="fr_FR">
-		  <Text>"Je crois que l'Afrique du Sud est le plus bel endroit du monde. Certes, je suis partial, mais je pense que même les critiques les plus scrupuleux conviendraient que nous avons la chance d'avoir une terre vraiment merveilleuse."[NEWLINE]- Nelson Mandela</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Le canyon de Motlatse est une caractéristique naturelle importante de l'Afrique du Sud, situé à Mpumalanga et formant la partie nord de l'escarpement du Drakfrsberg. Situé dans la réserve naturelle de Blyde River Canyon, il mesure 25 kilomètres de long et a une profondeur moyenne d'environ 750 mètres, arborant certaines des falaises abruptes les plus profondes de tous les canyons de la planète.</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
-		  <Text>Bien qu'il soit difficile de comparer les canyons du monde entier, le canyon de Blyde River est l'un des plus grands canyons de la planète, et c'est peut-être le plus grand canyon vert en raison de son feuillage subtropical luxuriant. Elle abrite une grande diversité de flore et de faune, y compris de nombreuses espèces de poissons et d'antilopes, ainsi que des hippopotames, des crocodiles et toutes les espèces de primates présentes en Afrique du Sud, ce qui en fait une région touristique très prisée.</Text>
-	</Replace>	
-	
+			  <Text>Motlatse Canyon</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable de 4 cases. [ICON_CULTURE] Culture +1 et [ICON_FAITH] Foi +1.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_QUOTE" Language="fr_FR">
+			  <Text>"Je crois que l'Afrique du Sud est le plus bel endroit du monde. Certes, je suis partial, mais je pense que même les critiques les plus scrupuleux conviendraient que nous avons la chance d'avoir une terre vraiment merveilleuse."[NEWLINE]- Nelson Mandela</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Le canyon de Motlatse est une caractéristique naturelle importante de l'Afrique du Sud, situé à Mpumalanga et formant la partie nord de l'escarpement du Drakfrsberg. Situé dans la réserve naturelle de Blyde River Canyon, il mesure 25 kilomètres de long et a une profondeur moyenne d'environ 750 mètres, arborant certaines des falaises abruptes les plus profondes de tous les canyons de la planète.</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
+			  <Text>Bien qu'il soit difficile de comparer les canyons du monde entier, le canyon de Blyde River est l'un des plus grands canyons de la planète, et c'est peut-être le plus grand canyon vert en raison de son feuillage subtropical luxuriant. Elle abrite une grande diversité de flore et de faune, y compris de nombreuses espèces de poissons et d'antilopes, ainsi que des hippopotames, des crocodiles et toutes les espèces de primates présentes en Afrique du Sud, ce qui en fait une région touristique très prisée.</Text>
+		</Replace>	
+		<!-- = Namib Sand Sea = -->
 		<Replace Tag="LOC_FEATURE_NAMIB_NAME" Language="fr_FR">
-		  <Text>Désert de Namib</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle de 3 cases. [ICON_CULTURE] Culture +2, [ICON_PRODUCTION] Production +2, et [ICON_GOLD] Or +2. Les unités de Reconnaissance qui pénètrent le Désert de Namib gagnent +1 PM pour le reste de la partie.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="fr_FR">
-		  <Text>"J'aime entendre le son des dunes de sable, je fais partie de ceux qui perçoivent le rythme d'un paysage comme enregistré dans de nombreuses peintures, je fais partie des milliers qui savent que je suis enfin chez moi." [NEWLINE]- Mvula Ya Nangolo</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_NAMIB_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Le Namib est un désert côtier de l'Afrique australe, dont le nom vient de Nama et signifie « vaste endroit ». Le Namib s'étend sur plus de 2000 km le long des côtes atlantiques de l'Angola, la Namibie et l'Afrique du Sud. Ayant subi des conditions arides ou semi-arides pendant environ 55 à 80 millions d'années, le Namib est peut-être le plus vieux désert du monde, contenant certaines des régions les plus arides du monde. En raison de son aridité, le Namib est presque totalement inhabité, à l'exception d'un petit nombre de colonies dispersées qui ont servi de postes de traite pour les commerçants et les missionnaires qui traversent le désert.</Text>
-	</Replace>	
-	<Replace Tag="LOC_ABILITY_NAMIB_BUFF_NAME" Language="fr_FR">
-		  <Text>Nomades du Désert</Text>
-	</Replace>
-	<Replace Tag="LOC_ABILITY_NAMIB_BUFF_DESCRIPTION" Language="fr_FR">
-		  <Text>+1 POM additionnel</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_GIBRALTAR_NAME" Language="fr_FR">
-		  <Text>Rocher de Gibraltar</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_GIBRALTAR_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case. [ICON_FOOD] Nourriture +1 et [ICON_GOLD] Or +1 pour les cases adjacentes.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_GIBRALTAR_QUOTE" Language="fr_FR">
-		  <Text>"Regardez autour de vous, mes garçons, et voyez comme le Rocher est beau à la lumière du feu glorieux."[NEWLINE]- George Augustus Eliott</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GIBRALTAR_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Gibraltar est une péninsule contenant une formation rocheuse remarquable à l'embouchure de la mer Méditerranée. Capturée par les Anglais et les Hollandais aux Espagnols en 1704 et cédée à l'Angleterre en 1713, Gibraltar est depuis une possession britannique (au grand dam de l'Espagne, qui veut le récupérer). Gardant l'entrée de l'Atlantique depuis la Méditerranée, Gibraltar est une importante base navale britannique depuis trois cents ans. La majeure partie de Gibraltar est recouverte par le « Rocher », une immense formation de schiste, de grès et de calcaire poussée par la puissance inimaginable de la tectonique des plaques. Le Rocher s'élève à environ 430 mètres de haut. Gibraltar était autrefois une fortification massive permettant à la Grande-Bretagne de dominer l'étroit passage Méditerranée-Atlantique, mais aujourd'hui l'île est plus une réserve naturelle et une destination touristique qu'une base militaire.</Text>
-	</Replace>	
-
-	
-	
-	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_NAME" Language="fr_FR">
-		  <Text>Old Faithful</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle d'une case. [ICON_Science] Science +3, [ICON_FOOD] Nourriture +2, [ICON_Faith] Foi +1, et [ICON_GOLD] Or +1. Bonus de proximité majeur pour les campus.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="fr_FR">
-		  <Text>Il a craché à intervalles réguliers neuf fois pendant notre séjour, les colonnes d'eau bouillante étant projetées de quatre-vingt-dix à cent vingt pieds à chaque décharge, ce qui a duré de quinze à vingt minutes. Nous lui avons donné le nom de Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OLD_FAITHFUL_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Old Faithful est un geyser du parc national de Yellowstone, dans le Wyoming, aux États-Unis. Vu pour la première fois par les Européens en 1870 (et par les indigènes environ 10 000 ans auparavant), Old Faithful fut ainsi nommé en raison de la régularité de son éruption. Le geyser tire une colonne d'eau bouillante à une hauteur d'environ 30-50 mètres toutes les 60-90 minutes (intervalle déterminé par la férocité de l'éruption précédente). Les geysers surviennent lorsque l'eau souterraine touche du magma (roche en fusion). L'eau est instantanément transformée en vapeur, qui se précipite dans le geyser disponible le plus proche à une pression extrêmement élevée. Old Faithful et les 250 autres geysers de Yellowstone accueillent environ trois millions de visiteurs chaque année.</Text>
-	</Replace>	
-	<Replace Tag="LOC_DISTRICT_OLD_FAITHFUL_Science" Language="fr_FR">
-			<Text>+{1_num} [ICON_Science] Science pour chaque Old Faithful.</Text>
-	</Replace>		
-	
+			  <Text>Désert de Namib</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle de 3 cases. [ICON_CULTURE] Culture +2, [ICON_PRODUCTION] Production +2 et [ICON_GOLD] Or +2. Les unités de Reconnaissance qui pénètrent le Désert de Namib gagnent +1 PM pour le reste de la partie.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="fr_FR">
+			  <Text>"J'aime entendre le son des dunes de sable, je fais partie de ceux qui perçoivent le rythme d'un paysage comme enregistré dans de nombreuses peintures, je fais partie des milliers qui savent que je suis enfin chez moi." [NEWLINE]- Mvula Ya Nangolo</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_NAMIB_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Le Namib est un désert côtier de l'Afrique australe, dont le nom vient de Nama et signifie « vaste endroit ». Le Namib s'étend sur plus de 2000 km le long des côtes atlantiques de l'Angola, la Namibie et l'Afrique du Sud. Ayant subi des conditions arides ou semi-arides pendant environ 55 à 80 millions d'années, le Namib est peut-être le plus vieux désert du monde, contenant certaines des régions les plus arides du monde. En raison de son aridité, le Namib est presque totalement inhabité, à l'exception d'un petit nombre de colonies dispersées qui ont servi de postes de traite pour les commerçants et les missionnaires qui traversent le désert.</Text>
+		</Replace>	
+		<Replace Tag="LOC_ABILITY_NAMIB_BUFF_NAME" Language="fr_FR">
+			  <Text>Nomades du Désert</Text>
+		</Replace>
+		<Replace Tag="LOC_ABILITY_NAMIB_BUFF_DESCRIPTION" Language="fr_FR">
+			  <Text>Nomades du désert : [ICON_Movement] PM +1</Text>
+		</Replace>	
+		<!-- = Rock of Gibraltar = -->
+		<Replace Tag="LOC_FEATURE_GIBRALTAR_NAME" Language="fr_FR">
+			  <Text>Rocher de Gibraltar</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_GIBRALTAR_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case. [ICON_FOOD] Nourriture +1 et [ICON_GOLD] Or +1 pour les cases adjacentes.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_GIBRALTAR_QUOTE" Language="fr_FR">
+			  <Text>"Regardez autour de vous, mes garçons, et voyez comme le Rocher est beau à la lumière du feu glorieux."[NEWLINE]- George Augustus Eliott</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GIBRALTAR_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Gibraltar est une péninsule contenant une formation rocheuse remarquable à l'embouchure de la mer Méditerranée. Capturée par les Anglais et les Hollandais aux Espagnols en 1704 et cédée à l'Angleterre en 1713, Gibraltar est depuis une possession britannique (au grand dam de l'Espagne, qui veut le récupérer). Gardant l'entrée de l'Atlantique depuis la Méditerranée, Gibraltar est une importante base navale britannique depuis trois cents ans. La majeure partie de Gibraltar est recouverte par le « Rocher », une immense formation de schiste, de grès et de calcaire poussée par la puissance inimaginable de la tectonique des plaques. Le Rocher s'élève à environ 430 mètres de haut. Gibraltar était autrefois une fortification massive permettant à la Grande-Bretagne de dominer l'étroit passage Méditerranée-Atlantique, mais aujourd'hui l'île est plus une réserve naturelle et une destination touristique qu'une base militaire.</Text>
+		</Replace>	
+		<!-- = Old Faithful = -->	
+		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_NAME" Language="fr_FR">
+			  <Text>Old Faithful</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle d'une case. [ICON_Science] Science +3, [ICON_FOOD] Nourriture +2, [ICON_Faith] Foi +1 et [ICON_GOLD] Or +1. Bonus de proximité majeur pour les campus.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="fr_FR">
+			  <Text>Il a craché à intervalles réguliers neuf fois pendant notre séjour, les colonnes d'eau bouillante étant projetées de quatre-vingt-dix à cent vingt pieds à chaque décharge, ce qui a duré de quinze à vingt minutes. Nous lui avons donné le nom de Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OLD_FAITHFUL_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Old Faithful est un geyser du parc national de Yellowstone, dans le Wyoming, aux États-Unis. Vu pour la première fois par les Européens en 1870 (et par les indigènes environ 10 000 ans auparavant), Old Faithful fut ainsi nommé en raison de la régularité de son éruption. Le geyser tire une colonne d'eau bouillante à une hauteur d'environ 30-50 mètres toutes les 60-90 minutes (intervalle déterminé par la férocité de l'éruption précédente). Les geysers surviennent lorsque l'eau souterraine touche du magma (roche en fusion). L'eau est instantanément transformée en vapeur, qui se précipite dans le geyser disponible le plus proche à une pression extrêmement élevée. Old Faithful et les 250 autres geysers de Yellowstone accueillent environ trois millions de visiteurs chaque année.</Text>
+		</Replace>	
+		<Replace Tag="LOC_DISTRICT_OLD_FAITHFUL_Science" Language="fr_FR">
+			  <Text>+{1_num} [ICON_Science] Science pour chaque Old Faithful.</Text>
+		</Replace>		
+		<!-- = Lakes of Ounianga = -->
 		<Replace Tag="LOC_FEATURE_OUNIANGA_NAME" Language="fr_FR">
-		  <Text>Lacs d'Ounianga</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="fr_FR">
-		  <Text>merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_CULTURE] Culture +2, et [ICON_GOLD] Or +2. [ICON_FOOD] Nourriture +1 pour les cases adjacentes.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="fr_FR">
-		  <Text>"Au commencement, le langage du désert était l'herbe qui fleurissait contre le mur du vent, les grands palmiers qui se balançaient au moment des semailles et les cendres transportées par l'air jusqu'à l'accueil bleu du sable chaud. Elle a été notre première fontaine, notre mère, qui nous a soutenus, puis nous a livrés à l'âge des villes d'attente."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OUNIANGA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Les lacs d'Ounianga sont une série de dix-huit lacs interconnectés dans la région hyper-aride Ennedi du désert du Sahara, occupant un bassin dans les montagnes du Tibesti occidental et frnedi oriental. Il constitue un paysage naturel exceptionnel d'une grande beauté aux couleurs et aux formes saisissantes. Les lacs salins, hyper salins et d'eau douce sont alimentés par les eaux souterraines et se trouvent en deux groupes à 40 kilomètres l'un de l'autre. Ounianga Kebir comprend quatre lacs, dont le plus grand, Yoan, couvre une superficie de 358 hectares et a une profondeur de 27 mètres. Ses eaux très salines ne nourrissent que les algues et certains micro-organismes. Le deuxième groupe, Ounianga Serir, comprend quatorze lacs séparés par des dunes de sable. Les roseaux flottants couvrent presque la moitié de la surface de ces lacs, réduisant ainsi l'évaporation. Le lac Teli a la plus grande superficie, mais sa profondeur est inférieure à 10 mètres. Avec leur eau douce de grande qualité, certains de ces lacs abritent une faune aquatique, en particulier des poissons.</Text>
-	</Replace>	
-	
+			  <Text>Lacs d'Ounianga</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_CULTURE] Culture +2 et [ICON_GOLD] Or +2. [ICON_FOOD] Nourriture +1 pour les cases adjacentes.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="fr_FR">
+			  <Text>"Au commencement, le langage du désert était l'herbe qui fleurissait contre le mur du vent, les grands palmiers qui se balançaient au moment des semailles et les cendres transportées par l'air jusqu'à l'accueil bleu du sable chaud. Elle a été notre première fontaine, notre mère, qui nous a soutenus, puis nous a livrés à l'âge des villes d'attente."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OUNIANGA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Les lacs d'Ounianga sont une série de dix-huit lacs interconnectés dans la région hyper-aride Ennedi du désert du Sahara, occupant un bassin dans les montagnes du Tibesti occidental et frnedi oriental. Il constitue un paysage naturel exceptionnel d'une grande beauté aux couleurs et aux formes saisissantes. Les lacs salins, hyper salins et d'eau douce sont alimentés par les eaux souterraines et se trouvent en deux groupes à 40 kilomètres l'un de l'autre. Ounianga Kebir comprend quatre lacs, dont le plus grand, Yoan, couvre une superficie de 358 hectares et a une profondeur de 27 mètres. Ses eaux très salines ne nourrissent que les algues et certains micro-organismes. Le deuxième groupe, Ounianga Serir, comprend quatorze lacs séparés par des dunes de sable. Les roseaux flottants couvrent presque la moitié de la surface de ces lacs, réduisant ainsi l'évaporation. Le lac Teli a la plus grande superficie, mais sa profondeur est inférieure à 10 mètres. Avec leur eau douce de grande qualité, certains de ces lacs abritent une faune aquatique, en particulier des poissons.</Text>
+		</Replace>	
+		<!-- = Salar de Uyuni = -->
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_NAME" Language="fr_FR">
-		  <Text>Salar d'Uyuni</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle de 4 cases. [ICON_Science] Science +2, [ICON_PRODUCTION] Production +2, et [ICON_GOLD] Or +4. Bonus de proximité majeur pour les plateformes commerciales.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="fr_FR">
-		  <Text>"J'ai frissonné dans ces solitudes quand j'ai entendu la voix du sel dans le désert."[NEWLINE]- Pablo Neruda</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SALAR_DE_UYUNI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Située au sud-ouest de la Bolivie, près de la frontière chilienne et du désert d'Atacama, se trouve Salar de Uyuni, la plus grande plaine saline du monde avec 10 582 kilomètres carrés, soit environ 100 fois la taille des plaines salines de Bonneville aux États-Unis. Le Salar a été formé à la suite de transformations entre plusieurs lacs préhistoriques. Recouvert de quelques mètres de croûte salée, il a une planéité extraordinaire avec des variations d'altitude moyennes de moins d'un mètre sur toute la zone du Salar. Sa grande surface, son ciel dégagé et sa planéité exceptionnelle en font un objet idéal pour calibrer les altimètres des satellites d'observation de la Terre.</Text>
-	</Replace>	
-	<Replace Tag="LOC_DISTRICT_SALAR_DE_UYUNI_GOLD" Language="fr_FR">
-			<Text>+{1_num} [ICON_GOLD] Gold pour chaque Salar d'Uyuni.</Text>
-	</Replace>
-	
-	
-	<Replace Tag="LOC_FEATURE_SINAI_NAME" Language="fr_FR">
-		  <Text>Mont Sinaï</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_SINAI_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle infranchissable d'une case, prenant la forme d'une montagne. [ICON_Faith] Foi +2 pour les cases adjacentes. Les unités religieuses se trouvant sur une case adjacente au mont Sinaï obtiennent [ICON_Strenght] +15 de puissance de combat lors d'un combat théologique.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_SINAI_QUOTE" Language="fr_FR">
-		  <Text>"Lorsque l'Éternel eut achevé de parler à Moïse sur le mont Sinaï, il lui donna les deux tables de la loi, les tables de pierre écrites du doigt de Dieu."[NEWLINE]- Exode 31:18</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SINAI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Situé sur la péninsule du Sinaï en Égypte, le mont Sinaï est l'un des sites sacrés les plus vénérés reconnus par les adeptes du judaïsme, du christianisme et de l' On pense que le mont Sinaï est l'endroit où Moïse a reçu les Dix Commandements de Dieu pendant l'exode des Israélites d'Egypte, faisant du sommet un site important pour les pèlerins du monde entier.</Text>
-	</Replace>	
-	<Replace Tag="LOC_ABILITY_SINAI_BUFF_NAME" Language="fr_FR">
-		  <Text>Dix Commandements</Text>
-	</Replace>
-	<Replace Tag="LOC_ABILITY_SINAI_BUFF_DESCRIPTION" Language="fr_FR">
-		  <Text> [ICON_Strenght] +15 de puissance de combat lors d'un combat théologique.</Text>
-	</Replace>	
-	
-	
-	
-	<Replace Tag="LOC_FEATURE_SRI_PADA_NAME" Language="fr_FR">
-		  <Text>Pic d'Adam</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_SRI_PADA_DESCRIPTION" Language="fr_FR">
-		  <Text>merveille naturelle infranchissable d'une case, prenant la forme d'une montagne. [ICON_FOOD] Nourriture +1 et [ICON_Faith] Foi +1 pour les cases adjacentes.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_SRI_PADA_QUOTE" Language="fr_FR">
-		  <Text>"Un spectacle extraordinairement merveilleux, doté d'une splendeur suprême."[NEWLINE]- Le Mahabharata</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SRI_PADA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Surplombant le Sri Lanka, le Pic d'Adam (ou Sri Pada) est un grand sommet de montagne avec une forme inhabituellement conique qui est considéré comme sacré par un certain nombre de religions pour l'empreinte qu'on trouve à son sommet. L'empreinte, une grande dépression trouvée dans une formation rocheuse sur le sommet, a été attribuée à Bouddha, Shiva et le personnage biblique Adam, conduisant à une révolte parmi les adeptes du bouddhisme, de l'hindouisme et de l'islam. Chaque année, des milliers de pèlerins montent pendant des heures la montagne pour rendre hommage au lieu saint.</Text>
-	</Replace>	
-	
+			  <Text>Salar d'Uyuni</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle de 4 cases. [ICON_Science] Science +2, [ICON_PRODUCTION] Production +2 et [ICON_GOLD] Or +4. Bonus de proximité majeur pour les plateformes commerciales.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="fr_FR">
+			  <Text>"J'ai frissonné dans ces solitudes quand j'ai entendu la voix du sel dans le désert."[NEWLINE]- Pablo Neruda</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SALAR_DE_UYUNI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Située au sud-ouest de la Bolivie, près de la frontière chilienne et du désert d'Atacama, se trouve Salar de Uyuni, la plus grande plaine saline du monde avec 10 582 kilomètres carrés, soit environ 100 fois la taille des plaines salines de Bonneville aux États-Unis. Le Salar a été formé à la suite de transformations entre plusieurs lacs préhistoriques. Recouvert de quelques mètres de croûte salée, il a une planéité extraordinaire avec des variations d'altitude moyennes de moins d'un mètre sur toute la zone du Salar. Sa grande surface, son ciel dégagé et sa planéité exceptionnelle en font un objet idéal pour calibrer les altimètres des satellites d'observation de la Terre.</Text>
+		</Replace>	
+		<Replace Tag="LOC_DISTRICT_SALAR_DE_UYUNI_GOLD" Language="fr_FR">
+			  <Text>+{1_num} [ICON_GOLD] Gold pour chaque Salar d'Uyuni.</Text>
+		</Replace>
+		<!-- = Mount Sinai = -->
+		<Replace Tag="LOC_FEATURE_SINAI_NAME" Language="fr_FR">
+			  <Text>Mont Sinaï</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SINAI_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_Faith] Foi +2 pour les cases adjacentes. Les unités religieuses se trouvant sur une case adjacente au Mont Sinaï obtiennent +15 [ICON_Strenght] Puissance de combat lors d'un combat théologique.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_SINAI_QUOTE" Language="fr_FR">
+			  <Text>"Lorsque l'Éternel eut achevé de parler à Moïse sur le mont Sinaï, il lui donna les deux tables de la loi, les tables de pierre écrites du doigt de Dieu."[NEWLINE]- Exode 31:18</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SINAI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Situé sur la péninsule du Sinaï en Égypte, le mont Sinaï est l'un des sites sacrés les plus vénérés reconnus par les adeptes du judaïsme, du christianisme et de l' On pense que le mont Sinaï est l'endroit où Moïse a reçu les Dix Commandements de Dieu pendant l'exode des Israélites d'Egypte, faisant du sommet un site important pour les pèlerins du monde entier.</Text>
+		</Replace>	
+		<Replace Tag="LOC_ABILITY_SINAI_BUFF_NAME" Language="fr_FR">
+			  <Text>Dix Commandements</Text>
+		</Replace>
+		<Replace Tag="LOC_ABILITY_SINAI_BUFF_DESCRIPTION" Language="fr_FR">
+			  <Text>Dix Commandements : [ICON_Strength] Puissance de combat +15 lors d'un combat théologique.</Text>
+		</Replace>	
+		<!-- = Sri Pada = -->	
+		<Replace Tag="LOC_FEATURE_SRI_PADA_NAME" Language="fr_FR">
+			  <Text>Pic d'Adam</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SRI_PADA_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_FOOD] Nourriture +1 et [ICON_Faith] Foi +1 pour les cases adjacentes.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_SRI_PADA_QUOTE" Language="fr_FR">
+			  <Text>"Un spectacle extraordinairement merveilleux, doté d'une splendeur suprême."[NEWLINE]- Le Mahabharata</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SRI_PADA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Surplombant le Sri Lanka, le Pic d'Adam (ou Sri Pada) est un grand sommet de montagne avec une forme inhabituellement conique qui est considéré comme sacré par un certain nombre de religions pour l'empreinte qu'on trouve à son sommet. L'empreinte, une grande dépression trouvée dans une formation rocheuse sur le sommet, a été attribuée à Bouddha, Shiva et le personnage biblique Adam, conduisant à une révolte parmi les adeptes du bouddhisme, de l'hindouisme et de l'islam. Chaque année, des milliers de pèlerins montent pendant des heures la montagne pour rendre hommage au lieu saint.</Text>
+		</Replace>	
+		<!-- = Vredefort Dome = -->
 		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_NAME" Language="fr_FR">
-		  <Text>Dôme de Vredefort</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_DESCRIPTION" Language="fr_FR">
-		  <Text>Merveille naturelle de 2 cases. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +1, [ICON_Science] Science +2, et [ICON_CULTURE] Culture +1.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_QUOTE" Language="fr_FR">
-		  <Text>"Lorsque les géologues ont parcouru pour la première fois le spectaculaire cercle de collines qui chevauchent la rivière Vaal au nord de Vredefort il y a près de 150 ans, ils ont immédiatement reconnu que les roches inhabituellement brisées et inclinées témoignaient d'un événement exceptionnellement violent dans un passé lointain."[NEWLINE]- Wolf Uwe Reimold</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_VREDEFORT_DOME_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Le dôme de Vredefort est le plus grand cratère d'impact vérifié sur Terre, avec plus de 300 kilomètres de diamètre au moment de sa formation. Ce qui en reste se trouve dans l'actuelle province de l'État libre d'Afrique du Sud, où l'agriculture cultivée domine le paysage. On estime que le cratère a plus de 2 milliards d'années et que l'impact a eu lieu au Paléoprotérozoïque, ce qui en fait le deuxième plus ancien cratère connu sur Terre.</Text>
-	</Replace>	
-	
-	<Replace Tag="LOC_FEATURE_WULINGYUAN_NAME" Language="fr_FR">
-		  <Text>Wulingyuan</Text>
-	</Replace>
-	<Replace Tag="LOC_FEATURE_WULINGYUAN_DESCRIPTION" Language="fr_FR">
-		  <Text>merveille naturelle infranchissable de 2 cases. [ICON_CULTURE] Culture +1 pour les cases adjacentes.</Text>
-	</Replace>	
-	<Replace Tag="LOC_FEATURE_WULINGYUAN_QUOTE" Language="fr_FR">
-		  <Text>"De dix mille vallées les arbres touchent le ciel, sur mille sommets les coucous appellent, et, après une nuit de pluie de montagne, de chaque sommet viennent des centaines de cascades de soie."[NEWLINE]- Wang Wei</Text>
-	</Replace>	
-	<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_WULINGYUAN_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
-		  <Text>Wulingyuan est un site pittoresque et historique du centre-sud de la Chine. Il est connu pour plus de 3000 piliers et sommets en grès quartzite, dont beaucoup dépassent 200 mètres de haut, ainsi que des ravins, des gorges, des piscines, des lacs, des rivières et des cascades. Il comprend 40 grottes et deux ponts naturels, Xianrenqiao (Pont des Immortels) et Tianqiashengkong (Pont à travers le ciel).</Text>
-	</Replace>	
-	
-	
+			  <Text>Dôme de Vredefort</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle de 2 cases. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +1, [ICON_Science] Science +2 et [ICON_CULTURE] Culture +1.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_QUOTE" Language="fr_FR">
+			  <Text>"Lorsque les géologues ont parcouru pour la première fois le spectaculaire cercle de collines qui chevauchent la rivière Vaal au nord de Vredefort il y a près de 150 ans, ils ont immédiatement reconnu que les roches inhabituellement brisées et inclinées témoignaient d'un événement exceptionnellement violent dans un passé lointain."[NEWLINE]- Wolf Uwe Reimold</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_VREDEFORT_DOME_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Le dôme de Vredefort est le plus grand cratère d'impact vérifié sur Terre, avec plus de 300 kilomètres de diamètre au moment de sa formation. Ce qui en reste se trouve dans l'actuelle province de l'État libre d'Afrique du Sud, où l'agriculture cultivée domine le paysage. On estime que le cratère a plus de 2 milliards d'années et que l'impact a eu lieu au Paléoprotérozoïque, ce qui en fait le deuxième plus ancien cratère connu sur Terre.</Text>
+		</Replace>	
+		<!-- = Wulingyuan = -->
+		<Replace Tag="LOC_FEATURE_WULINGYUAN_NAME" Language="fr_FR">
+			  <Text>Wulingyuan</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_WULINGYUAN_DESCRIPTION" Language="fr_FR">
+			  <Text>Merveille naturelle infranchissable de 2 cases. [ICON_CULTURE] Culture +1 pour les cases adjacentes.</Text>
+		</Replace>	
+		<Replace Tag="LOC_FEATURE_WULINGYUAN_QUOTE" Language="fr_FR">
+			  <Text>"De dix mille vallées les arbres touchent le ciel, sur mille sommets les coucous appellent, et, après une nuit de pluie de montagne, de chaque sommet viennent des centaines de cascades de soie."[NEWLINE]- Wang Wei</Text>
+		</Replace>	
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_WULINGYUAN_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
+			  <Text>Wulingyuan est un site pittoresque et historique du centre-sud de la Chine. Il est connu pour plus de 3000 piliers et sommets en grès quartzite, dont beaucoup dépassent 200 mètres de haut, ainsi que des ravins, des gorges, des piscines, des lacs, des rivières et des cascades. Il comprend 40 grottes et deux ponts naturels, Xianrenqiao (Pont des Immortels) et Tianqiashengkong (Pont à travers le ciel).</Text>
+		</Replace>
 	</LocalizedText>
-
 </GameData>
