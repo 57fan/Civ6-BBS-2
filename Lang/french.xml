@@ -4,8 +4,9 @@
 
 		<!-- https://github.com/57fan/Civ6-BBS-2 -->
 		
-		<!-- Auteur : Ybanca -->
-		<!-- With the help of CivFr players, LordKnt -->
+		<!-- Author : Ybanca -->
+		<!-- With the help of Apeul, Chuck, CivFr players, Connavar, Gloen, LordKnt, platypus -->
+		<!-- Special Thanks to Priz and ZhenjaMax -->
 
 		<!-- === MAP SIZES === -->
 		<Replace Tag="LOC_MAPSIZE_ENORMOUS_NAME" Language="fr_FR">
@@ -37,19 +38,19 @@
 			<Text>Paramètres d'origine.</Text>
 		</Replace>
 		<Replace Tag="BBS_RIDGE_LESS_NAME" Language="fr_FR">
-			<Text>Petits Goulets</Text>
+			<Text>Petits goulets</Text>
 		</Replace>
 		<Replace Tag="BBS_RIDGE_LESS_DESC" Language="fr_FR">
 			<Text>Ajoute de petits goulets dans les chaînes de montagnes.</Text>
 		</Replace>
 		<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="fr_FR">
-			<Text>Grandes Ouvertures</Text>
+			<Text>Grandes ouvertures</Text>
 		</Replace>
 		<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="fr_FR">
 			<Text>Ajoute des passages plus larges dans la chaîne de montagnes.</Text>
 		</Replace>
 		<Replace Tag="BBS_RIDGE_NONE_NAME" Language="fr_FR">
-			<Text>Terre Plate</Text>
+			<Text>Terre plate</Text>
 		</Replace>
 		<Replace Tag="BBS_RIDGE_NONE_DESC" Language="fr_FR">
 			<Text>Les chaînes de montagnes sont fortement érodées pour créer une carte beaucoup plus plate avec beaucoup de collines.</Text>
@@ -92,7 +93,7 @@
 			 <Text>50% de ressources stratégiques supplémentaires.</Text>
 		</Replace>
 		<Replace Tag="BBS_SRESOURCES_GARANTEED_NAME" Language="fr_FR">
-			 <Text>Spawn Garanti</Text>
+			 <Text>Spawn garanti</Text>
 		</Replace>
 		<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="fr_FR">
 			 <Text>La présence de toutes les ressources stratégiques dans un rayon de 5 case autour du spawn est presque garantie.</Text>
@@ -353,7 +354,7 @@
 			  <Text>Barringer Crater</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case. [ICON_SCIENCE] Science +3, [ICON_FOOD] Nourriture +2 et [ICON_GOLD] Or +3. [ICON_PRODUCTION] Production +10% pour les projets de course à l'espace.</Text>
+			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2,  [ICON_GOLD] Or +3 et [ICON_SCIENCE] Science +3. [ICON_PRODUCTION] Production +10% pour les projets de course à l'espace.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_QUOTE" Language="fr_FR">
 			  <Text>"Aujourd'hui nous pouvons prouver que ce cratère est dû à la collision d'un corps extra-terrestres avec la Terre, surement un petit astéroïde de nature métallique."[NEWLINE]- Daniel Barringer</Text>
@@ -361,12 +362,13 @@
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BARRINGER_CRATER_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Le Barringer Crater est un gigantesque impact de météorite localisé en Arizona, aux États-Unis. Le cratère a un diamètre de 1 200 mètres, et les scientifiques croient qu’il a été créé il y a 50 000 ans quand une météorite composées de nickel et de fer pesant 160 000 tonnes et bougeant à 44 000 kilomètres par heure.</Text>
 		</Replace>	
+		
 		<!-- = Bioluminescent Bay = -->
 		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_NAME" Language="fr_FR">
 			  <Text>Baie bioluminescente</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case. [ICON_SCIENCE] Science +3, [ICON_FOOD] Nourriture +1 et [ICON_GOLD] Or +1. [ICON_GOLD] Or +1 sur les bateaux de pêche si vous possédez cette case.</Text>
+			  <Text>Merveille naturelle d'une case.[ICON_FOOD] Nourriture +1, [ICON_GOLD] Or +1 et [ICON_SCIENCE] Science +3. [ICON_GOLD] Or +1 sur les bateaux de pêche si vous possédez cette case.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE" Language="fr_FR">
 			  <Text>“L’émission de lumière du feu, des éclairs, des étoiles ou des êtres vivants attire toujours l’attention de tout être humain. Dans le cas de la baie luminescente, elle émet une étrange lueur, quelque chose de magique et mystèrieux."[NEWLINE]- Cassius Stevani</Text>
@@ -377,6 +379,7 @@
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
 			  <Text>Une combinaison de facteurs crée les conditions nécessaires à la bioluminescence : les mangroves rouges entourent l'eau, l'absence totale de développement moderne autour de la baie, l'eau est fraîche et profonde, et un petit chenal vers l'océan retient les dinoflagellés dans la baie. Ce petit chenal a été créé artificiellement, à la suite des tentatives des occupants des navires espagnols d'étouffer la baie de l'océan. Les Espagnols croyaient que la bioluminescence qu'ils avaient rencontrée lors de leur première exploration de la région était l'œuvre du diable et essayaient d'empêcher l'eau de mer de traverser la baie en jetant d'énormes rochers dans le canal. Les Espagnols n'ont réussi qu'à préserver et à accroître la luminescence de la baie désormais isolée.</Text>
 		</Replace>	
+
 		<!-- = Cerro de Potosi = -->
 		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_NAME" Language="fr_FR">
 			  <Text>Cerro de Potosi</Text>
@@ -390,12 +393,13 @@
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_CERRO_DE_POTOSI_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Localisée dans le sud de la Bolivie, la montagne de Potosi a produit la quasi-totalité de l'argent extrait par les Espagnols à l'époque impériale. Une fois extrait de la montagne, l'argent était transporté jusqu'à la côte à dos de lamas et de mules, où il était chargé à bord de bateaux à trésors à destination de l'Europe. Pas loin de 41 000 tonnes d'argent pur ont été minées sur 200 ans, dont 8 200 qui revinrent directement à la couronne espagnole. Après 1800, la plupart des mines d'argent sont épuisées, mais l'exploitation de la montagne continue, non plus pour l'argent mais pour l'étain qu'elle contient.</Text>
 		</Replace>	
+
 		<!-- = Dallol = -->
 		<Replace Tag="LOC_FEATURE_DALLOL_NAME" Language="fr_FR">
 			  <Text>Dallol</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case. [ICON_Science] Science +2, [ICON_PRODUCTION] Production +2, [ICON_FOOD] Nourriture +2 et [ICON_GOLD] Or +1.</Text>
+			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +1 et [ICON_Science] Science +2.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="fr_FR">
 			  <Text>"Là, tout est enfer, ténèbres, gouffre sulfureux, incendie, bouillonnement, infection, consomption"[NEWLINE]- William Shakespeare, King Lear</Text>
@@ -405,7 +409,8 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
 			  <Text>De nombreuses sources chaudes évacuent ici de la saumure et du liquide acide. De petits geysers temporaires répandus produisent des cônes de sel. Les gisements de Dallol comprennent d'importantes quantités de potasse trouvées directement à la surface. Le terme 'Dallol' a été inventé par le peuple afar et signifie 'dissolution' ou 'désintégration', décrivant un paysage d'étangs acides verts (pH inférieur à 1) et de plaines désertiques d'oxyde de fer, de soufre et de sel.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Grand Mesa = -->
 		<Replace Tag="LOC_FEATURE_GRAND_MESA_NAME" Language="fr_FR">
 			  <Text>Grand Mesa</Text>
@@ -418,52 +423,56 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GRAND_MESA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>La Grande Mesa est une grande formation géologique du Colorado, aux États-Unis d'Amérique. S'élevant à environ 1500 mètres au-dessus du territoire environnant et avec une superficie de 1300 kilomètres carrés, c'est la plus grande mesa du monde. La Grande Mesa est recouverte d'une couche de basalte volcanique qui résiste à l'érosion. Il ne s'éleva pas tant dans les airs qu'il resta à son altitude initiale, car le terrain environnant fut érodé par l'action des rivières Colorado et Gunnison. La forêt nationale de Grand Mesa (à l'origine appelée réserve forestière de Battlemfrt Mesa) a été créée par Benjamin Harrison le 24 décembre 1892. Il s'agit de la troisième réserve forestière créée aux États-Unis.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Mount Kailash = -->
 		<Replace Tag="LOC_FEATURE_KAILASH_NAME" Language="fr_FR">
 			  <Text>Mont Kailash</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_KAILASH_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_Faith] Foi +1 et [ICON_CULTURE] Culture +1.[NEWLINE][ICON_CULTURE] Culture +1 pour chaque ville étrangère qui suit votre religion si vous possédez cette case.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_CULTURE] Culture +1 et [ICON_Faith] Foi +1.[NEWLINE][ICON_CULTURE] Culture +1 pour chaque ville étrangère qui suit votre religion si vous possédez cette case.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_KAILASH_QUOTE" Language="fr_FR">
 			  <Text>"Après avoir ainsi instruit les pieux Brahma de Seigneur s'en alla avec dans son sillage les ancêtres et les chefs du peuple qu'il emmena de sa propre place à la demeure de Shiva de Seigneur, Kailash, la meilleure de toutes les montagnes qui est si chère au maître. " [NEWLINE]- Le Bhagavata Purana</Text>
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KAILASH_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Le sommet sacré du mont Kailash, situé dans l'Himalaya du Tibet, est chéri par un certain nombre de religions, en particulier les adeptes de l'hindouisme. On le croit être la maison de Shiva de Seigneur, qui demeure sur la montagne dans un état de béatitude éternelle. Le mont Kailash est considéré comme l'un des pèlerinages religieux les plus difficiles, car les conditions difficiles dissuadent de nombreux pèlerins potentiels et il n'est accessible par aucun moyen de transport moderne.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Lake Victoria = -->
 		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_NAME" Language="fr_FR">
 			  <Text>Lac Victoria</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 4 cases, considérées comme un lac et fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_CULTURE] Culture +1, [ICON_PRODUCTION] Production +1 et [ICON_GOLD] Or +1.</Text>
+			  <Text>Merveille naturelle de 4 cases, considérées comme un lac et fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +1, [ICON_GOLD] Or +1 et [ICON_CULTURE] Culture +1.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="fr_FR">
 			  <Text>"J'ai vu ce vieux père Nile se lever sans aucun doute dans la Victoria Nyanza, et comme je l'avais prédit, ce lac est la grande source de la rivière sainte qui a bercé le premier exposant de notre croyance religieuse."[NEWLINE]- John Hanning Speke</Text>
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LAKE_VICTORIA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Avec une superficie de plus de 68 800 km², le lac Victoria est le plus grand lac d'Afrique, le deuxième plus grand lac d'eau douce de la Terre et le plus grand lac tropical du monde. Deux grands fleuves quittent le lac, le Nil Blanc et le Katonga. Les premiers documents historiques sur le lac proviennent de commerçants arabes qui cherchaient de l'or, de l'ivoire et d'autres produits auprès des indigènes alors qu'ils poussaient vers l'intérieur des terres depuis la côte. La recherche par les explorateurs européens de la source du Nil a conduit à la découverte du lac par le Français John Speke en 1858 après J.-C. , qui l'a nommé d'après le monarque britannique de l'époque.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Lençóis Maranhenses = -->
 		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_NAME" Language="fr_FR">
 			  <Text>Lençois Maranhenses</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, +2 [ICON_CULTURE] Culture +2 et [ICON_GOLD] Or +2.[NEWLINE][ICON_CULTURE] Culture +1 pour les cases de désert et de plaines inondables si vous possédez au moins une case.</Text>
+			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2.[NEWLINE][ICON_CULTURE] Culture +1 pour les cases de désert et de plaines inondables si vous possédez au moins une case.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="fr_FR">
 			  <Text>"J'ai vu des prairies de sable blanc et doré, changeant constamment de forme selon l'humeur créative et le caprice des vents."[NEWLINE]- Geert Mauricio Bas</Text>
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LENCOIS_MARANHENSES_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Situé dans l'état de Maranhão au nord-est du Brésil, le parc national Lençois Maranhenses se compose de 380 000 hectares de dunes de sable qui inondent d'eau douce pendant la saison des pluies. Le parc abrite une variété d'espèces, dont quatre sont en voie de disparition, et en raison de ses propriétés physiques uniques, il est devenu une destination populaire pour les écotouristes.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Krakatoa = -->
 		<Replace Tag="LOC_FEATURE_KRAKATOA_NAME" Language="fr_FR">
 			  <Text>Krakatoa</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_KRAKATOA_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme un volcan. [ICON_Science] Science +2 pour les cases adjacentes. Fournit des rendements supplémentaires en cas d'éruption au coût de [ICON_Citizen] Population et dommages importants aux bâtiments et aménagements. Toujours actif.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme un volcan. [ICON_Science] Science +2 pour les cases adjacentes. Fournit des rendements supplémentaires en cas d'éruption au coût de [ICON_Citizen] Citoyens et dommages importants aux bâtiments et aménagements. Toujours actif.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_KRAKATOA_QUOTE" Language="fr_FR">
 			  <Text>"J'ai vu avec stupéfaction que l'île de Krakatoa était complètement brûlée et stérile sous nos yeux et qu'à quatre endroits elle lançait de gros morceaux de feu. "[NEWLINE]- Johann Wilhelm Vogel</Text>
@@ -489,6 +498,7 @@
 		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_DESCRIPTION" Language="fr_FR">
 			  <Text>Maudite soit la terre sur laquelle Krakatoa jette son ombre puissante. Le feu et le rocher qu'il a forgés sur nous. Car on nous a enlevés de la terre pour les cendres que nous sommes... et aux cendres que nous sommes retournés.</Text>
 		</Replace>
+
 		<!-- = Mosi-oa-Tunya = -->
 		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_NAME" Language="fr_FR">
 			  <Text>Mosi-oa-Tunya</Text>
@@ -501,7 +511,8 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOSI_OA_TUNYA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>La Mosi-oa-Tunya, également connue sous le nom de chutes Victoria, est l'une des chutes d'eau les plus spectaculaires au monde. Le fleuve Zambèze, large de plus de 2 kilomètres, s'enfonce bruyamment dans une série de gorges de basalte et soulève un brouillard irisé visible à plus de 50 kilomètres de là. Son nom, qui se traduit par « La fumée qui tonnerre », vient du Kololo ou Lozi utilisé dans toute la Zambie et dans certaines parties du Zimbabwe, bien qu'il soit plus communément connu dans le monde entier sous le nom de Victoria Falls en raison du missionnaire et explorateur écossais David Livingstone, qui est peut-être le plus célèbre pour avoir donné son nom à une cascade qui en avait déjà une.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Motlatse Canyon = -->
 		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_NAME" Language="fr_FR">
 			  <Text>Motlatse Canyon</Text>
@@ -517,13 +528,14 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_2" Language="fr_FR">
 			  <Text>Bien qu'il soit difficile de comparer les canyons du monde entier, le canyon de Blyde River est l'un des plus grands canyons de la planète, et c'est peut-être le plus grand canyon vert en raison de son feuillage subtropical luxuriant. Elle abrite une grande diversité de flore et de faune, y compris de nombreuses espèces de poissons et d'antilopes, ainsi que des hippopotames, des crocodiles et toutes les espèces de primates présentes en Afrique du Sud, ce qui en fait une région touristique très prisée.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Namib Sand Sea = -->
 		<Replace Tag="LOC_FEATURE_NAMIB_NAME" Language="fr_FR">
 			  <Text>Désert de Namib</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 3 cases. [ICON_CULTURE] Culture +2, [ICON_PRODUCTION] Production +2 et [ICON_GOLD] Or +2. Les unités de Reconnaissance qui pénètrent le Désert de Namib gagnent +1 PM pour le reste de la partie.</Text>
+			  <Text>Merveille naturelle de 3 cases. [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2. Les unités de Reconnaissance qui pénètrent le Désert de Namib gagnent +1 PM pour le reste de la partie.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="fr_FR">
 			  <Text>"J'aime entendre le son des dunes de sable, je fais partie de ceux qui perçoivent le rythme d'un paysage comme enregistré dans de nombreuses peintures, je fais partie des milliers qui savent que je suis enfin chez moi." [NEWLINE]- Mvula Ya Nangolo</Text>
@@ -536,7 +548,8 @@
 		</Replace>
 		<Replace Tag="LOC_ABILITY_NAMIB_BUFF_DESCRIPTION" Language="fr_FR">
 			  <Text>Nomades du désert : [ICON_Movement] PM +1</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Rock of Gibraltar = -->
 		<Replace Tag="LOC_FEATURE_GIBRALTAR_NAME" Language="fr_FR">
 			  <Text>Rocher de Gibraltar</Text>
@@ -549,13 +562,14 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GIBRALTAR_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Gibraltar est une péninsule contenant une formation rocheuse remarquable à l'embouchure de la mer Méditerranée. Capturée par les Anglais et les Hollandais aux Espagnols en 1704 et cédée à l'Angleterre en 1713, Gibraltar est depuis une possession britannique (au grand dam de l'Espagne, qui veut le récupérer). Gardant l'entrée de l'Atlantique depuis la Méditerranée, Gibraltar est une importante base navale britannique depuis trois cents ans. La majeure partie de Gibraltar est recouverte par le « Rocher », une immense formation de schiste, de grès et de calcaire poussée par la puissance inimaginable de la tectonique des plaques. Le Rocher s'élève à environ 430 mètres de haut. Gibraltar était autrefois une fortification massive permettant à la Grande-Bretagne de dominer l'étroit passage Méditerranée-Atlantique, mais aujourd'hui l'île est plus une réserve naturelle et une destination touristique qu'une base militaire.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Old Faithful = -->	
 		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_NAME" Language="fr_FR">
 			  <Text>Old Faithful</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case. [ICON_Science] Science +3, [ICON_FOOD] Nourriture +2, [ICON_Faith] Foi +1 et [ICON_GOLD] Or +1. Bonus de proximité majeur pour les campus.</Text>
+			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +1, [ICON_Science] Science +3 et [ICON_Faith] Foi +1. Bonus de proximité majeur pour les Campus.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="fr_FR">
 			  <Text>Il a craché à intervalles réguliers neuf fois pendant notre séjour, les colonnes d'eau bouillante étant projetées de quatre-vingt-dix à cent vingt pieds à chaque décharge, ce qui a duré de quinze à vingt minutes. Nous lui avons donné le nom de Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
@@ -565,26 +579,28 @@
 		</Replace>	
 		<Replace Tag="LOC_DISTRICT_OLD_FAITHFUL_Science" Language="fr_FR">
 			  <Text>+{1_num} [ICON_Science] Science pour chaque Old Faithful.</Text>
-		</Replace>		
+		</Replace>
+
 		<!-- = Lakes of Ounianga = -->
 		<Replace Tag="LOC_FEATURE_OUNIANGA_NAME" Language="fr_FR">
 			  <Text>Lacs d'Ounianga</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_CULTURE] Culture +2 et [ICON_GOLD] Or +2. [ICON_FOOD] Nourriture +1 pour les cases adjacentes.</Text>
+			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2. [ICON_FOOD] Nourriture +1 pour les cases adjacentes.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="fr_FR">
 			  <Text>"Au commencement, le langage du désert était l'herbe qui fleurissait contre le mur du vent, les grands palmiers qui se balançaient au moment des semailles et les cendres transportées par l'air jusqu'à l'accueil bleu du sable chaud. Elle a été notre première fontaine, notre mère, qui nous a soutenus, puis nous a livrés à l'âge des villes d'attente."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OUNIANGA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Les lacs d'Ounianga sont une série de dix-huit lacs interconnectés dans la région hyper-aride Ennedi du désert du Sahara, occupant un bassin dans les montagnes du Tibesti occidental et frnedi oriental. Il constitue un paysage naturel exceptionnel d'une grande beauté aux couleurs et aux formes saisissantes. Les lacs salins, hyper salins et d'eau douce sont alimentés par les eaux souterraines et se trouvent en deux groupes à 40 kilomètres l'un de l'autre. Ounianga Kebir comprend quatre lacs, dont le plus grand, Yoan, couvre une superficie de 358 hectares et a une profondeur de 27 mètres. Ses eaux très salines ne nourrissent que les algues et certains micro-organismes. Le deuxième groupe, Ounianga Serir, comprend quatorze lacs séparés par des dunes de sable. Les roseaux flottants couvrent presque la moitié de la surface de ces lacs, réduisant ainsi l'évaporation. Le lac Teli a la plus grande superficie, mais sa profondeur est inférieure à 10 mètres. Avec leur eau douce de grande qualité, certains de ces lacs abritent une faune aquatique, en particulier des poissons.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Salar de Uyuni = -->
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_NAME" Language="fr_FR">
 			  <Text>Salar d'Uyuni</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 4 cases. [ICON_Science] Science +2, [ICON_PRODUCTION] Production +2 et [ICON_GOLD] Or +4. Bonus de proximité majeur pour les plateformes commerciales.</Text>
+			  <Text>Merveille naturelle de 4 cases. [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +4 et [ICON_Science] Science +2. Bonus de proximité majeur pour les Plateformes commerciales.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="fr_FR">
 			  <Text>"J'ai frissonné dans ces solitudes quand j'ai entendu la voix du sel dans le désert."[NEWLINE]- Pablo Neruda</Text>
@@ -595,12 +611,13 @@
 		<Replace Tag="LOC_DISTRICT_SALAR_DE_UYUNI_GOLD" Language="fr_FR">
 			  <Text>+{1_num} [ICON_GOLD] Gold pour chaque Salar d'Uyuni.</Text>
 		</Replace>
+
 		<!-- = Mount Sinai = -->
 		<Replace Tag="LOC_FEATURE_SINAI_NAME" Language="fr_FR">
 			  <Text>Mont Sinaï</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_SINAI_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_Faith] Foi +2 pour les cases adjacentes. Les unités religieuses se trouvant sur une case adjacente au Mont Sinaï obtiennent +15 [ICON_Strenght] Puissance de combat lors d'un combat théologique.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_Faith] Foi +2 pour les cases adjacentes. Les unités religieuses se trouvant sur une case adjacente au Mont Sinaï obtiennent +15 [ICON_Strenght] Puissance de combat théologique.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_SINAI_QUOTE" Language="fr_FR">
 			  <Text>"Lorsque l'Éternel eut achevé de parler à Moïse sur le mont Sinaï, il lui donna les deux tables de la loi, les tables de pierre écrites du doigt de Dieu."[NEWLINE]- Exode 31:18</Text>
@@ -613,7 +630,8 @@
 		</Replace>
 		<Replace Tag="LOC_ABILITY_SINAI_BUFF_DESCRIPTION" Language="fr_FR">
 			  <Text>Dix Commandements : [ICON_Strength] Puissance de combat +15 lors d'un combat théologique.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Sri Pada = -->	
 		<Replace Tag="LOC_FEATURE_SRI_PADA_NAME" Language="fr_FR">
 			  <Text>Pic d'Adam</Text>
@@ -626,7 +644,8 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SRI_PADA_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Surplombant le Sri Lanka, le Pic d'Adam (ou Sri Pada) est un grand sommet de montagne avec une forme inhabituellement conique qui est considéré comme sacré par un certain nombre de religions pour l'empreinte qu'on trouve à son sommet. L'empreinte, une grande dépression trouvée dans une formation rocheuse sur le sommet, a été attribuée à Bouddha, Shiva et le personnage biblique Adam, conduisant à une révolte parmi les adeptes du bouddhisme, de l'hindouisme et de l'islam. Chaque année, des milliers de pèlerins montent pendant des heures la montagne pour rendre hommage au lieu saint.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Vredefort Dome = -->
 		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_NAME" Language="fr_FR">
 			  <Text>Dôme de Vredefort</Text>
@@ -639,7 +658,8 @@
 		</Replace>	
 		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_VREDEFORT_DOME_CHAPTER_HISTORY_PARA_1" Language="fr_FR">
 			  <Text>Le dôme de Vredefort est le plus grand cratère d'impact vérifié sur Terre, avec plus de 300 kilomètres de diamètre au moment de sa formation. Ce qui en reste se trouve dans l'actuelle province de l'État libre d'Afrique du Sud, où l'agriculture cultivée domine le paysage. On estime que le cratère a plus de 2 milliards d'années et que l'impact a eu lieu au Paléoprotérozoïque, ce qui en fait le deuxième plus ancien cratère connu sur Terre.</Text>
-		</Replace>	
+		</Replace>
+
 		<!-- = Wulingyuan = -->
 		<Replace Tag="LOC_FEATURE_WULINGYUAN_NAME" Language="fr_FR">
 			  <Text>Wulingyuan</Text>
