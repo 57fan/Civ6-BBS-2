@@ -378,22 +378,36 @@ function AddVolcanos(plotTypes,world_age,iW, iH)
 	print ("Desired Volcanoes: " .. iDesiredVolcanoes);
 	
 	for iX = 0, iW - 1 do
-			for iY = 0, iH - 1 do
-				local index = (iY * iW) + iX;
-				if (plotTypes[index] ~= g_PLOT_TYPE_OCEAN) then
-					local bVolcanoHere = false;
-					if (plotTypes[index] == g_PLOT_TYPE_MOUNTAIN) then
-						local pPlot = Map.GetPlotByIndex(index);
-						local rng = TerrainBuilder.GetRandomNumber(100, "Volcano") / 100
-						if rng > 0.9 and iVolcanoesPlaced < iDesiredVolcanoes then
-						TerrainBuilder.SetFeatureType(pPlot, g_FEATURE_VOLCANO);
-						if pPlot:GetTerrainType() ~= 2 and pPlot:GetTerrainType() ~= 5 and pPlot:GetTerrainType() ~= 8 and pPlot:GetTerrainType() ~= 11 then
-							TerrainBuilder.SetTerrainType(pPlot, 5);
-						end
-						iVolcanoesPlaced = iVolcanoesPlaced + 1;
-					end
-				end
-			end
-		end
+      for iY = 0, iH - 1 do
+         local index = (iY * iW) + iX;
+         if (plotTypes[index] ~= g_PLOT_TYPE_OCEAN) then
+            local bVolcanoHere = false;
+            if (plotTypes[index] == g_PLOT_TYPE_MOUNTAIN) then
+               local pPlot = Map.GetPlotByIndex(index);
+               
+               local nextToWater = false;
+               for i = 0, 5 do
+                  local adjacentPlot = GetAdjacentTiles(pPlot, i);
+                  if (adjacentPlot ~= nil) then
+                     if (adjacentPlot:GetTerrainType() == 15) then
+                        nextToWater = true;
+                        break;
+                     end
+                  end
+               end
+               
+               if (nextToWater == false) then
+                  local rng = TerrainBuilder.GetRandomNumber(100, "Volcano") / 100
+                  if rng > 0.9 and iVolcanoesPlaced < iDesiredVolcanoes then
+                     TerrainBuilder.SetFeatureType(pPlot, g_FEATURE_VOLCANO);
+                     if pPlot:GetTerrainType() ~= 2 and pPlot:GetTerrainType() ~= 5 and pPlot:GetTerrainType() ~= 8 and pPlot:GetTerrainType() ~= 11 then
+                        TerrainBuilder.SetTerrainType(pPlot, 5);
+                     end
+                     iVolcanoesPlaced = iVolcanoesPlaced + 1;
+                  end
+               end
+            end
+         end
+      end
 	end
 end

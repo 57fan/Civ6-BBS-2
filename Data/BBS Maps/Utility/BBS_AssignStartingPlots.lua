@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.2.0"
+local bbs_version = "2.2.1"
 
 local bError_major = false;
 local bError_minor = false;
@@ -45,7 +45,7 @@ BBS_AssignStartingPlots = {};
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-   --print (...);
+   print (...);
 end
 
 ------------------------------------------------------------- BBS ----------------------------
@@ -2800,30 +2800,6 @@ function NewBBS(instance)
       for j = 0, mapYSize - 1 do 
          local jIndex = j + 1 ;
          
-         
-         -- We have some land
-         if (islandLabels[iIndex][jIndex] > 0) then
-            if isIslandMap then
-               if (islandSize[islandLabels[iIndex][jIndex]] < MIN_ISLAND_SIZE_WATER) then
-                  mapSpawnable[iIndex][jIndex] = false;
-                  table.insert(trashTiles, {i, j});
-                  trashTilesCount = trashTilesCount + 1;
-                  ___Debug("Too small island, water map: X:", i, "Y:", j);
-               end
-            else
-               if (islandSize[islandLabels[iIndex][jIndex]] < MIN_ISLAND_SIZE_STANDARD) then
-                  mapSpawnable[iIndex][jIndex] = false;
-                  table.insert(trashTiles, {i, j});
-                  trashTilesCount = trashTilesCount + 1;
-                  ___Debug("Too small island, standard map: X:", i, "Y:", j);
-                  
-                  table.insert(allTiles, {i, j});
-                  allTilesCount = allTilesCount + 1;
-                  
-               end
-            end
-         end
-         
          -- Checking if too many mountains/water around, will ban
          if (mapTerrainCode[iIndex][jIndex] < 15) then
             local list = getRing(i, j, 1, mapXSize, mapYSize, mapIsRoundWestEast);
@@ -3053,6 +3029,39 @@ function NewBBS(instance)
                end
             end
          end
+         
+         -- We have some land
+         if (islandLabels[iIndex][jIndex] > 0) then
+            if isIslandMap then
+               if (islandSize[islandLabels[iIndex][jIndex]] < MIN_ISLAND_SIZE_WATER) then
+                  if mapSpawnable[iIndex][jIndex] == true then -- tile is proper, just small island
+                     mapSpawnable[iIndex][jIndex] = false;
+                     table.insert(trashTiles, {i, j}); -- will be used by cs
+                     trashTilesCount = trashTilesCount + 1;
+                     
+                     table.insert(allTiles, {i, j});
+                     allTilesCount = allTilesCount + 1;
+                     
+                     ___Debug("Too small island, water map: X:", i, "Y:", j);
+                  end
+               end
+            else
+               if (islandSize[islandLabels[iIndex][jIndex]] < MIN_ISLAND_SIZE_STANDARD) then
+                  if mapSpawnable[iIndex][jIndex] == true then -- tile is proper, just small island
+                     mapSpawnable[iIndex][jIndex] = false;
+                     
+                     table.insert(trashTiles, {i, j}); -- will be used by cs
+                     trashTilesCount = trashTilesCount + 1;
+                     
+                     table.insert(allTiles, {i, j});
+                     allTilesCount = allTilesCount + 1;
+                     
+                     ___Debug("Too small island, standard map: X:", i, "Y:", j);
+                  end
+               end
+            end
+         end
+         
       end
    end
    

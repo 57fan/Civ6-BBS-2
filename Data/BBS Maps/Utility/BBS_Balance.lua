@@ -1,5 +1,5 @@
  ------------------------------------------------------------------------------
---	FILE:	 BBS_Balance.lua 2.2.0
+--	FILE:	 BBS_Balance.lua 2.2.1
 --	AUTHOR:  D. / Jack The Narrator, 57Fan
 --	PURPOSE: Rebalance the map spawn post placement 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -8447,20 +8447,39 @@ function Terraforming(plot, intensity, flag)
 				end
 				if d_count > d_factor then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Plains to Desert tile",i);
+               
+               if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
+                  if adjacentPlot:GetResourceType() == 28 then -- remove sugar and put wheat
+                     terraformBBS(adjX, adjY, 6, 9, 0);
+                  elseif (adjacentPlot:GetResourceType() == 9 or adjacentPlot:GetResourceType() == 44 or adjacentPlot:GetResourceType() == 13) then -- niter or wheat or coton: can stay
+                     terraformBBS(adjX, adjY, 6, -2, 0);
+                  else -- other resource is erased
+                     terraformBBS(adjX, adjY, 6, -1, 0);
+                  end
+               else
+                  terraformBBS(adjX, adjY, 6, -1, -1);
+               end
+               
+               
+               --[[
+               
 					--ResourceBuilder.SetResourceType(adjacentPlot, -1);
 					--TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
-               terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
+               --terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
 					if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, 0);
                elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-                  terraformBBS(adjX, adjY, -2, -2, 32);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, -2);
                else
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-                  terraformBBS(adjX, adjY, -2, -2, -1);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, -1);
 					end
+               
+               --]]
 				end
 			end
 			rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
@@ -8615,18 +8634,39 @@ function Terraforming(plot, intensity, flag)
 				end
 				if d_count > d_factor then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Plains to Desert tile",i);
+					
+               if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
+                  if adjacentPlot:GetResourceType() == 28 then -- remove sugar and put wheat
+                     terraformBBS(adjX, adjY, 6, 9, 0);
+                  elseif (adjacentPlot:GetResourceType() == 9 or adjacentPlot:GetResourceType() == 44 or adjacentPlot:GetResourceType() == 13) then -- niter or wheat or coton: can stay
+                     terraformBBS(adjX, adjY, 6, -2, 0);
+                  else -- other resource is erased
+                     terraformBBS(adjX, adjY, 6, -1, 0);
+                  end
+               else
+                  terraformBBS(adjX, adjY, 6, -1, -1);
+               end
+               
+               
+               --[[
+               
 					--ResourceBuilder.SetResourceType(adjacentPlot, -1);
 					--TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
-               terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
+               --terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
 					if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, 0);
                elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-						TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, -2);
                else
-						TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, -1);
 					end
+               
+               --]]
 				end
 			end
 			if (adjacentPlot:IsWater() == false and adjacentPlot:IsImpassable() == false and adjacentPlot:GetTerrainType() ~= 12 and adjacentPlot:GetTerrainType() ~= 13 and adjacentPlot:GetTerrainType() ~= 6 and adjacentPlot:GetTerrainType() ~= 7 and adjacentPlot:GetFeatureType() == -1 and rng > limit_tree and adjacentPlot:GetResourceType() == -1 and count_wood < max_wood) then
@@ -8770,20 +8810,39 @@ function Terraforming(plot, intensity, flag)
 				end
 				if d_count > d_factor then
 					__Debug("Terraforming X: ", adjacentPlot:GetX(), "Y: ", adjacentPlot:GetY(), "Changing Plains to Desert tile",i);
+					
+               if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
+                  if adjacentPlot:GetResourceType() == 28 then -- remove sugar and put wheat
+                     terraformBBS(adjX, adjY, 6, 9, 0);
+                  elseif (adjacentPlot:GetResourceType() == 9 or adjacentPlot:GetResourceType() == 44 or adjacentPlot:GetResourceType() == 13) then -- niter or wheat or coton: can stay
+                     terraformBBS(adjX, adjY, 6, -2, 0);
+                  else -- other resource is erased
+                     terraformBBS(adjX, adjY, 6, -1, 0);
+                  end
+               else
+                  terraformBBS(adjX, adjY, 6, -1, -1);
+               end
+               
+               
+               --[[
+               
 					--ResourceBuilder.SetResourceType(adjacentPlot, -1);
 					--TerrainBuilder.SetTerrainType(adjacentPlot,terrainType + 3);
-               terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
+               --terraformBBS(adjX, adjY, terrainType + 3, -1, -2);
 					if (adjacentPlot:GetFeatureType() == g_FEATURE_FLOODPLAINS_PLAINS) then
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-               elseif (adjacentPlot:IsRiver() == true and  rng < 0.33 and TerrainType == 3) then
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, 0);
+               elseif (adjacentPlot:IsRiver() == true and  rng < 0.33) and TerrainType == 3 then
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
 						--TerrainBuilder.SetFeatureType(adjacentPlot,g_FEATURE_FLOODPLAINS);
-                  terraformBBS(adjX, adjY, -2, -2, 0);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, -2);
                else
 						--TerrainBuilder.SetFeatureType(adjacentPlot,-1);
-                  terraformBBS(adjX, adjY, -2, -2, -1);
+                  terraformBBS(adjX, adjY, terrainType + 3, -2, -1);
 					end
+               
+               --]]
 				end
 			end
 			if (adjacentPlot:IsWater() == false and adjacentPlot:IsImpassable() == false and adjacentPlot:GetTerrainType() ~= 12 and adjacentPlot:GetTerrainType() ~= 13 and adjacentPlot:GetTerrainType() ~= 6 and adjacentPlot:GetTerrainType() ~= 7 and adjacentPlot:GetFeatureType() == -1 and rng > limit_tree and adjacentPlot:GetResourceType() == -1 and count_wood < max_wood) then
@@ -10523,5 +10582,5 @@ end
 
 -----------------------------------------------------------------------------
 function __Debug(...)
-   --print (...);
+   print (...);
 end
