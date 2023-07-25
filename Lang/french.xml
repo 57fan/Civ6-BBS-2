@@ -140,7 +140,7 @@
 		<Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="fr_FR">
 			  <Text>6 cases</Text>
 		</Replace>
-		<Replace> Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="fr_FR">
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="fr_FR">
 			  <Text>7</Text>
 		</Replace>
 		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="fr_FR">
