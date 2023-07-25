@@ -433,7 +433,7 @@
 			<Text>Lake Victoria</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="en_US">
-			<Text>Four tile natural wonder. Appears as a Lake and provides +3 [ICON_FOOD] Food, +1 [ICON_CULTURE] Culture, +1 [ICON_PRODUCTION] Production and +1 [ICON_GOLD] Gold.</Text>
+			<Text>Four tile natural wonder. Appears as a Lake and provides +2 [ICON_FOOD] Food, +1 [ICON_CULTURE] Culture, +1 [ICON_PRODUCTION] Production and +1 [ICON_GOLD] Gold.</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="en_US">
 			<Text>"I saw that old father Nile without any doubt rises in the Victoria Nyanza, and as I had foretold, that lake is the great source of the holy river which cradled the first expounder of our religious belief."[NEWLINE]- John Hanning Speke</Text>

@@ -132,6 +132,10 @@ function GenerateMap()
 		START_CONFIG = startConfig,
 	};
 	local resGen =  BBS_ResourceGenerator.Create(args);
+   
+   if (MapConfiguration.GetValue("BBSRidge") == 1) then
+		AddVolcanos(plotTypes,world_age,g_iW, g_iH)
+	end
 
 	print("Creating start plot database.");
 	

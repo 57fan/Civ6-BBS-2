@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+	<LocalizedText>
+		<!-- === MAP SIZES === -->
+		<Replace Tag="LOC_MAPSIZE_ENORMOUS_NAME" Language="ko_KR">
+			<Text>Enormous</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_ENORMOUS_DESCRIPTION" Language="ko_KR">
+			<Text>Huge map for 16 players</Text>
+		</Replace>
+
+
+
+		<!-- === SETUP === -->
+		<!-- == Map features == -->
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION" Language="ko_KR">
+			<Text>Spawn Recalculation</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_SPAWN_RECALCULATION_DESC" Language="ko_KR">
+			<Text>Attempt to place the civ in better starting location</Text>
+		</Replace>
+		<!-- = Ridges definition = -->
+		<Replace Tag="LOC_GAME_BBS_RIDGE_NAME" Language="ko_KR">
+			<Text>Ridges Definition</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_RIDGE_DESC" Language="ko_KR">
+			<Text>Control how formidable the mountain ranges are in the game</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NORMAL_NAME" Language="ko_KR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NORMAL_DESC" Language="ko_KR">
+			<Text>Original Game Setting</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_LESS_NAME" Language="ko_KR">
+			<Text>Small Chokes</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_LESS_DESC" Language="ko_KR">
+			<Text>Add small extra small choke in the mountain range</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_VLESS_NAME" Language="ko_KR">
+			<Text>Large Opening</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_VLESS_DESC" Language="ko_KR">
+			<Text>Add wider chokes in the mountain range allowing multiple path for attacking units</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NONE_NAME" Language="ko_KR">
+			<Text>Flat Earther</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_NONE_DESC" Language="ko_KR">
+			<Text>Mountain ranges are agressively eroded to create a much flatter map with a lot of Hills</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_MORE_NAME" Language="ko_KR">
+			<Text>Impenetrable</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_MORE_DESC" Language="ko_KR">
+			<Text>Make the mountain ridges broader with less passages</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_RF_NAME" Language="ko_KR">
+			<Text>Classic</Text>
+		</Replace>
+		<Replace Tag="BBS_RIDGE_RF_DESC" Language="ko_KR">
+			<Text>Pre Gathering Storm, non-continent based placement.</Text>
+		</Replace>
+		<!-- = Strategic resources = -->
+		<Replace Tag="LOC_GAME_BBS_SRESOURCES_NAME" Language="ko_KR">
+			<Text>Strategic Resources</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_SRESOURCES_DESC" Language="ko_KR">
+			<Text>Modulates the amount of strategic resources in Balanced Start settings</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_NORMAL_NAME" Language="ko_KR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_NORMAL_DESC" Language="ko_KR">
+			<Text>Standard setting of the Firaxis resource generator</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MORE_NAME" Language="ko_KR">
+			<Text>Abundant</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MORE_DESC" Language="ko_KR">
+			<Text>20% more strategics</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MUCHMORE_NAME" Language="ko_KR">
+			<Text>Epic</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_MUCHMORE_DESC" Language="ko_KR">
+			<Text>50% more strategics</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_GARANTEED_NAME" Language="ko_KR">
+			<Text>Spawn Garanteed</Text>
+		</Replace>
+		<Replace Tag="BBS_SRESOURCES_GARANTEED_DESC" Language="ko_KR">
+			<Text>Almost certain you will have all strategic resources within 5 tiles of your spawn</Text>
+		</Replace>
+		<!-- = Natural Wonders Density = -->
+		<Replace Tag="LOC_GAME_BBS_NATURAL_NAME" Language="ko_KR">
+			<Text>Natural Wonders Density</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_NATURAL_DESC" Language="ko_KR">
+			<Text>Control the maximum number of Natural Wonders that could appear on the map.</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_NORMAL_NAME" Language="ko_KR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_NORMAL_DESC" Language="ko_KR">
+			<Text>Duel: 2[NEWLINE]Tiny: 3[NEWLINE]Small: 4[NEWLINE]Standard: 5[NEWLINE]Large: 6[NEWLINE]Huge: 7[NEWLINE]Enormous: 8</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_LESS_NAME" Language="ko_KR">
+			<Text>Scarce</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_LESS_DESC" Language="ko_KR">
+			<Text>Duel: 1[NEWLINE]Tiny: 1[NEWLINE]Small: 3[NEWLINE]Standard: 3[NEWLINE]Large: 4[NEWLINE]Huge: 4[NEWLINE]Enormous: 5</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_MORE_NAME" Language="ko_KR">
+			<Text>Abundant</Text>
+		</Replace>
+		<Replace Tag="BBS_NATURAL_MORE_DESC" Language="ko_KR">
+			<Text>Duel: 3[NEWLINE]Tiny: 4[NEWLINE]Small: 6[NEWLINE]Standard: 8[NEWLINE]Large: 10[NEWLINE]Huge: 12[NEWLINE]Enormous: 14</Text>
+		</Replace>
+	
+		<!-- == Min distance == -->
+		<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="ko_KR">
+			<Text>Min Tiles between Players</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_NAME" Language="ko_KR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_AUTO_DESC" Language="ko_KR">
+			<Text>Standard distance, depending on map type</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_NAME" Language="ko_KR">
+			<Text>6</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIX_DESC" Language="ko_KR">
+			<Text>6 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_NAME" Language="ko_KR">
+			<Text>7</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVEN_DESC" Language="ko_KR">
+			<Text>7 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_NAME" Language="ko_KR">
+			<Text>8</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHT_DESC" Language="ko_KR">
+			<Text>8 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_NAME" Language="ko_KR">
+			<Text>9</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINE_DESC" Language="ko_KR">
+			<Text>9 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_NAME" Language="ko_KR">
+			<Text>10</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TEN_DESC" Language="ko_KR">
+			<Text>10 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_NAME" Language="ko_KR">
+			<Text>11</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_ELEVEN_DESC" Language="ko_KR">
+			<Text>11 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_NAME" Language="ko_KR">
+			<Text>12</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWELVE_DESC" Language="ko_KR">
+			<Text>12 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_NAME" Language="ko_KR">
+			<Text>13</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_THIRTEEN_DESC" Language="ko_KR">
+			<Text>13 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_NAME" Language="ko_KR">
+			<Text>14</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FOURTEEN_DESC" Language="ko_KR">
+			<Text>14 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_NAME" Language="ko_KR">
+			<Text>15</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_FIFTEEN_DESC" Language="ko_KR">
+			<Text>15 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_NAME" Language="ko_KR">
+			<Text>16</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SIXTEEN_DESC" Language="ko_KR">
+			<Text>16 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_NAME" Language="ko_KR">
+			<Text>17</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_SEVENTEEN_DESC" Language="ko_KR">
+			<Text>17 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_NAME" Language="ko_KR">
+			<Text>18</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_EIGHTEEN_DESC" Language="ko_KR">
+			<Text>18 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_NAME" Language="ko_KR">
+			<Text>19</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_NINETEEN_DESC" Language="ko_KR">
+			<Text>19 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_NAME" Language="ko_KR">
+			<Text>20</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTY_DESC" Language="ko_KR">
+			<Text>20 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_NAME" Language="ko_KR">
+			<Text>21</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYONE_DESC" Language="ko_KR">
+			<Text>21 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_NAME" Language="ko_KR">
+			<Text>22</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTWO_DESC" Language="ko_KR">
+			<Text>22 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_NAME" Language="ko_KR">
+			<Text>23</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYTHREE_DESC" Language="ko_KR">
+			<Text>23 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_NAME" Language="ko_KR">
+			<Text>24</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFOUR_DESC" Language="ko_KR">
+			<Text>24 tiles</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_NAME" Language="ko_KR">
+			<Text>25</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_DISTANCE_TWENTYFIVE_DESC" Language="ko_KR">
+			<Text>25 tiles</Text>
+		</Replace>
+
+		<!-- == Players options == -->
+		<!-- = Attempts = -->
+		<Replace Tag="LOC_GAME_BBS_MIN_ATTEMPTS_NAME" Language="ko_KR">
+			<Text>Minimum BBS attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_NAME" Language="ko_KR">
+			<Text>1</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_ONE_DESC" Language="ko_KR">
+			<Text>1 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_NAME" Language="ko_KR">
+			<Text>2</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TWO_DESC" Language="ko_KR">
+			<Text>2 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_NAME" Language="ko_KR">
+			<Text>3</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_THREE_DESC" Language="ko_KR">
+			<Text>3 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_NAME" Language="ko_KR">
+			<Text>4</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FOUR_DESC" Language="ko_KR">
+			<Text>4 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_NAME" Language="ko_KR">
+			<Text>5</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_FIVE_DESC" Language="ko_KR">
+			<Text>5 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_NAME" Language="ko_KR">
+			<Text>6</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SIX_DESC" Language="ko_KR">
+			<Text>6 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_NAME" Language="ko_KR">
+			<Text>7</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_SEVEN_DESC" Language="ko_KR">
+			<Text>7 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_NAME" Language="ko_KR">
+			<Text>8</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_EIGHT_DESC" Language="ko_KR">
+			<Text>8 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_NAME" Language="ko_KR">
+			<Text>9</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_NINE_DESC" Language="ko_KR">
+			<Text>9 attempts</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_NAME" Language="ko_KR">
+			<Text>10</Text>
+		</Replace>
+		<Replace Tag="BBS_MIN_ATTEMPTS_TEN_DESC" Language="ko_KR">
+			<Text>10 attempts</Text>
+		</Replace>
+		<!-- = Teamers start position = -->
+		<Replace Tag="LOC_BBS_Team_Spawn_NAME" Language="ko_KR">
+			<Text>Teamers Start Position</Text>
+		</Replace>
+		<Replace Tag="LOC_BBS_Team_Spawn_DESC" Language="ko_KR">
+			<Text>Control how the Major Civilizations would be placed on the map in Team games</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NORMAL_NAME" Language="ko_KR">
+			<Text>Standard</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NORMAL_DESC" Language="ko_KR">
+			<Text>Original Firaxis settings: players are randomly placed</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_EW_NAME" Language="ko_KR">
+			<Text>East vs. West</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_EW_DESC" Language="ko_KR">
+			<Text>For 2v2 or 4v4: players of the same team are much more likely to spawn East or West.</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NS_NAME" Language="ko_KR">
+			<Text>North vs. South</Text>
+		</Replace>
+		<Replace Tag="BBS_Team_Spawn_NS_DESC" Language="ko_KR">
+			<Text>For 2v2 or 4v4: players of the same team are much more likely to spawn North or South.</Text>
+		</Replace>
+		
+		
+
+		<!-- === NATURAL WONDERS === -->
+		<!-- = Barringer Crater = -->
+		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_NAME" Language="ko_KR">
+			<Text>Barringer Crater</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_DESCRIPTION" Language="ko_KR">
+			<Text>One tile natural wonder. Provides +3 [ICON_SCIENCE] Science, +2 [ICON_FOOD] Food and +3 [ICON_GOLD] Gold. +10% [ICON_PRODUCTION] Production toward Space Race Projects if you own this tile.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_BARRINGER_CRATER_QUOTE" Language="ko_KR">
+			<Text>"In fact we can now prove that this crater is due to the collision with the earth of an extra-terrestrial body, possibly a small asteroid, which was presumably metallic in nature."[NEWLINE]- Daniel Barringer</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BARRINGER_CRATER_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Barringer Crater is a huge meteorite crater located in Arizona, in the United States of America. The crater is 1,200 meters (4,000 feet) in diameter, and scientists believe that it was created some 50,000 years ago when the site was hit by a large nickel-iron meteorite weighing, at time of impact, 160,000 tons and moving at perhaps 44,000 kilometers per hour (27,000 mph).</Text>
+		</Replace>
+		<!-- = Bioluminescent Bay = -->
+		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_NAME" Language="ko_KR">
+			<Text>Bioluminescent Bay</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION" Language="ko_KR">
+			<Text>One tile natural wonder. Appears as a Reef and provides +3 [ICON_SCIENCE] Science, +1 [ICON_FOOD] Food, and +1 [ICON_GOLD] Gold. +1 [ICON_GOLD] Gold on Fishing Boats if you own this tile.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE" Language="ko_KR">
+			<Text>"The emission of light from fire, lightning bolts, stars or living beings attracts the attention of any human being. In the case of bioluminescence the light has a strange glow, something magic and mysterious."[NEWLINE]- Cassius Stevani'</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Bioluminescent Bay (also known as Puerto Mosquito, or Mosquito Bay), is considered the best example of a bioluminescent bay in the United States and is listed as a national natural landmark, one of five in Puerto Rico. The luminescence in the bay is caused by a micro-organism, the dinoflagellate Pyrodinium bahamense, which glows whenever the water is disturbed, leaving a trail of neon blue..</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_BIOLUMINESCENT_BAY_CHAPTER_HISTORY_PARA_2" Language="ko_KR">
+			<Text>A combination of factors creates the necessary conditions for bioluminescence: red mangrove trees surround the water, a complete lack of modern development around the bay, the water is cool enough and deep enough, and a small channel to the ocean keeps the dinoflagellates in the bay. This small channel was created artificially, being the result of attempts by the occupants of Spanish ships to choke off the bay from the ocean. The Spanish believed that the bioluminescence they encountered there while first exploring the area, was the work of the devil and tried to block ocean water from entering the bay by dropping huge boulders in the channel. The Spanish only succeeded in preserving and increasing the luminescence in the now isolated bay.</Text>
+		</Replace>
+		<!-- = Cerro de Potosi = -->
+		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_NAME" Language="ko_KR">
+			<Text>Cerro de Potosi</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Appears as a Mountain and provides +1 [ICON_PRODUCTION] Production and +3 [ICON_GOLD] Gold to adjacent tiles.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_CERRO_DE_POTOSI_QUOTE" Language="ko_KR">
+			<Text>"I am rich Potosi, treasure of the world, king of all mountains and envy of kings."[NEWLINE]- First Coat of Arms of Potosi</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_CERRO_DE_POTOSI_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Located in southern Bolivia, the mountain of Potosi produced nearly all of the silver mined by the Spanish during their imperial days. Once removed from the mountain, it was taken by llama and mule to the coast where it was then loaded onto treasure ships sailing back to Europe. Nearly 41,000 tons of pure silver were mined over the course of 200 years, 8,200 of which went directly to the Spanish crown. After 1800, the main silver mines were depleted, but the mining of Potosi still continues today - some for silver but now mostly for tin.</Text>
+		</Replace>
+		<!-- = Dallol = -->
+		<Replace Tag="LOC_FEATURE_DALLOL_NAME" Language="ko_KR">
+			<Text>Dallol</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="ko_KR">
+			<Text>One tile natural wonder. Provides +2 [ICON_SCIENCE] Science, +2 [ICON_PRODUCTION] Production, +2 [ICON_FOOD] Food and +1 [ICON_GOLD] Gold.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="ko_KR">
+			<Text>"There is hell, there is darkness, there is the sulfurous pit — burning, scalding, stench, consumption!"[NEWLINE]- William Shakespeare, King Lear</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Dallol is a cinder cone volcano in the Danakil Depression, northeast of the Erta Ale Range in Ethiopia. It has been formed by the intrusion of basaltic magma into Miocene salt deposits and subsequent hydrothermal activity. Phreatic eruptions took place in 1926, forming Dallol Volcano while numerous other eruption craters dot the salt flats nearby. These craters are the lowest known subaerial volcanic vents in the world, at 45 m (150 ft) or more below sea level.</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_DALLOL_CHAPTER_HISTORY_PARA_2" Language="ko_KR">
+			<Text>Numerous hot springs are discharging brine and acidic liquid here. Small, widespread, temporary geysers produce cones of salt. The Dallol deposits include significant bodies of potash found directly at the surface. The term 'Dallol' was coined by the Afar people and means 'dissolution' or 'disintegration', describing a landscape of green acid ponds (pH-values less than 1) and iron oxide, sulfur and salt desert plains.</Text>
+		</Replace>
+		<!-- = Grand Mesa = -->
+		<Replace Tag="LOC_FEATURE_GRAND_MESA_NAME" Language="ko_KR">
+			<Text>Grand Mesa</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_GRAND_MESA_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Provides +1 [ICON_FOOD] Food and +1 [ICON_CULTURE] Culture to adjacent tiles.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_GRAND_MESA_QUOTE" Language="ko_KR">
+			<Text>"Conservation means the wise use of the earth and its resources for the lasting good of men."[NEWLINE]- Gifford Pinchot'</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GRAND_MESA_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Grand Mesa is a large geologic formation in Colorado, the United States of America. Rising some 1,500 meters (5,000 feet) above the surrounding territory and with an area of 1300 square kilometers (500 square miles), it is the largest mesa in the world. The Grand Mesa has a layer of volcanic basalt on top, which resists erosion. It did not so much rise into the air, as it remained at its original height, as the surrounding terrain was eroded by the action of the Colorado and Gunnison rivers.  The Grand Mesa National Forest (originally called Battlement Mesa Forest Reserve) was created by Benjamin Harrison on December 24, 1892. It was the third forest reserve created in United States.</Text>
+		</Replace>
+		<!-- = Mount Kailash = -->
+		<Replace Tag="LOC_FEATURE_KAILASH_NAME" Language="ko_KR">
+			<Text>Mount Kailash</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_KAILASH_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Appears as a Mountain and provides +1 [ICON_Faith] Faith and +1 [ICON_CULTURE] Culture to adjacent tiles. +1 [ICON_CULTURE] Culture from foreign Cities following your [ICON_RELIGION] Religion if you own this tile.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_KAILASH_QUOTE" Language="ko_KR">
+			<Text>"After thus having instructed the godly ones Lord Brahma went away with in his wake the forefathers and the leaders of the people whom he took from his own place to the abode of Lord Shiva, Kailash, the best of all mountains that is so dear to the master."[NEWLINE]- The Bhagavata Purana</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KAILASH_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The sacred peak of Mount Kailash, found in the Himalayas of Tibet, is cherished by a number of religions, particularly the followers of Hinduism. It is believed to be the home of Lord Shiva, who dwells on the mountain in a state of eternal bliss. Mount Kailash is said to be among the most difficult of all religious pilgrimages, as the harsh conditions dissuade many would-be pilgrims, and the mountain is not accessible by any forms of modern transportation.</Text>
+		</Replace>
+		<!-- = Lake Victoria = -->
+		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_NAME" Language="ko_KR">
+			<Text>Lake Victoria</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_DESCRIPTION" Language="ko_KR">
+			<Text>Four tile natural wonder. Appears as a Lake and provides +2 [ICON_FOOD] Food, +1 [ICON_CULTURE] Culture, +1 [ICON_PRODUCTION] Production and +1 [ICON_GOLD] Gold.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_LAKE_VICTORIA_QUOTE" Language="ko_KR">
+			<Text>"I saw that old father Nile without any doubt rises in the Victoria Nyanza, and as I had foretold, that lake is the great source of the holy river which cradled the first expounder of our religious belief."[NEWLINE]- John Hanning Speke</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LAKE_VICTORIA_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>With a surface area over 26,000 square miles (68,800 km²), Lake Victoria is the largest lake in Africa, the second largest freshwater lake on Earth, and the largest tropical lake in the world. Two large rivers leave the lake, the White Nile and the Katonga. The first historical records of the lake come from Arab traders seeking gold, ivory and other commodities from the natives as they pushed inland from the coast. The search by European explorers for the source of the Nile led to the discovery of the lake by the Englishman John Speke in 1858 AD, who named it after the then British monarch.</Text>
+		</Replace>
+		<!-- = Lençóis Maranhenses = -->
+		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_NAME" Language="ko_KR">
+			<Text>Lençóis Maranhenses</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="ko_KR">
+			<Text>Two tile natural wonder. Provides +2 [ICON_FOOD] Food, +2 [ICON_CULTURE] Culture and +2 [ICON_GOLD]. +1 [ICON_CULTURE] Culture on Desert and Plains Floodplains if you own at least one of these tiles. Provides fresh water.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="ko_KR">
+			<Text>"I saw meadows of white and golden sands, ever shifting their shape according to the creative mood and whim of the winds."[NEWLINE]- Geert Mauricio Bas</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_LENCOIS_MARANHENSES_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Located in Maranhão state in northeastern Brazil, Lençóis Maranhenses National Park is composed of 380,000 acres of rolling sand dunes that flood with freshwater during the rainy season. The park is home to a range of species, four of which are endangered, and due to its unique physical properties it has become a popular destination for ecotourists.</Text>
+		</Replace>
+		<!-- = Krakatoa = -->
+		<Replace Tag="LOC_FEATURE_KRAKATOA_NAME" Language="ko_KR">
+			<Text>Krakatoa</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_KRAKATOA_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Appears as a Volcano and provides +2 [ICON_SCIENCE] Science to adjacent tiles. Provides additional yields on eruption at the cost of [ICON_Citizen] Population and damage to infrastructure. Always active.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_KRAKATOA_QUOTE" Language="ko_KR">
+			<Text>"I saw with amazement that the island of Krakatoa lay completely burnt and barren in front of our eyes and that at four locations was throwing up large chunks of fire."[NEWLINE]- Johann Wilhelm Vogel</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_KRAKATOA_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Krakatoa is a volcanic island located in Indonesia, between the islands of Java and Sumatra. The volcano exploded violently in August, 1883 with a force equivalent to 13,000 times the power of the Hiroshima nuclear bomb. The blast is widely regarded as the loudest sound ever recorded. The eruption destroyed over half of the island, and was heard in parts of Australia, some 3,200 kilometers (2,000 miles) away. Some 37,000 people were killed by the eruption and subsequent tsunamis. The volcano has been emitting lava steadily for the past eighty years, rebuilding the cone at a rate of about 5 meters per year (15 feet per year).</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_GENTLE_NAME" Language="ko_KR">
+			<Text>Gentle Eruption</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_GENTLE_DESCRIPTION" Language="ko_KR">
+			<Text>Smoke billows from the mountain of fire that people call Krakatoa. Could this be a foreboding sign of things to come?</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_CATASTROPHIC_NAME" Language="ko_KR">
+			<Text>Catastrophic Eruption</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_CATASTROPHIC_DESCRIPTION" Language="ko_KR">
+			<Text>Must we have forsaken our gods, for when we looked toward the blue sky and asked for rain, it was Krakatoa that answered with fire.</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_NAME" Language="ko_KR">
+			<Text>Megacolossal Eruption</Text>
+		</Replace>
+		<Replace Tag="LOC_RANDOM_EVENT_KRAKATOA_MEGACOLOSSAL_DESCRIPTION" Language="ko_KR">
+			<Text>Cursed be the ground on which Krakatoa casts its mighty shadow. Both fire and rock it wrought upon us. For out of the ground we were taken for the ashes we are... and to the ashes we returned.</Text>
+		</Replace>
+		<!-- = Mosi-oa-Tunya = -->
+		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_NAME" Language="ko_KR">
+			<Text>Mosi-oa-Tunya</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Provides +2 [ICON_FOOD] Food to adjacent tiles. Provides +4 Appeal to adjacent tiles isntead of the usual +2. Provides fresh water.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_MOSI_OA_TUNYA_QUOTE" Language="ko_KR">
+			<Text>"Creeping with awe to the verge, I peered down into a large rent and saw that a stream of a thousand yards broad leaped down a hundred feet, and then became suddenly compressed into a space of fifteen or twenty yards, the most wonderful sight I had witnessed in Africa."[NEWLINE]- David Livingstone</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOSI_OA_TUNYA_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Mosi-oa-Tunya, otherwise known as Victoria Falls, is among the most spectacular waterfalls in the world. The Zambezi River, which is more than 2 kilometers wide at this point, plunges noisily down a series of basalt gorges and raises an iridescent mist that can be seen more than 50 km away. Its name, which translates to 'The Smoke Which Thunders', comes from the Kololo or Lozi language used throughout Zambia and in parts of Zimbabwe, though it is more commonly known worldwide as Victoria Falls due to Scottish missionary and explorer, David Livingstone, who is perhaps most famous for giving a name to a waterfall that already had one.</Text>
+		</Replace>
+		<!-- = Motlatse Canyon = -->
+		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_NAME" Language="ko_KR">
+			<Text>Motlatse Canyon</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_DESCRIPTION" Language="ko_KR">
+			<Text>Four tile impassable natural wonder. Provides +1 [ICON_CULTURE] Culture and +1 [ICON_FAITH] Faith to adjacent tiles.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_MOTLATSE_CANYON_QUOTE" Language="ko_KR">
+			<Text>"I believe that South Africa is the most beautiful place on earth. Admittedly, I am biased, but I think even the most scrupulous critic would agree that we have been blessed with a truly wonderful land."[NEWLINE]- Nelson Mandela</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Motlatse Canyon is a significant natural feature of South Africa, located in Mpumalanga, and forming the northern part of the Drakensberg escarpment. Located in the Blyde River Canyon Nature Reserve, it is 25 kilometers in length and is, on average, around 750 meters deep, sporting some of the deepest precipitous cliffs of any canyon on the planet.</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_MOTLATSE_CANYON_CHAPTER_HISTORY_PARA_2" Language="ko_KR">
+			<Text>While it is difficult to compare canyons world-wide, Blyde River Canyon is one of the largest canyons on Earth, and it may be the largest green canyon due to its lush subtropical foliage. It supports a large diversity of flora and fauna, including numerous fish and antelope species as well as hippos, crocodiles and every primate species that may be seen in south Africa, making it a very popular region for tourism.</Text>
+		</Replace>
+		<!-- = Namib Sand Sea = -->
+		<Replace Tag="LOC_FEATURE_NAMIB_NAME" Language="ko_KR">
+			<Text>Namib Sand Sea</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="ko_KR">
+			<Text>Three tile natural wonder. Provides +2 [ICON_CULTURE] Culture, +2 [ICON_PRODUCTION] Production and +2 [ICON_GOLD] Gold. Recon units that enter Namib Sand Sea tiles receive the ability 'Desert Nomads' (+1 [ICON_Movement] Movement).</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="ko_KR">
+			<Text>"I love to hear the sound made by sand dunes, I am one of those who perceive the rhythm of a landscape as recorded in many paintings, I am one of thousands who know I am finally home."[NEWLINE]- Mvula Ya Nangolo</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_NAMIB_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Namib is a coastal desert in southern Africa, whose name is of Nama origin and means 'vast place'. The Namib stretches for more than 2,000km along the Atlantic coasts of Angola, Namibia, and South Africa. Having endured arid, or semi-arid conditions for roughly 55-80 million years, the Namib may be the oldest desert in the world, containing some of the world's driest regions. Owing to its aridity, the Namib is almost totally uninhabited except for a small number of scattered settlements, which have historically served as trading posts for the routes of traders and missionaries that cross the desert.</Text>
+		</Replace>
+		<Replace Tag="LOC_ABILITY_NAMIB_BUFF_NAME" Language="ko_KR">
+			<Text>Desert Nomads</Text>
+		</Replace>
+		<Replace Tag="LOC_ABILITY_NAMIB_BUFF_DESCRIPTION" Language="ko_KR">
+			<Text>Desert Nomads: +1 [ICON_Movement] Movement</Text>
+		</Replace>
+		<!-- = Rock of Gibraltar = -->
+		<Replace Tag="LOC_FEATURE_GIBRALTAR_NAME" Language="ko_KR">
+			<Text>Rock of Gibraltar</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_GIBRALTAR_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Provides +1 [ICON_FOOD] Food and +1 [ICON_GOLD] Gold to adjacent tiles.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_GIBRALTAR_QUOTE" Language="ko_KR">
+			<Text>"Look round, my boys, and view how beautiful the Rock appears by the light of the glorious fire."[NEWLINE]- George Augustus Eliott</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_GIBRALTAR_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Gibraltar is a peninsula containing a remarkable rock formation at the mouth of the Mediterranean Sea. Captured from Spain by the English and Dutch in 1704 and ceded to England in 1713, Gibraltar has been a British possession ever since (much to the annoyance of Spain, which wants it back). Commanding the entrance to the Atlantic from the Mediterranean, Gibraltar has been a major British naval base for three hundred years. Most of Gibraltar is covered by the 'Rock', a huge formation of shale, sandstone and limestone thrust up by the unimaginable power of plate tectonics. The Rock stands some 430 meters (1400 feet) in height. At one time Gibraltar was a massive fortification allowing Britain to dominate the narrow Mediterranean-Atlantic passage, but today the island is more of a nature preserve and tourist destination than it is a military base.</Text>
+		</Replace>
+		<!-- = Old Faithful = -->
+		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_NAME" Language="ko_KR">
+			<Text>Old Faithful</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="ko_KR">
+			<Text>One tile natural wonder. Provides +3 [ICON_SCIENCE] Science, +2 [ICON_FOOD] Food, +1 [ICON_Faith] Faith, and +1 [ICON_GOLD] Gold. Major bonus adjacency to Campus districts.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="ko_KR">
+			<Text>"It spouted at regular intervals nine times during our stay, the columns of boiling water being thrown from ninety to one hundred and twenty-five feet at each discharge, which lasted from fifteen to twenty minutes. We gave it the name of Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OLD_FAITHFUL_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Old Faithful is a geyser found in Yellowstone National Park, in Wyoming, US. First seen by Europeans in 1870 (and by natives some 10,000 years before that), Old Faithful was thus named because of the regularity of its eruption. The geyser shoots a column of boiling water to a height of some 30-50 meters (100-175 feet) every 60-90 minutes (the interval determined by the ferocity of the previous eruption). Geysers occur when subterranean water hits magma (molten rock). The water is instantly turned to steam, which rushes out the nearest available opening at tremendously high pressure. Old Faithful and the other 250 geysers in Yellowstone are enjoyed by some three million visitors each year.</Text>
+		</Replace>
+		<Replace Tag="LOC_DISTRICT_OLD_FAITHFUL_SCIENCE" Language="ko_KR">
+				<Text>+{1_num} [ICON_SCIENCE] Science from the adjacent natural wonder Old Faithful.</Text>
+		</Replace>
+		<!-- = Lakes of Ounianga = -->
+		<Replace Tag="LOC_FEATURE_OUNIANGA_NAME" Language="ko_KR">
+			<Text>Lakes of Ounianga</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="ko_KR">
+			<Text>Two tile natural wonder. Provides +2 [ICON_FOOD] Food, +2 [ICON_CULTURE] Culture, and +2 [ICON_GOLD] Gold. Provides +1 [ICON_FOOD] Food to adjacent tiles. Provides fresh water.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="ko_KR">
+			<Text>"At the beginning, the language of the desert was grass blooming against the wall of wind, tall palms swaying in the season of seeding and cinders carried by air to the blue welcome of warm sand. She was our first fountain, our mother, who held us, then gave us away to the age of waiting cities."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_OUNIANGA_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Lakes of Ounianga are a series of eighteen interconnected lakes in the hyper arid Ennedi region of the Sahara desert, occupying a basin in the mountains of West Tibesti and Ennedi East. It constitutes an exceptional natural landscape of great beauty with striking colours and shapes. The saline, hyper saline and freshwater lakes are supplied by groundwater and are found in two groups 40 km apart. Ounianga Kebir comprises four lakes, the largest of which, Yoan, covers an area of 358 ha and is 27 m deep. Its highly saline waters only sustain algae and some microorganisms. The second group, Ounianga Serir, comprises fourteen lakes separated by sand dunes. Floating reeds cover almost half the surface of these lakes reducing evaporation. Lake Teli has the largest surface area but is less than 10 m deep. With their high quality freshwater, some of these lakes are home to aquatic fauna, particularly fish.</Text>
+		</Replace>
+		<!-- = Salar de Uyuni = -->
+		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_NAME" Language="ko_KR">
+			<Text>Salar de Uyuni</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="ko_KR">
+			<Text>Four tile natural wonder. Provides +2 [ICON_SCIENCE] Science, +2 [ICON_PRODUCTION] Production, and +4 [ICON_GOLD] Gold. Major adjacency bonus to Commercial Hub districts.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="ko_KR">
+			<Text>"I shivered in those solitudes when I heard the voice of the salt in the desert."[NEWLINE]- Pablo Neruda</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SALAR_DE_UYUNI_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Situated in southwest Bolivia, near the Chilean border and the Atacama Desert, lies Salar de Uyuni; the largest salt flat on Earth at 10,582 square kilometers, roughly 100 times the size of the Bonneville Salt Flats in the United States. The Salar was formed a result of transformations between several prehistoric lakes. Covered by a few meters of salt crust, it has an extraordinary flatness with the average elevation variations within one meter over the entire area of the Salar. The large area, clear skies, and exceptional flatness of the surface make it an ideal object for calibrating the altimeters of Earth observation satellites.</Text>
+		</Replace>
+		<Replace Tag="LOC_DISTRICT_SALAR_DE_UYUNI_GOLD" Language="ko_KR">
+				<Text>+{1_num} [ICON_GOLD] Gold from the adjacent natural wonder Salar de Uyuni.</Text>
+		</Replace>
+		<!-- = Mount Sinai = -->
+		<Replace Tag="LOC_FEATURE_SINAI_NAME" Language="ko_KR">
+			<Text>Mount Sinai</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SINAI_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Appears as a Mountain and provides +2 [ICON_Faith] Faith to adjacent tiles. Religious units that move next to Mount Sinai receive the ability 'Ten Commandments' (+15 [ICON_RELIGION] Religious Strength).</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SINAI_QUOTE" Language="ko_KR">
+			<Text>"When the Lord finished speaking to Moses on Mount Sinai, he gave him the two tablets of the covenant law, the tablets of stone inscribed by the finger of God."[NEWLINE]- Exodus 31:18</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SINAI_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Found on the Sinai Peninsula of Egypt, Mount Sinai is among the most revered holy sites recognized by the followers of Judaism, Christianity, and Islam. Mount Sinai is believed to be the location where Moses first received the Ten Commandments from God during the Israelites' exodus from Egypt, making the peak an important site for religious pilgrims from around the world.</Text>
+		</Replace>
+		<Replace Tag="LOC_ABILITY_SINAI_BUFF_NAME" Language="ko_KR">
+			<Text>Ten Commandments</Text>
+		</Replace>
+		<Replace Tag="LOC_ABILITY_SINAI_BUFF_DESCRIPTION" Language="ko_KR">
+			<Text>Ten Commandments: +15 [ICON_RELIGION] Religious Strength.</Text>
+		</Replace>
+		<!-- = Sri Pada = -->
+		<Replace Tag="LOC_FEATURE_SRI_PADA_NAME" Language="ko_KR">
+			<Text>Sri Pada</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SRI_PADA_DESCRIPTION" Language="ko_KR">
+			<Text>One tile impassable natural wonder. Appears as a Mountain and provides +1 [ICON_FOOD] Food and +1 [ICON_Faith] Faith to adjacent tiles.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_SRI_PADA_QUOTE" Language="ko_KR">
+			<Text>"An exceedingly wondrous sight, which is endowed with supreme splendour."[NEWLINE]- The Mahabharata</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_SRI_PADA_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Towering above Sri Lanka, Sri Pada is a large mountain peak with an unusually conical shape that is held sacred by a number of religions for the footprint found at its peak. The footprint, a large depression found in a rock formation on the summit, has been attributed to Buddha, Shiva, and the biblical figure Adam, leading to a reverence among followers of Buddhism, Hinduism, and Islam. Each year, thousands of pilgrims trek for hours up the mountain to pay their respects at the holy site.</Text>
+		</Replace>
+		<!-- = Vredefort Dome = -->
+		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_NAME" Language="ko_KR">
+			<Text>Vredefort Dome</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_DESCRIPTION" Language="ko_KR">
+			<Text>Two tile natural wonder. Provides +2 [ICON_FOOD] Food, +1 [ICON_PRODUCTION] Production, +2 [ICON_SCIENCE] Science, and +1 [ICON_CULTURE] Culture.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_QUOTE" Language="ko_KR">
+			<Text>"When geologists first wandered the spectacular ring of hills straddling the Vaal River north of Vredefort nearly 150 years ago, they immediately recognised that the unusually shattered and uptilted rocks bore witness to an exceptionally violent event in the distant past."[NEWLINE]- Wolf Uwe Reimold</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_VREDEFORT_DOME_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>The Vredefort Dome is the largest verified impact crater on Earth, more than 300km across when it was formed. What remains of it is located in the present-day Free State province of South Africa where cultivated agriculture dominates the landscape. The crater is estimated to be over 2 billion years old, with impact taking place in the Paleoproterozoic Era, making it the second-oldest known crater on Earth.</Text>
+		</Replace>
+		<!-- = Wulingyuan = -->
+		<Replace Tag="LOC_FEATURE_WULINGYUAN_NAME" Language="ko_KR">
+			<Text>Wulingyuan</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_WULINGYUAN_DESCRIPTION" Language="ko_KR">
+			<Text>Two tile impassable natural wonder. Provides +1 [ICON_CULTURE] Culture to adjacent tiles.</Text>
+		</Replace>
+		<Replace Tag="LOC_FEATURE_WULINGYUAN_QUOTE" Language="ko_KR">
+			<Text>"From ten thousand valleys the trees touch heaven, on a thousand peaks cuckoos are calling, and, after a night of mountain rain, from each summit come hundreds of silken cascades."[NEWLINE]- Wang Wei</Text>
+		</Replace>
+		<Replace Tag="LOC_PEDIA_FEATURES_PAGE_FEATURE_WULINGYUAN_CHAPTER_HISTORY_PARA_1" Language="ko_KR">
+			<Text>Wulingyuan is a scenic and historical site in south-central China. It is noted for more than 3,000 quartzite sandstone pillars and peaks, many over 200 meters in height, along with ravines, gorges, pools, lakes, rivers and waterfalls. It features 40 caves and two natural bridges, Xianrenqiao (Bridge of the Immortals) and Tianqiashengkong (Bridge Across the Sky).</Text>
+		</Replace>
+	</LocalizedText>
+</GameData>
