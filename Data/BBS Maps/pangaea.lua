@@ -72,6 +72,7 @@ function GenerateMap()
 	else
 		world_age = 2 + TerrainBuilder.GetRandomNumber(4, "Random World Age - Lua");
 	end
+   
 
 	plotTypes = GeneratePlotTypes(world_age);
 	local BBS_temp = false;

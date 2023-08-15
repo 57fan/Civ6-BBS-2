@@ -18,7 +18,9 @@ include "BBS_ResourceGenerator"
 include "CoastalLowlands"
 include "AssignStartingPlots"
 include "BBS_AssignStartingPlots";
-include "BBS_Balance";local g_iW, g_iH;
+include "BBS_Balance";
+
+local g_iW, g_iH;
 local g_iFlags = {};
 local g_continentsFrac = nil;
 local islands = {};
@@ -60,6 +62,7 @@ function GenerateMap()
 	else
 		world_age = 1 + TerrainBuilder.GetRandomNumber(3, "Random World Age - Lua");
 	end
+   
 
 	plotTypes = GeneratePlotTypes(world_age);
 	local BBS_temp = false;
@@ -161,7 +164,6 @@ function GeneratePlotTypes(world_age)
 	local peaks_ridge_flags = g_iFlags;
 	local has_center_rift = false;
 	local sea_level = 1;
-	local world_age = 1;
 
 	local water_percent_modifier = 0; 
 
