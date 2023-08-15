@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 2.2.2
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.2.3
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.2.2"
+local bbs_version = "2.2.3"
 
 local bError_major = false;
 local bError_minor = false;
@@ -538,6 +538,21 @@ mapScienceYield = {};
 mapCultureYield = {};
 mapFaithYield = {};
 
+-- row ID + 1 will contain amount of specifics
+rowUsable = {};
+
+rowTwoTwo = {};
+rowHills = {};
+rowResource = {};
+rowLuxury = {};
+
+rowPercentageTwoTwo = {};
+rowPercentageHills = {};
+rowPercentageResource = {};
+rowPercentageLuxury = {};
+
+
+
 --- civ related ---
 
 local majorList = {};
@@ -633,6 +648,8 @@ mapTwoTwo = {};
 local terrainCount = {};
 local featureCount = {};
 local resourceCount = {};
+local mapLuxuryCount = 0;
+local mapResourceCount = 0;
 local coastalCount = 0;
 
 local landCount = 0;
@@ -2358,7 +2375,7 @@ function NewBBS(instance)
    -- Amount of land for each column of the map.
    -- will be used to draw the "border" for East-West scenario
    local amountOfLandX = {};
-   
+ 
    -- Array init --
    for i = 1, mapXSize do
    
@@ -2730,7 +2747,139 @@ function NewBBS(instance)
    ___Debug("---------------");
    ___Debug("---------------");
    
+   for jIndex = 1, mapYSize do
+      
+      rowUsable[jIndex] = 0
+
+      rowTwoTwo[jIndex] = 0;
+      rowHills[jIndex] = 0;
+      rowResource[jIndex] = 0;
+      rowLuxury[jIndex] = 0;
+
+      rowPercentageTwoTwo[jIndex] = 0;
+      rowPercentageHills[jIndex] = 0;
+      rowPercentageResource[jIndex] = 0;
+      rowPercentageLuxury[jIndex] = 0;
    
+      for iIndex = 1, mapXSize do
+      
+         if mapTerrainCode[iIndex][jIndex] == 15 then
+            
+            -- counting even resources in water, but only for global knowledge
+            if isLuxury(mapResourceCode[iIndex][jIndex]) then
+               mapLuxuryCount = mapLuxuryCount + 1;
+            end
+            
+         elseif mapTerrainCode[iIndex][jIndex] < 15 then
+            rowUsable[jIndex] = rowUsable[jIndex] + 1;
+            
+            if mapTerrainCode[iIndex][jIndex] % 3 == 1 then
+               rowHills[jIndex] = rowHills[jIndex] + 1;
+            end
+            
+            if mapResourceCode[iIndex][jIndex] >= 0 then
+               rowResource[jIndex]= rowResource[jIndex] + 1;
+               mapResourceCount = mapResourceCount + 1;
+               
+               if isLuxury(mapResourceCode[iIndex][jIndex]) then
+                  rowLuxury[jIndex] = rowLuxury[jIndex] + 1;
+                  mapLuxuryCount = mapLuxuryCount + 1;
+               end
+            end
+            
+            if mapTwoTwo[iIndex][jIndex] > 1 then
+               rowTwoTwo[jIndex] = rowTwoTwo[jIndex] + 1;
+            end
+         end
+      end
+      
+      rowPercentageHills[jIndex] = rowHills[jIndex] / rowUsable[jIndex];
+      rowPercentageTwoTwo[jIndex] = rowTwoTwo[jIndex] / rowUsable[jIndex];
+      rowPercentageResource[jIndex] = rowResource[jIndex] / rowUsable[jIndex];
+      rowPercentageLuxury[jIndex] = rowLuxury[jIndex] / rowUsable[jIndex];
+
+      
+   end
+   
+   
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------ Map General information -----------------------------")
+   
+   print("Amount of tiles:", tilesCount);
+   print("---------------");
+   print("--- Water ---");
+   print("---------------");
+   print("------Percentage of Water:", ((waterCount / tilesCount) * 100));
+   print("------Water Count:", terrainCount[16 + 1] + terrainCount[15 + 1]);
+   print("----------Coast Count:", terrainCount[15 + 1] - lakeCount);
+   print("----------Lake Count: ", lakeCount);
+   print("----------Ocean Count:", terrainCount[16 + 1]);
+   print("--------------Of which are ice:", featureCount[1 + 1]);
+   print("---------------");
+   
+   print("---------------");
+   print("--- Land ---");
+   print("---------------");
+   print("------Percentage of Land:", ((landCount / tilesCount) * 100));
+   print("------Land count", landCount);
+   print("----------Coastal tiles:", coastalCount);
+   print("----------Mountains count", mountainCount);
+   print("----------Hills count", hillsCount);
+   print("----------Hills percentage", hillsCount / usableLand);
+   print("------Usable land count (no mountains)", usableLand);
+   print("----------Of which: Resources", mapResourceCount);
+   print("----------Percentage: Resources", mapResourceCount / usableLand);
+   print("----------Of which: Luxuries", mapLuxuryCount);
+   print("----------Percentage: Luxuries", mapLuxuryCount / usableLand);
+   print("----------Of which: twoTwos", twoTwoCount);
+   print("----------Percentage: twoTwos", twoTwoCount / usableLand);
+   print("----------Of which: grasland", terrainCount[0 + 1] + terrainCount[1 + 1]);
+   print("----------Of which: plain", terrainCount[3 + 1] + terrainCount[4 + 1]);
+   print("----------Of which: desert", terrainCount[6 + 1] + terrainCount[7 + 1]);
+   print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
+   print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
+   print("----------Floodplains:", floodPlainsCount);
+   --print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   print("------------------------------------------------------------------------------")
+   
+   ___Debug("--- Per row ---")
+   ___Debug("---------------");
+   ___Debug("usable count, hills percentage, two two percentage, resource percentage, luxury percentage");
+   
+   for j = 0, mapYSize - 1 do
+      ___Debug(rowUsable[j + 1], ",", rowHills[j + 1], ",", rowTwoTwo[j + 1], ",", rowResource[j + 1], ",", rowLuxury[j + 1])
+      --print(rowPercentageHills[j + 1], ",", rowPercentageTwoTwo[j + 1], ",", rowPercentageResource[j + 1], ",", rowPercentageLuxury[j + 1])
+   end
+   
+   
+   ___Debug("---------------");
+   ___Debug("--- Two-Two Map ---");
+   drawMap(mapTwoTwo, mapXSize, mapYSize);
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("--- Spawnablemap ---");
+   
+   
+   drawMapBoolean(mapSpawnable, mapXSize, mapYSize);
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("--- Desert map ---");
+   drawMapBoolean(mapDesert, mapXSize, mapYSize);
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
+   ___Debug("---------------");
    
    
    -- test rings
@@ -3075,69 +3224,7 @@ function NewBBS(instance)
       end
    end
    
-   print("------------------------------------------------------------------------------")
-   print("------------------------------------------------------------------------------")
-   print("------------------------ Map General information -----------------------------")
-   
-   print("Amount of tiles:", tilesCount);
-   print("---------------");
-   print("--- Water ---");
-   print("---------------");
-   print("------Percentage of Water:", ((waterCount / tilesCount) * 100));
-   print("------Water Count:", terrainCount[16 + 1] + terrainCount[15 + 1]);
-   print("----------Coast Count:", terrainCount[15 + 1] - lakeCount);
-   print("----------Lake Count: ", lakeCount);
-   print("----------Ocean Count:", terrainCount[16 + 1]);
-   print("--------------Of which are ice:", featureCount[1 + 1]);
-   print("---------------");
-   
-   print("---------------");
-   print("--- Land ---");
-   print("---------------");
-   print("------Percentage of Land:", ((landCount / tilesCount) * 100));
-   print("------Land count", landCount);
-   print("----------Coastal tiles:", coastalCount);
-   print("----------Mountains count", mountainCount);
-   print("----------Hills count", hillsCount);
-   print("------Usable land count (no mountains)", usableLand);
-   print("----------Of which: twoTwos", twoTwoCount);
-   print("----------Of which: grasland", terrainCount[0 + 1] + terrainCount[1 + 1]);
-   print("----------Of which: plain", terrainCount[3 + 1] + terrainCount[4 + 1]);
-   print("----------Of which: desert", terrainCount[6 + 1] + terrainCount[7 + 1]);
-   print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
-   print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
-   print("----------Floodplains:", floodPlainsCount);
-   --print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
-   print("------------------------------------------------------------------------------")
-   print("------------------------------------------------------------------------------")
-   print("------------------------------------------------------------------------------")
-   
-   
-   ___Debug("---------------");
-   ___Debug("--- Two-Two Map ---");
-   drawMap(mapTwoTwo, mapXSize, mapYSize);
-   
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("--- Spawnablemap ---");
-   
-   
-   drawMapBoolean(mapSpawnable, mapXSize, mapYSize);
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("--- Desert map ---");
-   drawMapBoolean(mapDesert, mapXSize, mapYSize);
-   
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
-   ___Debug("---------------");
+
    
 
    ----------------------
@@ -5588,7 +5675,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                         end
                      end
                      
-                     if mapTwoTwo[xIndex][yIndex] then
+                     if mapTwoTwo[xIndex][yIndex] > 1 then
                         ringTwoTwo[k] = ringTwoTwo[k] + 1;
                      end
                      
