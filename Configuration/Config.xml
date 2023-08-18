@@ -8,6 +8,7 @@
 		<Row Domain="Maps:Expansion2Maps" File="DWSmallContinents.lua" Name="Small Continents+" Description="Detailed Worlds: A more detailed version (but slower) of the original script" Image="Map_SmallContinents" SortIndex="260"/>
 		<Row Domain="Maps:Expansion2Maps" File="DWMixedLand.lua" Name="Detailed Continents" Description="Detailed Worlds: Continents with smaller Islands" Image="Map_ContinentsAndIslands" SortIndex="260"/>
 		<Row Domain="Maps:Expansion2Maps" File="DWMixedIslands.lua" Name="Island Regions+" Description="Detailed Worlds: A more detailed version (but slower) of the original script" Image="Map_IslandPlates" SortIndex="260"/>
+      <Row Domain="Maps:Expansion2Maps" File="rich_highlands_xp2.lua" Name="Rich Highlands" Description="Highlands, with more resources" Image="Map_Pangea" SortIndex="260"/>
 		<!--<Row Domain="Maps:Expansion2Maps" File="DWContinents.lua" Name="Continents+" Description="Detailed Worlds Continents" Image="Map_Continents" SortIndex="260"/> too many continent maps -->
 	</Maps>
 	
@@ -68,6 +69,14 @@
 		<Row Key1="Map" Key2="Highlands_XP2.lua" ParameterId="AutoRemap" Name="LOC_GAME_SPAWN_REMAP" Description="LOC_GAME_SPAWN_REMAP_DESC" Domain="bool" DefaultValue="0" ConfigurationGroup="Game" ConfigurationId="AutoRemap" GroupId="AdvancedOptions" Visible="0" SortIndex="2051"/>
 		<Row Key1="Map" Key2="Highlands_XP2.lua" ParameterId="BBStemp" Name="LOC_GAME_BBS_TEMP" Description="LOC_GAME_BBS_TEMP_DESC" Domain="bool" DefaultValue="1" ConfigurationGroup="Game" ConfigurationId="BBStemp" GroupId="AdvancedOptions" Visible="0" SortIndex="2052"/>
       <Row Key1="Map" Key2="Highlands_XP2.lua" ParameterId="WorldAge" Name="LOC_MAP_WORLD_AGE_NAME" Description="LOC_MAP_WORLD_AGE_DESCRIPTION" Domain="WorldAge" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="world_age" GroupId="MapOptions" Hash="0" SortIndex="230"/>
+      
+      <Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="Rich_Highlands_XP2MapName" 		Name="MapName" Description="" Domain="text" DefaultValue="Rich_Highlands_XP2" 		ConfigurationGroup="Map" ConfigurationId="MapName" GroupId="MapOptions" Visible="0" SortIndex="2010"/>
+		<Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="SpawnRecalculation" Name="LOC_GAME_SPAWN_RECALCULATION" Description="LOC_GAME_SPAWN_RECALCULATION_DESC" Domain="bool" DefaultValue="1" ConfigurationGroup="Game" ConfigurationId="SpawnRecalculation" GroupId="BBSOptions" SortIndex="2050"/>
+		<Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="AutoRemap" Name="LOC_GAME_SPAWN_REMAP" Description="LOC_GAME_SPAWN_REMAP_DESC" Domain="bool" DefaultValue="0" ConfigurationGroup="Game" ConfigurationId="AutoRemap" GroupId="AdvancedOptions" Visible="0" SortIndex="2051"/>
+		<Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="BBStemp" Name="LOC_GAME_BBS_TEMP" Description="LOC_GAME_BBS_TEMP_DESC" Domain="bool" DefaultValue="1" ConfigurationGroup="Game" ConfigurationId="BBStemp" GroupId="AdvancedOptions" Visible="0" SortIndex="2052"/>
+      <Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="WorldAge" Name="LOC_MAP_WORLD_AGE_NAME" Description="LOC_MAP_WORLD_AGE_DESCRIPTION" Domain="WorldAge" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="world_age" GroupId="MapOptions" Hash="0" SortIndex="230"/>
+      <Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="Temperature" Name="LOC_MAP_TEMPERATURE_NAME" Description="LOC_MAP_TEMPERATURE_DESCRIPTION" Domain="Temperature" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="temperature" GroupId="MapOptions" Hash="0" SortIndex="240"/>
+		<Row Key1="Map" Key2="rich_highlands_xp2.lua" ParameterId="Rainfall" Name="LOC_MAP_RAINFALL_NAME" Description="LOC_MAP_RAINFALL_DESCRIPTION" Domain="Rainfall" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="rainfall" GroupId="MapOptions" Hash="0" SortIndex="250"/>
 
 		<Row Key1="Map" Key2="Wetlands_XP2.lua" ParameterId="Wetlands_XP2MapName" 		Name="MapName" Description="" Domain="text" DefaultValue="Wetlands_XP2" 		ConfigurationGroup="Map" ConfigurationId="MapName" GroupId="MapOptions" Visible="0" SortIndex="2010"/>
 		<Row Key1="Map" Key2="Wetlands_XP2.lua" ParameterId="SpawnRecalculation" Name="LOC_GAME_SPAWN_RECALCULATION" Description="LOC_GAME_SPAWN_RECALCULATION_DESC" Domain="bool" DefaultValue="1" ConfigurationGroup="Game" ConfigurationId="SpawnRecalculation" GroupId="BBSOptions" SortIndex="2050"/>
