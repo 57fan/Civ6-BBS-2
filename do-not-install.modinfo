@@ -183,6 +183,7 @@
 	<File>Data/BBS Maps/tilted_axis.lua</File>
 	<File>Data/BBS Maps/archipelago_xp2.lua</File>
 	<File>Data/BBS Maps/highlands_xp2.lua</File>
+	<File>Data/BBS Maps/rich_highlands_xp2.lua</File>
 	<File>Data/BBS Maps/wetlands_xp2.lua</File>
 	<File>Data/BBS Maps/perfectworld6.lua</File>
 	<File>Data/BBS Maps/Utility/BBS_NaturalWonderGenerator.lua</File>
@@ -363,6 +364,7 @@
 	<File>Data/BBS Maps/tilted_axis.lua</File>
 	<File>Data/BBS Maps/archipelago_xp2.lua</File>
 	<File>Data/BBS Maps/highlands_xp2.lua</File>
+	<File>Data/BBS Maps/rich_highlands_xp2.lua</File>
 	<File>Data/BBS Maps/wetlands_xp2.lua</File>
 	<File>Data/BBS Maps/perfectworld6.lua</File>
 	<File>Data/BBS Maps/Utility/BBS_NaturalWonderGenerator.lua</File>

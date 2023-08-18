@@ -30,8 +30,8 @@ local CRABS_R3 = 10;
 local CRABS_R2 = 30;
 local FISH_R3 = 40;
 local FISH_R2 = 70;
-local PEARLS_R3 = 30;
-local PEARLS_R2 = 60;
+local PEARLS_R3 = 40;
+local PEARLS_R2 = 70;
 local AMBER_R3 = 30;
 local AMBER_R2 = 55;
 local WHALES_R3 = 50;
@@ -594,18 +594,22 @@ function BBS_Script()
 		world_age = MapConfiguration.GetValue("world_age");
       if (world_age == 1) then -- new
          spawnHills = 0.45;
-      else
+      elseif (world_age == 2) then
          spawnHills = 0.30;
+      else
+         spawnHills = 0.20;
       end
       
       if (MapConfiguration.GetValue("MAP_SCRIPT") == "Highlands_XP2.lua") then
-         spawnHills = 0.7;
+         if (world_age == 1) then -- new
+            spawnHills = 0.7;
+         elseif (world_age == 2) then
+            spawnHills = 0.45;
+         else
+            spawnHills = 0.30;
+         end
       end
-      
-      if (MapConfiguration.GetValue("MAP_SCRIPT") == "Lakes.lua") then
-         spawnHills = 0.25;
-         spawnTwoTwo = 0.07;
-      end
+
       
 		local ridge = MapConfiguration.GetValue("BBSRidge");
 		print ("Init: Map Size: ", mapSize, "2 = Small, 5 = Huge");

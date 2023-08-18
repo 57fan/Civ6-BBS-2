@@ -2375,6 +2375,7 @@ function NewBBS(instance)
    -- Amount of land for each column of the map.
    -- will be used to draw the "border" for East-West scenario
    local amountOfLandX = {};
+   local amountOfFresh = 0;
  
    -- Array init --
    for i = 1, mapXSize do
@@ -2406,6 +2407,7 @@ function NewBBS(instance)
       mapDesert[i] = {};
       
       amountOfLandX[i] = 0;
+      
       
       for j = 1, mapYSize do
          mapResourceCode[i][j] = -1;
@@ -2527,6 +2529,7 @@ function NewBBS(instance)
             end
             
             if(hasFreshWater(i, j, mapXSize, mapYSize, mapIsRoundWestEast)) then
+               amountOfFresh = amountOfFresh + 1;
                mapFreshWater[iIndex][jIndex] = true;
             end
             
@@ -2828,6 +2831,10 @@ function NewBBS(instance)
    print("----------Hills count", hillsCount);
    print("----------Hills percentage", hillsCount / usableLand);
    print("------Usable land count (no mountains)", usableLand);
+   print("----------Of which: fresh water", amountOfFresh);
+   print("----------Percentage: fresh water", amountOfFresh / usableLand);
+   print("----------Of which: costal tile", coastalCount);
+   print("----------Percentage: coastal tile", coastalCount / usableLand);
    print("----------Of which: Resources", mapResourceCount);
    print("----------Percentage: Resources", mapResourceCount / usableLand);
    print("----------Of which: Luxuries", mapLuxuryCount);
@@ -2840,6 +2847,7 @@ function NewBBS(instance)
    print("----------Of which: tundra", terrainCount[9 + 1] + terrainCount[10 + 1]);
    print("----------Of which: snow", terrainCount[12 + 1] + terrainCount[13 + 1]);
    print("----------Floodplains:", floodPlainsCount);
+   print("----------Floodplains percentage:", floodPlainsCount / usableLand);
    --print("----------Spawnable (after removing restricted tiles)", totalSpawnable);
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
