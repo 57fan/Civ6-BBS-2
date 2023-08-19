@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---	FILE:	BBS_AssignStartingPlot.lua    -- 2.2.3
+--	FILE:	BBS_AssignStartingPlot.lua    -- 2.2.5
 --	AUTHOR:  D. / Jack The Narrator
 --	PURPOSE: Custom Spawn Placement Script
 ------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.2.4"
+local bbs_version = "2.2.5"
 
 local bError_major = false;
 local bError_minor = false;
@@ -201,7 +201,7 @@ function BBS_AssignStartingPlots.Create(args)
       
       
    else -- using automatic setting
-      if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" then
+      if mapScript == "Highlands_XP2.lua" or mapScript == "Lakes.lua" or mapScript == "rich_highlands_xp2.lua" then
          Major_Distance_Target = 15
       end
       
