@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.2.5"
+local bbs_version = "2.2.6"
 
 local bError_major = false;
 local bError_minor = false;
@@ -5629,7 +5629,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                   ringRiver[k] = 0;
                   ringSea[k] = 0;
                   
-                  for l = 1, 100 do
+                  for l = 1, 1000 do
                      ringTerrain[k][l] = 0;
                      ringResource[k][l] = 0;
                      ringFeature[k][l] = 0;
