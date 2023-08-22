@@ -835,6 +835,7 @@ function BBS_Script()
       end
       
       __Debug("sorti montagnes")
+
       -------------------------------
 
        ---- LARGE SPAWN CORRECTION -----
@@ -1261,6 +1262,7 @@ function BBS_Script()
 		end
 		__Debug("Terraforming: Completed")
 		print ("Terraforming - Completed", os.date("%c"))
+      
 
 		---------------------------------------------------------------------------------------------------------------
 		-- Starting the resources rebalancing in 3 phases: Strategic, Food and Production
@@ -1282,7 +1284,7 @@ function BBS_Script()
 				end
 			end
 		end
-		
+
 		-- Phase 1 Completed
 		print ("Strategic Resouce Balancing - Completed", os.date("%c"))
 		

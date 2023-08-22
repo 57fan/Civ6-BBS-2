@@ -13,7 +13,7 @@ include( "NaturalWonderGenerator" );
 include( "ResourceGenerator" );
 include ( "AssignStartingPlots" );
 
-local bbs_version = "2.2.6"
+local bbs_version = "2.2.7"
 
 local bError_major = false;
 local bError_minor = false;
@@ -711,6 +711,11 @@ function terraformBBS(x, y, newTerrain, newResource, newFeature)
    local yIndex = y + 1;
    
    local plot = Map.GetPlot(x, y);
+   
+   if ((mapFeatureCode[xIndex][yIndex] > 5 and mapFeatureCode[xIndex][yIndex] < 30) or mapFeatureCode[xIndex][yIndex] > 33) then -- wonder tile 
+      print ("ERROR, tried to terraform a wonder tile x:", x ,"y:", y);
+      return -1;
+   end
 
    -- Terrain first
    if (newTerrain ~= -2) then -- -2 = no change
@@ -2471,6 +2476,14 @@ function NewBBS(instance)
             local feature = plot:GetFeatureType();
             local terrain = plot:GetTerrainType();
             local resource = plot:GetResourceType();
+            
+            if (feature == 41 and isMountainCode(terrain) == false) then -- vesuvius wrongly put on the map
+                ___Debug("fixing Vesuvius", i, j);
+                TerrainBuilder.SetTerrainType(plot, 5);
+                terrain = 5;
+            end
+               
+            
             --local isCoastal = false;
             local food = plot:GetYield(g_YIELD_FOOD);
             local prod = plot:GetYield(g_YIELD_PRODUCTION);
@@ -3231,9 +3244,7 @@ function NewBBS(instance)
          end
       end
    end
-   
-
-   
+  
 
    ----------------------
    -----PHASE 3----------
@@ -3675,9 +3686,6 @@ function NewBBS(instance)
    print(os.date("%c"));
    print("--------------------------");
    print("--------------------------");
-
-
-
    
 end
 
