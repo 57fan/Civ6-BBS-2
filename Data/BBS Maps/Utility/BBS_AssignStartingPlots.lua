@@ -45,7 +45,7 @@ BBS_AssignStartingPlots = {};
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-   --print (...);
+   print (...);
 end
 
 ------------------------------------------------------------- BBS ----------------------------
@@ -1913,10 +1913,10 @@ local islandTwoTeamID = -1;
 
 
 --- Minimal size of an island in case of "standard map"
-local MIN_ISLAND_SIZE_STANDARD = 35;
+local MIN_ISLAND_SIZE_STANDARD = 50;
 
 --- Minimal size of an island in case of "naval map" (ex:islands, continent and islands, small continent)
-local MIN_ISLAND_SIZE_WATER = 20;
+local MIN_ISLAND_SIZE_WATER = 25;
 
 function labelIslands(mapXSize, mapYSize, mapIsRoundWestEast)
 
@@ -7211,9 +7211,13 @@ function hasFreshWater (xStart, yStart, xSize, ySize, mapIsRoundWestEast)
       local x = element[1];
       local y = element[2];
       
-      local tempPlot = Map.GetPlot(x, y);
-      if tempPlot:IsLake() then
-         return true; 
+      -- iSLake is not accurate: we might have a volcanoe put there. First need to check we are dealing with water
+      if mapTerrainCode[x + 1][y + 1] == 15 then      
+         local tempPlot = Map.GetPlot(x, y);
+         if tempPlot:IsLake() then
+            return true; 
+         end
+      
       end
       
    end
