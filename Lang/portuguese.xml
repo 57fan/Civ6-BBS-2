@@ -118,6 +118,31 @@
 		<Replace Tag="BBS_NATURAL_MORE_DESC" Language="pt_BR">
 			<Text>Duelo: 3[NEWLINE]Minúsculo: 4[NEWLINE]Pequeno: 6[NEWLINE]Padrão: 8[NEWLINE]Grande: 10[NEWLINE]Enorme: 12[NEWLINE]Gigante: 14</Text>
 		</Replace>
+      
+            
+      <!-- == Forest balancing-->
+
+		<Replace Tag="BBS_BALANCE_FORESTS_ENABLED_NAME" Language="pt_BR">
+			<Text>Ativado</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_ENABLED_DESC" Language="pt_BR">
+			<Text>Esta funcionalidade irá equilibrar a distribuição de florestas em todo o mapa</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_DISABLED_NAME" Language="pt_BR">
+			<Text>Desativado</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_DISABLED_DESC" Language="pt_BR">
+			<Text>As florestas permanecerão como a Firaxis projetou</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_BALANCE_FORESTS_NAME" Language="pt_BR">
+			<Text>Equilíbrio de Florestas</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_BALANCE_FORESTS_DESC" Language="pt_BR">
+			<Text>Se devemos equilibrar a distribuição de florestas no mapa ou não</Text>
+		</Replace>
+
+      
+      <!-- == End Forest balancing-->
 	
 		<!-- == Min distance == -->
 		<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="pt_BR">
