@@ -1,5 +1,5 @@
  ------------------------------------------------------------------------------
---	FILE:	 BBS_Balance.lua 2.2.3
+--	FILE:	 BBS_Balance.lua 2.2.8
 --	AUTHOR:  D. / Jack The Narrator, 57Fan
 --	PURPOSE: Rebalance the map spawn post placement 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,12 +106,12 @@ function isHillAble (x, y)
    local resource = mapResourceCode[xIndex][yIndex];
    
    -- anything that is not: forest or rainforest
-   if (feature == 0 or feature > 4) then
+   if (feature < 3 or feature > 4) then
       return -1;
    end
    
    -- We only look at plains/grassland
-   if terrain >= 6 then
+   if terrain >= 15 then
       return -1;
    end
    
@@ -265,6 +265,12 @@ function toHill (x, y, cleanResource, cleanFeature)
    
    --mapTwoTwo[xIndex][yIndex] = twoTwo;
    
+   if (mapTerrainCode[xIndex][yIndex] == 9 or mapTerrainCode[xIndex][yIndex] == 10) then -- in case we are in tundra, we consider a 3 yield tile a 2-2
+      if (mapFoodYield[xIndex][yIndex] + mapProdYield[xIndex][yIndex] >= 3) then
+         return 2;
+      end
+   end
+   
    if (twoTwo >= 2) then
       return 2;
    end
@@ -340,6 +346,8 @@ end
 function toTwoTwo(x, y, canStone, canSheep, canBanana)
    local xIndex = x + 1;
    local yIndex = y + 1;
+   
+   canSheep = true; -- will  be fixed the day balancing is done civ per civ
 
 --   local plot = Map.GetPlot(x, y);
    local terrain = mapTerrainCode[xIndex][yIndex];
@@ -481,6 +489,36 @@ function toTwoTwo(x, y, canStone, canSheep, canBanana)
             return -1;
          end
       end
+   elseif (terrain == 9) then -- flat tundra -- can either deer/forest 1-2
+      --print ("boost flat tundra", x, y);
+      local rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
+      
+      if rng > 0.8 then --sheep
+         targetResource = 7;
+         targetTerrain = 10;
+         targetFeature = -1;
+      else -- deer
+         targetResource = 4;
+         targetTerrain = -2;
+         targetFeature = -2;
+      end
+   
+      
+   
+   elseif (terrain == 10) then -- tundra hill - can either deer 1-2 or sheep
+      --print ("boost hill tundra", x, y);
+      local rng = TerrainBuilder.GetRandomNumber(100,"test")/100;
+      
+      if rng > 0.5 then --sheep
+         targetResource = 7;
+         targetTerrain = -2;
+         targetFeature = -1;
+      else -- deer
+         targetResource = 4;
+         targetTerrain = -2;
+         targetFeature = -2;
+      end
+   
    end
    
    --return changePlot(x, y, targetTerrain, targetResource, targetFeature);
@@ -864,7 +902,7 @@ function BBS_Script()
          local missingHills = 0;
          local missingTwoTwo = 0;
          
-         for j = 3, fixedRing do
+         for j = 2, fixedRing do
          
             local okToHill = {};
             local okToHillCount = 0;
@@ -874,7 +912,7 @@ function BBS_Script()
             
             local hillCount = 0;
             local twoTwoCount = 0;
-            local plainGrasslandTile = 0; -- this tile is workable
+            local workableTile = 0; -- this tile is workable
             
             
             
@@ -890,31 +928,52 @@ function BBS_Script()
                if mapTwoTwo[xIndex][yIndex] >= 2 then
                   twoTwoCount = twoTwoCount + 1;
                end
-               
+
                if (mapTerrainCode[xIndex][yIndex] == 0 or mapTerrainCode[xIndex][yIndex] == 1 or mapTerrainCode[xIndex][yIndex] == 3
                       or mapTerrainCode[xIndex][yIndex] == 4) then -- we are looking at plain/grassland only
-                  plainGrasslandTile = plainGrasslandTile + 1;
+                  workableTile = workableTile + 1;
                   if (mapTerrainCode[xIndex][yIndex] == 4 or mapTerrainCode[xIndex][yIndex] == 1) then
                      hillCount = hillCount + 1;
                   end
+                  
+                  local hillReturn = isHillAble(x, y);
+                  if hillReturn == 1 then
+                     table.insert(okToHill, {x, y});
+                     okToHillCount = okToHillCount + 1;
+                  elseif hillReturn == 0 then
+                     table.insert(okToHillBkp, {x, y});
+                     okToHillBkpCount = okToHillBkpCount + 1;
+                  end
                end
                
-               local hillReturn = isHillAble(x, y);
-               if hillReturn == 1 then
-                  table.insert(okToHill, {x, y});
-                  okToHillCount = okToHillCount + 1;
-               elseif hillReturn == 0 then
-                  table.insert(okToHillBkp, {x, y});
-                  okToHillBkpCount = okToHillBkpCount + 1;
+               if (player.tundraCiv and (mapTerrainCode[xIndex][yIndex] == 9 or mapTerrainCode[xIndex][yIndex] == 10)) then
+                  workableTile = workableTile + 1;
+                  if (mapTerrainCode[xIndex][yIndex] == 10) then
+                     hillCount = hillCount + 1;
+                  end
+                  
+                  --print("tundra routine");
+                  
+                  local hillReturn = isHillAble(x, y);
+                  if hillReturn == 1 then
+                     table.insert(okToHill, {x, y});
+                     okToHillCount = okToHillCount + 1;
+                  elseif hillReturn == 0 then
+                     table.insert(okToHillBkp, {x, y});
+                     okToHillBkpCount = okToHillBkpCount + 1;
+                  end
                end
+               
+               
+               
             end
             
-            local aimedTwoTwo =  math.floor(plainGrasslandTile * spawnTwoTwo + 1);
-            local aimedHills =  math.floor(plainGrasslandTile * spawnHills + 1);
+            local aimedTwoTwo =  math.floor(workableTile * spawnTwoTwo + 1);
+            local aimedHills =  math.floor(workableTile * spawnHills + 1);
             
             __Debug("Ring ", j, "Hill status: current", hillCount, "Aimed hills", aimedHills);
             __Debug("Ring ", j, "two-two status: current", twoTwoCount, "Aimed two-two:", aimedTwoTwo);
-            __Debug("Ring ", j, "Workable tiles", plainGrasslandTile);
+            __Debug("Ring ", j, "Workable tiles", workableTile);
             
             local hillDiff = aimedHills - hillCount;
             local twotwoDiff = aimedTwoTwo - twoTwoCount;
@@ -931,6 +990,8 @@ function BBS_Script()
             okToHillBkp = GetShuffledCopyOfTable(okToHillBkp);
             
             local givenTwoTwos = giveHills(okToHill, okToHillCount, okToHillBkp, okToHillBkpCount, hillDiff)
+            
+            --print("two-two", givenTwoTwos);
             
             twotwoDiff = twotwoDiff - givenTwoTwos;
             
@@ -952,6 +1013,20 @@ function BBS_Script()
 			local playerUnits;
 			local startPlot;
 			--playerUnits = pPlayer:GetUnits()
+         local isOceanCiv = false;
+         
+         ___Debug(leaderType);
+         
+         for row in GameInfo.Leaders_XP2() do
+            ___Debug("test start bis", row.LeaderType);
+            if (row.LeaderType == leaderType) then
+               ___Debug("Ocean start bis", row.OceanStart);
+               if row.OceanStart == true then
+                  ___Debug("Found ocean civ: bsi", leaderType);
+                  isOceanCiv = true;
+               end
+            end
+         end
 
 			--for j, unit in playerUnits:Members() do
 				--local unitTypeName = UnitManager.GetTypeName(unit)
@@ -1023,6 +1098,7 @@ function BBS_Script()
 											possibleCoastalRing3Count = 0; 
 											possibleCoastalRing2 = nil; 
 											possibleCoastalRing3 = nil;
+                                 isOceanCiv = isOceanCiv;
 										};
 
 						__Debug("Major Start X: ", majList[i].plotX, "Major Start Y: ", majList[i].plotY, "Player: ",major_table[i]," ",majList[i].leader, majList[i].civ);
@@ -1310,6 +1386,7 @@ function BBS_Script()
 				tempEval = EvaluateStartingLocation(startPlot)
 				majList[i].food_spawn_start = tempEval[5]+0.25 * tempEval[26] + tempEval[13]*0.75  -- Adjust for Mountains;;
 				majList[i].prod_spawn_start = tempEval[6]+0.25 * tempEval[27];
+            --print(majorAll, i , majorAll[i])
 				if (majList[i].civ == "CIVILIZATION_MALI" ) then
 					majList[i].food_spawn_start = majList[i].food_spawn_start + tempEval[12] * 1.5
 					elseif (majList[i].civ == "CIVILIZATION_CANADA" ) then
@@ -1318,7 +1395,8 @@ function BBS_Script()
 						end
 					elseif (majList[i].civ == "CIVILIZATION_RUSSIA" ) then
 					majList[i].food_spawn_start = majList[i].food_spawn_start + tempEval[11] * 1 -- was 0 would make Russia less prone to food correction
-					elseif (majList[i].civ == "CIVILIZATION_MAORI" ) then
+               
+					elseif (majList[i].isOceanCiv == true ) then
 					majList[i].food_spawn_start = math.max(majList[i].food_spawn_start,18) -- so Maori doesn't penalized other.
 				end
 				temp = majList[i].food_spawn_start;
@@ -1770,7 +1848,7 @@ function BBS_Script()
 				if (majList[i].civ == "CIVILIZATION_MALI" ) then
 					majList[i].prod_spawn_start = majList[i].prod_spawn_start + tempEval[12]*0.75 -- Add +0.75 prod per Desert tile for the faith bonus
 				end
-				if (majList[i].civ == "CIVILIZATION_MAORI" ) then
+				if (majList[i].isOceanCiv == true ) then
 					majList[i].prod_spawn_start = math.max(majList[i].prod_spawn_start,10) -- so Maori doesn't penalized other.
 				end
 				avgProd = avgProd + majList[i].prod_spawn_start;
@@ -2120,7 +2198,7 @@ function BBS_Script()
 				majList[i].best_tile_inner = tempEval[28]+1.5; 
 				majList[i].best_tile_inner_2 = tempEval[29]+1.5;
 				end				
-				if (majList[i].civ == "CIVILIZATION_MAORI" ) and tempEval[14] > 4 then
+				if (majList[i].isOceanCiv == true ) and tempEval[14] > 4 then
 				-- Maori if on water
 				--	Ring 1 like a 2:2
 				majList[i].best_tile = 5;
@@ -3956,7 +4034,7 @@ function Terraforming_Best_Refresh(majList,major_count,step,bHighRoll)
 				majList[i].best_tile_inner = _tempEval[28]+desert_buff; 
 				majList[i].best_tile_inner_2 = _tempEval[29]+desert_buff;
 				end				
-				if (majList[i].civ == "CIVILIZATION_MAORI" ) and _tempEval[14] > 4 then
+				if (majList[i].isOceanCiv == true and _tempEval[14] > 4) then
 				-- Maori if on water
 				--	Ring 1 like a 2:2
 				majList[i].best_tile = maori_sea;
