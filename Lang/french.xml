@@ -368,7 +368,7 @@
 			  <Text>Baie bioluminescente</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case.[ICON_FOOD] Nourriture +1, [ICON_GOLD] Or +1 et [ICON_SCIENCE] Science +3. [ICON_GOLD] Or +1 sur les bateaux de pêche si vous possédez cette case.</Text>
+			  <Text>Merveille naturelle d'une case, considérée comme un récif.[ICON_FOOD] Nourriture +1, [ICON_GOLD] Or +1 et [ICON_SCIENCE] Science +3. [ICON_GOLD] Or +1 sur les bateaux de pêche si vous possédez cette case.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_BIOLUMINESCENT_BAY_QUOTE" Language="fr_FR">
 			  <Text>“L’émission de lumière du feu, des éclairs, des étoiles ou des êtres vivants attire toujours l’attention de tout être humain. Dans le cas de la baie luminescente, elle émet une étrange lueur, quelque chose de magique et mystèrieux."[NEWLINE]- Cassius Stevani</Text>
@@ -399,7 +399,7 @@
 			  <Text>Dallol</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_DALLOL_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +1 et [ICON_Science] Science +2.</Text>
+			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +1 et [ICON_SCIENCE] Science +2.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_DALLOL_QUOTE" Language="fr_FR">
 			  <Text>"Là, tout est enfer, ténèbres, gouffre sulfureux, incendie, bouillonnement, infection, consomption"[NEWLINE]- William Shakespeare, King Lear</Text>
@@ -430,7 +430,7 @@
 			  <Text>Mont Kailash</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_KAILASH_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_CULTURE] Culture +1 et [ICON_Faith] Foi +1.[NEWLINE][ICON_CULTURE] Culture +1 pour chaque ville étrangère qui suit votre religion si vous possédez cette case.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_CULTURE] Culture +1 et [ICON_FAITH] Foi +1.[NEWLINE][ICON_CULTURE] Culture +1 pour chaque ville étrangère qui suit votre religion si vous possédez cette case.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_KAILASH_QUOTE" Language="fr_FR">
 			  <Text>"Après avoir ainsi instruit les pieux Brahma de Seigneur s'en alla avec dans son sillage les ancêtres et les chefs du peuple qu'il emmena de sa propre place à la demeure de Shiva de Seigneur, Kailash, la meilleure de toutes les montagnes qui est si chère au maître. " [NEWLINE]- Le Bhagavata Purana</Text>
@@ -458,7 +458,7 @@
 			  <Text>Lençois Maranhenses</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2.[NEWLINE][ICON_CULTURE] Culture +1 pour les cases de désert et de plaines inondables si vous possédez au moins une case.</Text>
+			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2.[NEWLINE][ICON_CULTURE] Culture +1 pour les cases inondables de plaine et de désert si vous possédez au moins une case.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_LENCOIS_MARANHENSES_QUOTE" Language="fr_FR">
 			  <Text>"J'ai vu des prairies de sable blanc et doré, changeant constamment de forme selon l'humeur créative et le caprice des vents."[NEWLINE]- Geert Mauricio Bas</Text>
@@ -472,7 +472,7 @@
 			  <Text>Krakatoa</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_KRAKATOA_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme un volcan. [ICON_Science] Science +2 pour les cases adjacentes. Fournit des rendements supplémentaires en cas d'éruption au coût de [ICON_Citizen] Citoyens et dommages importants aux bâtiments et aménagements. Toujours actif.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme un volcan. [ICON_SCIENCE] Science +2 pour les cases adjacentes. Fournit des rendements supplémentaires en cas d'éruption au coût de [ICON_CITIZEN] Citoyens et dommages importants aux bâtiments et aménagements. Toujours actif.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_KRAKATOA_QUOTE" Language="fr_FR">
 			  <Text>"J'ai vu avec stupéfaction que l'île de Krakatoa était complètement brûlée et stérile sous nos yeux et qu'à quatre endroits elle lançait de gros morceaux de feu. "[NEWLINE]- Johann Wilhelm Vogel</Text>
@@ -535,7 +535,7 @@
 			  <Text>Désert de Namib</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_NAMIB_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 3 cases. [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2. Les unités de Reconnaissance qui pénètrent le Désert de Namib gagnent +1 PM pour le reste de la partie.</Text>
+			  <Text>Merveille naturelle de 3 cases. [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2. Les unités de reconnaissance qui pénètrent le Désert de Namib gagnent +1 [ICON_MOVEMENT] PM pour le reste de la partie.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_NAMIB_QUOTE" Language="fr_FR">
 			  <Text>"J'aime entendre le son des dunes de sable, je fais partie de ceux qui perçoivent le rythme d'un paysage comme enregistré dans de nombreuses peintures, je fais partie des milliers qui savent que je suis enfin chez moi." [NEWLINE]- Mvula Ya Nangolo</Text>
@@ -547,7 +547,7 @@
 			  <Text>Nomades du Désert</Text>
 		</Replace>
 		<Replace Tag="LOC_ABILITY_NAMIB_BUFF_DESCRIPTION" Language="fr_FR">
-			  <Text>Nomades du désert : [ICON_Movement] PM +1</Text>
+			  <Text>[ICON_MOVEMENT] PM +1 (Nomades du désert).</Text>
 		</Replace>
 
 		<!-- = Rock of Gibraltar = -->
@@ -569,7 +569,7 @@
 			  <Text>Old Faithful</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +1, [ICON_Science] Science +3 et [ICON_Faith] Foi +1. Bonus de proximité majeur pour les Campus.</Text>
+			  <Text>Merveille naturelle d'une case. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +1, [ICON_SCIENCE] Science +3 et [ICON_FAITH] Foi +1. Bonus de proximité majeur pour les Campus.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_OLD_FAITHFUL_QUOTE" Language="fr_FR">
 			  <Text>Il a craché à intervalles réguliers neuf fois pendant notre séjour, les colonnes d'eau bouillante étant projetées de quatre-vingt-dix à cent vingt pieds à chaque décharge, ce qui a duré de quinze à vingt minutes. Nous lui avons donné le nom de Old Faithful."[NEWLINE]- Nathaniel P. Langford</Text>
@@ -578,7 +578,7 @@
 			  <Text>Old Faithful est un geyser du parc national de Yellowstone, dans le Wyoming, aux États-Unis. Vu pour la première fois par les Européens en 1870 (et par les indigènes environ 10 000 ans auparavant), Old Faithful fut ainsi nommé en raison de la régularité de son éruption. Le geyser tire une colonne d'eau bouillante à une hauteur d'environ 30-50 mètres toutes les 60-90 minutes (intervalle déterminé par la férocité de l'éruption précédente). Les geysers surviennent lorsque l'eau souterraine touche du magma (roche en fusion). L'eau est instantanément transformée en vapeur, qui se précipite dans le geyser disponible le plus proche à une pression extrêmement élevée. Old Faithful et les 250 autres geysers de Yellowstone accueillent environ trois millions de visiteurs chaque année.</Text>
 		</Replace>	
 		<Replace Tag="LOC_DISTRICT_OLD_FAITHFUL_Science" Language="fr_FR">
-			  <Text>+{1_num} [ICON_Science] Science pour chaque Old Faithful.</Text>
+			  <Text>[ICON_SCIENCE] Science +{1_num} pour l'Old Faithful.</Text>
 		</Replace>
 
 		<!-- = Lakes of Ounianga = -->
@@ -586,7 +586,7 @@
 			  <Text>Lacs d'Ounianga</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_OUNIANGA_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2. [ICON_FOOD] Nourriture +1 pour les cases adjacentes.</Text>
+			  <Text>Merveille naturelle de 2 cases. Fournit de l'eau douce. [ICON_FOOD] Nourriture +2, [ICON_GOLD] Or +2 et [ICON_CULTURE] Culture +2.[NEWLINE][ICON_FOOD] Nourriture +1 pour les cases adjacentes.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_OUNIANGA_QUOTE" Language="fr_FR">
 			  <Text>"Au commencement, le langage du désert était l'herbe qui fleurissait contre le mur du vent, les grands palmiers qui se balançaient au moment des semailles et les cendres transportées par l'air jusqu'à l'accueil bleu du sable chaud. Elle a été notre première fontaine, notre mère, qui nous a soutenus, puis nous a livrés à l'âge des villes d'attente."[NEWLINE]- Al-Munsif al-Wahaybi</Text>
@@ -600,7 +600,7 @@
 			  <Text>Salar d'Uyuni</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 4 cases. [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +4 et [ICON_Science] Science +2. Bonus de proximité majeur pour les Plateformes commerciales.</Text>
+			  <Text>Merveille naturelle de 4 cases. [ICON_PRODUCTION] Production +2, [ICON_GOLD] Or +4 et [ICON_SCIENCE] Science +2. Bonus de proximité majeur pour les Plateformes commerciales.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_SALAR_DE_UYUNI_QUOTE" Language="fr_FR">
 			  <Text>"J'ai frissonné dans ces solitudes quand j'ai entendu la voix du sel dans le désert."[NEWLINE]- Pablo Neruda</Text>
@@ -617,7 +617,7 @@
 			  <Text>Mont Sinaï</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_SINAI_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_Faith] Foi +2 pour les cases adjacentes. Les unités religieuses se trouvant sur une case adjacente au Mont Sinaï obtiennent +15 [ICON_Strenght] Puissance de combat théologique.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_FAITH] Foi +2 pour les cases adjacentes. Les unités religieuses se trouvant sur une case adjacente au Mont Sinaï obtiennent +15 [ICON_RELIGION] Puissance religieuse.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_SINAI_QUOTE" Language="fr_FR">
 			  <Text>"Lorsque l'Éternel eut achevé de parler à Moïse sur le mont Sinaï, il lui donna les deux tables de la loi, les tables de pierre écrites du doigt de Dieu."[NEWLINE]- Exode 31:18</Text>
@@ -629,7 +629,7 @@
 			  <Text>Dix Commandements</Text>
 		</Replace>
 		<Replace Tag="LOC_ABILITY_SINAI_BUFF_DESCRIPTION" Language="fr_FR">
-			  <Text>Dix Commandements : [ICON_Strength] Puissance de combat +15 lors d'un combat théologique.</Text>
+			  <Text>[ICON_RELIGION] Puissance de combat religieux +15 (Dix Commandement).</Text>
 		</Replace>
 
 		<!-- = Sri Pada = -->	
@@ -637,7 +637,7 @@
 			  <Text>Pic d'Adam</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_SRI_PADA_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_FOOD] Nourriture +1 et [ICON_Faith] Foi +1 pour les cases adjacentes.</Text>
+			  <Text>Merveille naturelle infranchissable d'une case, considérée comme une montagne. [ICON_FOOD] Nourriture +1 et [ICON_FAITH] Foi +1 pour les cases adjacentes.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_SRI_PADA_QUOTE" Language="fr_FR">
 			  <Text>"Un spectacle extraordinairement merveilleux, doté d'une splendeur suprême."[NEWLINE]- Le Mahabharata</Text>
@@ -651,7 +651,7 @@
 			  <Text>Dôme de Vredefort</Text>
 		</Replace>
 		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_DESCRIPTION" Language="fr_FR">
-			  <Text>Merveille naturelle de 2 cases. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +1, [ICON_Science] Science +2 et [ICON_CULTURE] Culture +1.</Text>
+			  <Text>Merveille naturelle de 2 cases. [ICON_FOOD] Nourriture +2, [ICON_PRODUCTION] Production +1, [ICON_SCIENCE] Science +2 et [ICON_CULTURE] Culture +1.</Text>
 		</Replace>	
 		<Replace Tag="LOC_FEATURE_VREDEFORT_DOME_QUOTE" Language="fr_FR">
 			  <Text>"Lorsque les géologues ont parcouru pour la première fois le spectaculaire cercle de collines qui chevauchent la rivière Vaal au nord de Vredefort il y a près de 150 ans, ils ont immédiatement reconnu que les roches inhabituellement brisées et inclinées témoignaient d'un événement exceptionnellement violent dans un passé lointain."[NEWLINE]- Wolf Uwe Reimold</Text>
