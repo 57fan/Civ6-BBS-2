@@ -45,7 +45,7 @@ BBS_AssignStartingPlots = {};
 
 ------------------------------------------------------------------------------
 function ___Debug(...)
-   print (...);
+   --print (...);
 end
 
 ------------------------------------------------------------- BBS ----------------------------
@@ -96,6 +96,7 @@ function BBS_AssignStartingPlots.Create(args)
    print ("Init: Team Placement ", Teamers_Config, "0 = Standard, 1 = East-West (RTS Mode)");
    local minDistance = MapConfiguration.GetValue("BBSMinDistance");
    print ("Init: Minimal distance setting:", minDistance);
+   print ("Init: Balance Forests", MapConfiguration.GetValue("BBSBalanceForests"), "0 = enabled, 1 = disabled");
 
    print("------------------------------------------------------------------------------")
    print("------------------------------------------------------------------------------")
@@ -545,11 +546,15 @@ rowTwoTwo = {};
 rowHills = {};
 rowResource = {};
 rowLuxury = {};
+rowForest = {}; -- Forest
+rowRain = {};
 
 rowPercentageTwoTwo = {};
 rowPercentageHills = {};
 rowPercentageResource = {};
 rowPercentageLuxury = {};
+rowPercentageForest = {};
+rowPercentageRain = {};
 
 
 
@@ -691,6 +696,348 @@ local SHIT_PERCENTAGE_R5 = 0.15;
 
 local SEA_PERCANTEGE_R3 = 0.50;
 
+
+local PERCENTAGEGREENS = 0.35 -- combined percentage of forest and rainforests
+
+local cat0Forest = 0.33 
+local cat1Forest = 0.50
+local cat2Forest = 0.66
+local cat3Forest = 1
+
+--[[
+0 = equator ( 66% rainforest)
+1 = mid (50% rainforest)
+2 = high (33% rain)
+3 = poles (0% rain)
+--]]
+function evenForest(rowID, mapXSize, mapYSize)
+
+   if (rowUsable[rowID + 1] < 5) then
+      ___Debug("won't work as there are less than 5 tiles");
+      return;
+   end
+
+   -- know where we are
+   --local equatorDistance = 0 -- expressed in percentage
+   local forestCategory = 0
+   local middleMap = (mapYSize - 1) / 2
+   
+   
+   if (rowID < middleMap) then
+      if (rowID > (middleMap - mapYSize * 0.12)) then
+         forestCategory = 0;
+      elseif (rowID > (middleMap - mapYSize * 0.18)) then
+         forestCategory = 1;
+      elseif (rowID > (middleMap - mapYSize * 0.25)) then
+         forestCategory = 2;
+      else
+         forestCategory = 3;
+      end
+   else
+      if (rowID < (middleMap + mapYSize * 0.12)) then
+         forestCategory = 0;
+      elseif (rowID < (middleMap + mapYSize * 0.18)) then
+         forestCategory = 1;
+      elseif (rowID < (middleMap + mapYSize * 0.25)) then
+         forestCategory = 2;
+      else
+         forestCategory = 3;
+      end
+   end
+   
+   ___Debug("row", rowID, "forestCategory", forestCategory);
+   
+   local greenPercentage = rowPercentageForest[rowID + 1] + rowPercentageRain[rowID + 1];
+   
+   ___Debug("green", greenPercentage);
+   
+   if (greenPercentage > PERCENTAGEGREENS * 100) then
+      ___Debug("reduce");
+      reduceForest(rowID, forestCategory, mapXSize);
+   elseif (greenPercentage < PERCENTAGEGREENS * 100) then
+      ___Debug("grow");
+      growForest(rowID, forestCategory, mapXSize);
+   end
+   
+   return;
+
+end
+
+function growForest(rowID, forestCategory, mapXSize)
+
+   local objectiveRain = 0;
+   local objectiveForest = 0;
+   local usableCount = rowUsable[rowID + 1];
+   
+   if (forestCategory == 0) then
+      objectiveForest = math.floor(usableCount * cat0Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat0Forest) * PERCENTAGEGREENS + 0.5)
+   elseif (forestCategory == 1) then
+      objectiveForest = math.floor(usableCount * cat1Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat1Forest) * PERCENTAGEGREENS + 0.5)
+   elseif (forestCategory == 2) then
+      objectiveForest = math.floor(usableCount * cat2Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat2Forest) * PERCENTAGEGREENS + 0.5)
+   else
+      objectiveForest = math.floor(usableCount * cat3Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat3Forest) * PERCENTAGEGREENS + 0.5)
+   end
+   
+   local addForest = objectiveForest - rowForest[rowID + 1];
+   local addRain = objectiveRain - rowRain[rowID + 1];
+   
+   if addForest < 0 then
+      ___Debug("need to reduce forest, not add");
+      addRain = addRain + addForest;
+      addForest = 0;
+   end
+   
+   if addRain < 0 then
+      ___Debug("need to reduce Rain, not add");
+      addForest = addForest + addRain ;
+      addRain = 0;
+   end
+   
+   local listRainAdd = {};
+   local listForestAdd = {};
+   
+   local addForestCount = 0;
+   local addRainCount = 0;
+   
+   for i = 0, mapXSize - 1 do
+      if (canAddRain(i, rowID)) then
+         table.insert(listRainAdd, {i, rowID});
+         addRainCount = addRainCount + 1;
+      end
+      if (canAddForest(i, rowID)) then
+         table.insert(listForestAdd, {i, rowID});
+         addForestCount = addForestCount + 1;
+      end
+   end
+   
+   --print("addForest", addForest)
+   --print("addRain", addRain)
+   --print("addForestCount", addForestCount)
+   --print("addRainCount", addRainCount)
+   
+   if addRainCount < addRain then -- not enough tiles to add
+      addForest = addForest + (addRain - addRainCount);
+      addRain = addRainCount;
+   end
+   
+   if addForestCount < addForest then
+      addForest = addForestCount;
+   end
+   
+   listRainAdd = GetShuffledCopyOfTable(listRainAdd);
+   listForestAdd = GetShuffledCopyOfTable(listForestAdd);
+   
+   for i = 0, addForest - 1 do
+      terraformBBS(listForestAdd[i + 1][1], listForestAdd[i + 1][2], -2, -2, 3);
+      ___Debug("added forest", listForestAdd[i + 1][1], listForestAdd[i + 1][2])
+   end
+   
+   for i = 0, addRain - 1 do
+      terraformBBS(listRainAdd[i + 1][1], listRainAdd[i + 1][2], -2, -2, 2);
+      ___Debug("added rain", listRainAdd[i + 1][1], listRainAdd[i + 1][2])
+   end
+   
+   ___Debug("finished for row", rowID);
+   
+   return 0;
+end
+
+function reduceForest(rowID, forestCategory, mapXSize)
+
+   local objectiveRain = 0;
+   local objectiveForest = 0;
+   local usableCount = rowUsable[rowID + 1];
+   
+   if (forestCategory == 0) then
+      objectiveForest = math.floor(usableCount * cat0Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat0Forest) * PERCENTAGEGREENS + 0.5)
+   elseif (forestCategory == 1) then
+      objectiveForest = math.floor(usableCount * cat1Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat1Forest) * PERCENTAGEGREENS + 0.5)
+   elseif (forestCategory == 2) then
+      objectiveForest = math.floor(usableCount * cat2Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat2Forest) * PERCENTAGEGREENS + 0.5)
+   else
+      objectiveForest = math.floor(usableCount * cat3Forest * PERCENTAGEGREENS + 0.5)
+      objectiveRain = math.floor(usableCount * (1 - cat3Forest) * PERCENTAGEGREENS + 0.5)
+   end
+   
+   local minusForest = rowForest[rowID + 1] - objectiveForest;
+   local minusRain = rowRain[rowID + 1] - objectiveRain;
+   
+   if minusForest < 0 then
+      ___Debug("need to add forest, not reduce");
+      minusRain = minusRain + minusForest *-1;
+      minusForest = 0;
+   end
+   
+   if minusRain < 0 then
+      ___Debug("need to add Rain, not reduce");
+      minusForest = minusForest + minusRain *-1;
+      minusRain = 0;
+   end
+   
+   local listRainReduce = {};
+   local listForestReduce = {};
+   
+   local reduceForestCount = 0;
+   local reduceRainCount = 0;
+   
+   for i = 0, mapXSize - 1 do
+      if mapFeatureCode[i + 1][rowID + 1] == 2 then
+         if (canRemoveRain(i, rowID)) then
+            table.insert(listRainReduce, {i, rowID});
+            reduceRainCount = reduceRainCount + 1;
+         end
+      elseif mapFeatureCode[i + 1][rowID + 1] == 3 then
+         if (canRemoveForest(i, rowID)) then
+            table.insert(listForestReduce, {i, rowID});
+            reduceForestCount = reduceForestCount + 1;
+         end
+      end
+   end
+   
+   if minusForest > reduceForestCount then -- we don't have enough forest to reduce
+      minusRain = minusRain + (minusForest - reduceForestCount);
+      minusForest = reduceForestCount
+   end
+   
+   if minusRain > reduceRainCount then -- we don't have enough rain to reduce
+      minusRain = reduceRainCount;
+   end
+   
+   listRainReduce = GetShuffledCopyOfTable(listRainReduce);
+   listForestReduce = GetShuffledCopyOfTable(listForestReduce);
+   
+   for i = 0, minusForest - 1 do
+      terraformBBS(listForestReduce[i + 1][1], listForestReduce[i + 1][2], -2, -2, -1);
+   end
+   
+   for i = 0, minusRain - 1 do
+      terraformBBS(listRainReduce[i + 1][1], listRainReduce[i + 1][2], -2, -2, -1);
+   end
+   
+   ___Debug("finished for row", rowID);
+   
+   return 0;
+end
+
+function canAddForest(x, y)
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   local res = mapResourceCode[xIndex][yIndex]
+   local ter = mapTerrainCode[xIndex][yIndex]
+   local fea = mapFeatureCode[xIndex][yIndex]
+   
+   --print(x, y);
+   --print(ter, res, fea);
+   
+   if (fea ~= -1) then
+      return false;
+   end
+   
+   
+   
+   if (ter % 3 == 2) then --mountain
+      return false;
+   end
+   
+   if (ter == 6 or ter == 7) then -- desert
+      return false;
+   end
+   
+   if (ter > 11) then --snow/water
+      return false;
+   end
+   
+   if (res == 16 and ter < 9) then
+      return true;
+   end
+   
+   if (res == 4 or res == 19 or res == 30 or res == 33 or res == -1) then
+      return true; 
+   end
+   
+   return false;
+
+end
+
+function canAddRain(x, y)
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   if (mapFeatureCode[xIndex][yIndex] ~= -1) then
+      return false;
+   end
+   
+   local res = mapResourceCode[xIndex][yIndex]
+   local ter = mapTerrainCode[xIndex][yIndex]
+   
+   if (ter ~= 3 and ter ~= 4) then -- not plain
+      return false;
+   end
+   
+   if (res == 19 or res == 30 or res == 14 or res == -1) then
+      return true; 
+   end
+   
+   return false;
+
+end
+
+function canRemoveForest(x, y)
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   if (mapFeatureCode[xIndex][yIndex] ~= 3) then
+      ___Debug("Warning, tried to removed forest where there is none");
+      return false;
+   end
+   
+   local res = mapResourceCode[xIndex][yIndex]
+   local ter = mapTerrainCode[xIndex][yIndex]
+   
+   if ((res == 16 or res == 4) and ter >= 8) then -- furs deers
+      return true;
+   end
+   
+   if (res == 19 or res == 30 or res == 33 or res == -1) then
+      return true; 
+   end
+   
+   return false;
+
+end
+
+function canRemoveRain(x, y)
+
+   local xIndex = x + 1;
+   local yIndex = y + 1;
+   
+   if (mapFeatureCode[xIndex][yIndex] ~= 2) then
+      ___Debug("Warning, tried to removed rain where there is none");
+      return false;
+   end
+   
+   local res = mapResourceCode[xIndex][yIndex]
+   
+   if (res == 19 or res == 30 or res == 14 or res == -1) then
+      return true; 
+   end
+   
+   return false;
+
+end
+
 function terraformBBSPlot(plot, newTerrain, newResource, newFeature)
    if (plot ~= nil) then
       return terraformBBS(plot:GetX(), plot:GetY(), newTerrain, newResource, newFeature);
@@ -771,19 +1118,19 @@ function terraformBBS(x, y, newTerrain, newResource, newFeature)
    
    -- Feature
    if (newFeature ~= -2) then -- -2 = no change
-      if (newResource < -2) then
+      if (newFeature < -2) then
          print("ERROR, usage of invalid Feature ID:", newFeature);
          return -1;
       end
       
    
-      if (newResource == -1) then -- clean, no feature
+      if (newFeature == -1) then -- clean, no feature
          TerrainBuilder.SetFeatureType(plot, -1);
          ___Debug("Cleaned Feature of tile ", x, "Y:", y);
       else
          TerrainBuilder.SetFeatureType(plot, -1);
          TerrainBuilder.SetFeatureType(plot, newFeature, 1);
-         ___Debug("Changed Feature of tile X:", x, "Y:", y, "New Feature:", newResource);
+         ___Debug("Changed Feature of tile X:", x, "Y:", y, "New Feature:", newFeature);
       end
 
       mapFeatureCode[xIndex][yIndex] = newFeature;
@@ -796,6 +1143,8 @@ function terraformBBS(x, y, newTerrain, newResource, newFeature)
    local science = plot:GetYield(g_YIELD_SCIENCE);
    local culture = plot:GetYield(g_YIELD_CULTURE);
    local faith = plot:GetYield(g_YIELD_FAITH);
+   
+   
    
    --- strategics are not visible at start, but the game would count their stat anyway
    if (resource == 40 or resource == 43) then
@@ -811,43 +1160,51 @@ function terraformBBS(x, y, newTerrain, newResource, newFeature)
       prod = prod - 2; 
    end
    
-   mapFoodYield[iIndex][jIndex] = food;
-   mapProdYield[iIndex][jIndex] = prod;
-   mapGoldYield[iIndex][jIndex] = gold;
-   mapScienceYield[iIndex][jIndex] = science;
-   mapCultureYield[iIndex][jIndex] = culture;
-   mapFaithYield[iIndex][jIndex] = faith;
+   mapFoodYield[xIndex][yIndex] = food;
+   mapProdYield[xIndex][yIndex] = prod;
+   mapGoldYield[xIndex][yIndex] = gold;
+   mapScienceYield[xIndex][yIndex] = science;
+   mapCultureYield[xIndex][yIndex] = culture;
+   mapFaithYield[xIndex][yIndex] = faith;
    
    
    -- 2-2 map
    
-   local previousTwoTWo = mapTwoTwo[iIndex][jIndex];
+   local previousTwoTWo = mapTwoTwo[xIndex][yIndex];
    
    -- Mapping 2-2
    if (newTerrain >= 15) then -- water
-      mapTwoTwo[iIndex][jIndex] = 0;
+      mapTwoTwo[xIndex][yIndex] = 0;
+      --print(food, prod, "UPDATE 0");
    
    elseif (food < 2 or prod < 2) then -- not 2-2
-      mapTwoTwo[iIndex][jIndex] = 1;
+      mapTwoTwo[xIndex][yIndex] = 1;
+      
+      --print(x, y, food, prod, "UPDATE 3, previous", mapTwoTwo);
       
       if previousTwoTWo >= 2 then -- we had a 2-2, not anymore
          twoTwoCount = twoTwoCount - 1;
       end
       
    elseif (food == 2 and prod == 2) then -- 2-2
-      mapTwoTwo[iIndex][jIndex] = 2;
+      mapTwoTwo[xIndex][yIndex] = 2;
+      
+      --print(x, y, food, prod, "UPDATE 3, previous", mapTwoTwo);
       
       if previousTwoTWo < 2 then -- we did not have a 2-2, now we have
          twoTwoCount = twoTwoCount + 1;
       end
    
    else -- better than 2-2
-      mapTwoTwo[iIndex][jIndex] = 3;
+      mapTwoTwo[xIndex][yIndex] = 3;
       if previousTwoTWo < 2 then -- we did not have a 2-2, now we have
          twoTwoCount = twoTwoCount + 1;
       end
+      --print(x, y, food, prod, "UPDATE 3, previous", mapTwoTwo);
    end
    --- end mapping 2-2 --
+   
+   ___Debug("next", mapTwoTwo[xIndex][yIndex]);
    
    -- updating fresh water (in case we added lake tile) or coastal (in case we added coast).
    if (newTerrain == 15) then
@@ -873,7 +1230,7 @@ function terraformBBS(x, y, newTerrain, newResource, newFeature)
    
    -- desert map
    if (newTerrain == 6 or newTerrain == 7) then
-      mapDesert[iIndex][jIndex] = true;
+      mapDesert[xIndex][yIndex] = true;
    end
    
 
@@ -1913,10 +2270,10 @@ local islandTwoTeamID = -1;
 
 
 --- Minimal size of an island in case of "standard map"
-local MIN_ISLAND_SIZE_STANDARD = 50;
+local MIN_ISLAND_SIZE_STANDARD = 55;
 
 --- Minimal size of an island in case of "naval map" (ex:islands, continent and islands, small continent)
-local MIN_ISLAND_SIZE_WATER = 25;
+local MIN_ISLAND_SIZE_WATER = 30;
 
 function labelIslands(mapXSize, mapYSize, mapIsRoundWestEast)
 
@@ -1973,6 +2330,25 @@ function recursiveLabelIslands(x, y, mapXSize, mapYSize, mapIsRoundWestEast, isl
    return;
 
 end
+
+--[[
+
+oceanLeadersList = {};
+oceanLeadersListSize = 0;
+
+function ListOceanLeaders()
+   for row in GameInfo.Leaders_XP2 do
+      ___Debug("test ocean", row.LeaderType)
+      if(row.OceanStart == 1) then
+         ___Debug("Found an ocean Leader:", row.LeaderType);
+         oceanLeadersListSize = oceanLeadersListSize + 1;
+         oceanLeadersList[oceanLeadersListSize] = row.LeaderType;
+      end
+   end
+end
+
+--]]
+
 --[[ Draws the two-two map.
 
 Map: the two-two map (see "mapTwoTwo" declaration for details)
@@ -1980,6 +2356,8 @@ xSize: xSize of the map
 ySize: ySize of the map
 
 --]]
+
+
 
 function drawMap(map, xSize, ySize)
 
@@ -2771,11 +3149,15 @@ function NewBBS(instance)
       rowHills[jIndex] = 0;
       rowResource[jIndex] = 0;
       rowLuxury[jIndex] = 0;
+      rowForest[jIndex] = 0;
+      rowRain[jIndex] = 0;
 
       rowPercentageTwoTwo[jIndex] = 0;
       rowPercentageHills[jIndex] = 0;
       rowPercentageResource[jIndex] = 0;
       rowPercentageLuxury[jIndex] = 0;
+      rowPercentageForest[jIndex] = 0;
+      rowPercentageRain[jIndex] = 0;
    
       for iIndex = 1, mapXSize do
       
@@ -2786,11 +3168,19 @@ function NewBBS(instance)
                mapLuxuryCount = mapLuxuryCount + 1;
             end
             
-         elseif mapTerrainCode[iIndex][jIndex] < 15 then
+         elseif mapTerrainCode[iIndex][jIndex] < 15 and mapTerrainCode[iIndex][jIndex] % 3 ~= 2 then
+         --elseif mapTerrainCode[iIndex][jIndex] < 15 then
             rowUsable[jIndex] = rowUsable[jIndex] + 1;
             
             if mapTerrainCode[iIndex][jIndex] % 3 == 1 then
                rowHills[jIndex] = rowHills[jIndex] + 1;
+            end
+            
+            if (mapFeatureCode[iIndex][jIndex] == 2) then -- rainforest
+               rowRain[jIndex] = rowRain[jIndex] + 1;
+            end
+            if (mapFeatureCode[iIndex][jIndex] == 3) then -- forest
+               rowForest[jIndex] = rowForest[jIndex] + 1;
             end
             
             if mapResourceCode[iIndex][jIndex] >= 0 then
@@ -2803,16 +3193,22 @@ function NewBBS(instance)
                end
             end
             
+            
+            
             if mapTwoTwo[iIndex][jIndex] > 1 then
                rowTwoTwo[jIndex] = rowTwoTwo[jIndex] + 1;
             end
          end
       end
       
-      rowPercentageHills[jIndex] = rowHills[jIndex] / rowUsable[jIndex];
-      rowPercentageTwoTwo[jIndex] = rowTwoTwo[jIndex] / rowUsable[jIndex];
-      rowPercentageResource[jIndex] = rowResource[jIndex] / rowUsable[jIndex];
-      rowPercentageLuxury[jIndex] = rowLuxury[jIndex] / rowUsable[jIndex];
+      ___Debug("old row", jIndex - 1, "count", rowTwoTwo[jIndex]);
+      
+      rowPercentageHills[jIndex] = math.floor((rowHills[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageTwoTwo[jIndex] = math.floor((rowTwoTwo[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageResource[jIndex] = math.floor((rowResource[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageLuxury[jIndex] = math.floor((rowLuxury[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageForest[jIndex] = math.floor((rowForest[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageRain[jIndex] = math.floor((rowRain[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
 
       
    end
@@ -2868,10 +3264,10 @@ function NewBBS(instance)
    
    ___Debug("--- Per row ---")
    ___Debug("---------------");
-   ___Debug("usable count, hills percentage, two two percentage, resource percentage, luxury percentage");
+   ___Debug("Row id, usable count, hills percentage, two two percentage, resource percentage, luxury percentage, forest percentage, rain forest");
    
-   for j = 0, mapYSize - 1 do
-      ___Debug(rowUsable[j + 1], ",", rowHills[j + 1], ",", rowTwoTwo[j + 1], ",", rowResource[j + 1], ",", rowLuxury[j + 1])
+   for j = mapYSize - 1, 0, -1 do
+      ___Debug(j, ",", rowUsable[j + 1], ",", rowPercentageHills[j + 1], ",", rowPercentageTwoTwo[j + 1], ",", rowPercentageResource[j + 1], ",", rowPercentageLuxury[j + 1], ",", rowPercentageForest[j + 1], ",", rowPercentageRain[j + 1])
       --print(rowPercentageHills[j + 1], ",", rowPercentageTwoTwo[j + 1], ",", rowPercentageResource[j + 1], ",", rowPercentageLuxury[j + 1])
    end
    
@@ -2902,6 +3298,117 @@ function NewBBS(instance)
    ___Debug("---------------");
    ___Debug("---------------");
    
+   
+   ___Debug("work on forest repartition");
+   
+   local BalanceForests = MapConfiguration.GetValue("BBSBalanceForests");
+   
+   if (BalanceForests == 0 and MapConfiguration.GetValue("MAP_SCRIPT") ~= "Tilted_Axis.lua") then -- makes no sense on tilted axis
+   
+      ___Debug("actually doing it");
+
+      for j = 0, mapYSize - 1 do
+         evenForest(j, mapXSize, mapYSize);
+      end
+   
+   end
+   
+   ___Debug("end forest work");
+   
+   
+   ___Debug("---------------");
+   ___Debug("--- Two-Two Map ---");
+   drawMap(mapTwoTwo, mapXSize, mapYSize);
+   
+   ___Debug("---------------");
+   ___Debug("---------------");
+   
+   
+   for jIndex = 1, mapYSize do
+      
+      rowUsable[jIndex] = 0
+
+      rowTwoTwo[jIndex] = 0;
+      rowHills[jIndex] = 0;
+      rowResource[jIndex] = 0;
+      rowLuxury[jIndex] = 0;
+      rowForest[jIndex] = 0;
+      rowRain[jIndex] = 0;
+
+      rowPercentageTwoTwo[jIndex] = 0;
+      rowPercentageHills[jIndex] = 0;
+      rowPercentageResource[jIndex] = 0;
+      rowPercentageLuxury[jIndex] = 0;
+      rowPercentageForest[jIndex] = 0;
+      rowPercentageRain[jIndex] = 0;
+   
+      for iIndex = 1, mapXSize do
+      
+         --print("x:", iIndex - 1, mapTwoTwo[iIndex][jIndex]);
+      
+         if mapTerrainCode[iIndex][jIndex] == 15 then
+            
+            -- counting even resources in water, but only for global knowledge
+            if isLuxury(mapResourceCode[iIndex][jIndex]) then
+               mapLuxuryCount = mapLuxuryCount + 1;
+            end
+            
+         elseif mapTerrainCode[iIndex][jIndex] < 15 and mapTerrainCode[iIndex][jIndex] % 3 ~= 2 then
+         --elseif mapTerrainCode[iIndex][jIndex] < 15 then
+            rowUsable[jIndex] = rowUsable[jIndex] + 1;
+            
+            if mapTerrainCode[iIndex][jIndex] % 3 == 1 then
+               rowHills[jIndex] = rowHills[jIndex] + 1;
+            end
+            
+            if (mapFeatureCode[iIndex][jIndex] == 2) then -- rainforest
+               rowRain[jIndex] = rowRain[jIndex] + 1;
+            end
+            if (mapFeatureCode[iIndex][jIndex] == 3) then -- forest
+               rowForest[jIndex] = rowForest[jIndex] + 1;
+            end
+            
+            if mapResourceCode[iIndex][jIndex] >= 0 then
+               rowResource[jIndex]= rowResource[jIndex] + 1;
+               mapResourceCount = mapResourceCount + 1;
+               
+               if isLuxury(mapResourceCode[iIndex][jIndex]) then
+                  rowLuxury[jIndex] = rowLuxury[jIndex] + 1;
+                  mapLuxuryCount = mapLuxuryCount + 1;
+               end
+            end
+            
+            if mapTwoTwo[iIndex][jIndex] > 1 then
+               rowTwoTwo[jIndex] = rowTwoTwo[jIndex] + 1;
+            end
+         end
+      end
+      
+      
+      --print("row", jIndex - 1, "count", rowTwoTwo[jIndex]);
+      
+      rowPercentageHills[jIndex] = math.floor((rowHills[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageTwoTwo[jIndex] = math.floor((rowTwoTwo[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageResource[jIndex] = math.floor((rowResource[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageLuxury[jIndex] = math.floor((rowLuxury[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageForest[jIndex] = math.floor((rowForest[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+      rowPercentageRain[jIndex] = math.floor((rowRain[jIndex] / rowUsable[jIndex]) * 100 + 0.5);
+
+      
+   end
+   
+   for j = mapYSize - 1, 0, -1 do
+      ___Debug("two-two", rowTwoTwo[j + 1]);
+   end
+   
+   print("--- Per row After forest balancing if any---")
+   print("---------------");
+   print("Row id, usable count, hills percentage, two two percentage, resource percentage, luxury percentage, forest percentage, rain forest");
+   
+   for j = mapYSize - 1, 0, -1 do
+      print(j, ",", rowUsable[j + 1], ",", rowPercentageHills[j + 1], ",", rowPercentageTwoTwo[j + 1], ",", rowPercentageResource[j + 1], ",", rowPercentageLuxury[j + 1], ",", rowPercentageForest[j + 1], ",", rowPercentageRain[j + 1])
+      --print(rowPercentageHills[j + 1], ",", rowPercentageTwoTwo[j + 1], ",", rowPercentageResource[j + 1], ",", rowPercentageLuxury[j + 1])
+   end
    
    -- test rings
    --[[
@@ -3277,8 +3784,18 @@ function NewBBS(instance)
    
    local majorList = {};
    local minorList = {};
-   local hasMaori = false;
+   local hasOceanLeader = false;
    
+   --[[
+   
+   ListOceanLeaders();
+   
+   if oceanLeadersListSize > 0 then
+      hasOceanLeader = true;
+   end
+   
+   --]]
+
    local biasCount = 0;
    
    -- Will calculate the amount of player per team --
@@ -3345,10 +3862,13 @@ function NewBBS(instance)
             playerPerTeam[teamID + 1] = playerPerTeam[teamID + 1] + 1 ;
          end
          
+         
+         --[[
          if (civName == "CIVILIZATION_MAORI") then
-            hasMaori = true;
+            hasOceanLeader = true;
             biasScore = 0;
          end
+         --]]
          local tempBias = BBS_AssignStartingPlots:__FindBias(civName);
          
          --print(tempBias);
@@ -3554,6 +4074,25 @@ function NewBBS(instance)
             floodPlainsCiv = true;
          end
          
+         local isOceanCiv = false;
+         
+         ___Debug(leaderType);
+         
+         for row in GameInfo.Leaders_XP2() do
+            ___Debug("test start", row.LeaderType);
+            if (row.LeaderType == leaderType) then
+               ___Debug("Ocean start", row.OceanStart);
+               if row.OceanStart == true then
+                  ___Debug("Found ocean civ:", leaderType);
+                  isOceanCiv = true;
+                  hasOceanLeader = true;
+               end
+            end
+         end
+               
+
+            
+         
          
          ----------
          
@@ -3563,8 +4102,9 @@ function NewBBS(instance)
          
          -- Main object --
          -- This will contain all the player information (leader, civ, biases, ...)
-         majorAll[majorCount] = {index = i, civName = civName, civID = tempMajorList[i], major = PlayerConfigurations[tempMajorList[i]], biases = majorBiases[i],
-                          biasScore = biasScore, biasCount = biasCount, tundraCiv = tundraCiv, floodPlainsCiv = floodPlainsCiv,
+         majorAll[majorCount] = {index = i, civName = civName, civID = tempMajorList[i], major = PlayerConfigurations[tempMajorList[i]], leaderName = leaderType,
+                          isOceanCiv = isOceanCiv,
+                          biases = majorBiases[i], biasScore = biasScore, biasCount = biasCount, tundraCiv = tundraCiv, floodPlainsCiv = floodPlainsCiv,
                           biasTerrain = biasTerrain, biasFeature = biasFeature, biasResource = biasResource, bestBias = bestBias,
                           resourcesBiasList = resourcesBiasList, resourcesBiasListCount = resourcesBiasListCount, featuresBiasList = featuresBiasList, featuresBiasListCount = featuresBiasListCount, 
                           resourcesNegativeBiasList = resourcesNegativeBiasList, resourcesNegativeBiasListCount = resourcesNegativeBiasListCount, featuresNegativeBiasList = featuresNegativeBiasList, featuresNegativeBiasListCount = featuresNegativeBiasListCount, 
@@ -3665,7 +4205,7 @@ function NewBBS(instance)
    print("--------------------------");
    print("--------------------------");
    
-   evaluateSpawns(majorAll, majorCount, minorAll, minorCount, hasMaori);
+   evaluateSpawns(majorAll, majorCount, minorAll, minorCount, hasOceanLeader);
    
    print("--------------------------");
    print("--------------------------");
@@ -4318,7 +4858,7 @@ function recursivePlacement(majorAll, majorCount, currentIndex, playerProximityM
    ___Debug("Placing player", player.civName, player.teamID);
    
    
-   if (player.biasScore == 0) then -- Ocean civ
+   if (player.isOceanCiv == true) then -- Ocean civ
       ___Debug("Found some Maori");
       ___Debug("starting at index:", deepOceanIndex);
       
@@ -5500,7 +6040,7 @@ end
 
 local MAORI_LAND_DISTANCE = 8;
 
-function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
+function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasOceanLeader)
 
    
    if majorCount < 1 then
@@ -5556,7 +6096,7 @@ function evaluateSpawns(majorAll, majorCount, minorList, minorCount, hasMaori)
                      end
                   end
 
-                  if (hasMaori and isNearIce == false) then
+                  if (hasOceanLeader and isNearIce == false) then
                   
                      -- coast or lake
                      if (mapTerrainCode[iIndex][jIndex] == 15) then

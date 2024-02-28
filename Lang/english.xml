@@ -118,6 +118,29 @@
 		<Replace Tag="BBS_NATURAL_MORE_DESC" Language="en_US">
 			<Text>Duel: 3[NEWLINE]Tiny: 4[NEWLINE]Small: 6[NEWLINE]Standard: 8[NEWLINE]Large: 10[NEWLINE]Huge: 12[NEWLINE]Enormous: 14</Text>
 		</Replace>
+      
+      <!-- == Forest balancing-->
+      
+      <Replace Tag="BBS_BALANCE_FORESTS_ENABLED_NAME" Language="en_US">
+			<Text>Enabled</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_ENABLED_DESC" Language="en_US">
+			<Text>This feature will even forest repartition on whole map</Text>
+		</Replace>
+      <Replace Tag="BBS_BALANCE_FORESTS_DISABLED_NAME" Language="en_US">
+			<Text>Disabled</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_DISABLED_DESC" Language="en_US">
+			<Text>Forests will remain as Firaxis attended</Text>
+		</Replace>
+      <Replace Tag="LOC_GAME_BBS_BALANCE_FORESTS_NAME" Language="en_US">
+			<Text>Forest Balancing</Text>
+		</Replace>
+      <Replace Tag="LOC_GAME_BBS_BALANCE_FORESTS_DESC" Language="en_US">
+			<Text>Whether we balance forest repartition on the map or not</Text>
+		</Replace>
+      
+      <!-- == End Forest balancing-->
 	
 		<!-- == Min distance == -->
 		<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="en_US">
