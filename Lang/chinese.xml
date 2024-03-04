@@ -118,7 +118,26 @@
 		<Replace Tag="BBS_NATURAL_MORE_DESC" Language="zh_Hans_CN">
 			<Text>决斗：3[NEWLINE]极小：4[NEWLINE]小：6[NEWLINE]标准：8[NEWLINE]大：10[NEWLINE]巨大：12[NEWLINE]极大：14</Text>
 		</Replace>
-	
+		
+		<!-- == Forest balancing-->      
+		<Replace Tag="BBS_BALANCE_FORESTS_ENABLED_NAME" Language="zh_Hans_CN">
+			<Text>启用</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_ENABLED_DESC" Language="zh_Hans_CN">
+			<Text>在整个地图上重新划分森林和雨林，使其分布更加均匀。</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_DISABLED_NAME" Language="zh_Hans_CN">
+			<Text>关闭</Text>
+		</Replace>
+		<Replace Tag="BBS_BALANCE_FORESTS_DISABLED_DESC" Language="zh_Hans_CN">
+			<Text>森林和雨林分布将保留原版设定，主要集中在赤道区域。</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_BALANCE_FORESTS_NAME" Language="zh_Hans_CN">
+			<Text>森林平衡</Text>
+		</Replace>
+		<Replace Tag="LOC_GAME_BBS_BALANCE_FORESTS_DESC" Language="zh_Hans_CN">
+			<Text>控制是否平衡森林的分布。</Text>
+		</Replace>      
 		<!-- == Min distance == -->
 		<Replace Tag="LOC_GAME_BBS_MIN_DISTANCE_NAME" Language="zh_Hans_CN">
 			<Text>玩家间最小距离</Text>
